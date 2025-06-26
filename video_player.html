@@ -232,46 +232,43 @@
                     <div id="tab-all" class="tab-pane active">
                         <div class="sidebar-section">
                             <ul class="video-list" id="latest-videos">
-                                <!-- OVAJ LI ELEMENT JE KORISNIK ZAHTJEVAO DA SE IZMIJENI -->
-                                <li class="video-item active" data-video-src="videos/sft21_prezentacija.mp4" data-poster="img/video-poster-1.jpg">
-                                    <div class="video-thumbnail"><img src="img/SFT21.jpg" alt="Thumbnail"></div>
-                                    <div class="video-info">
-                                        <div class="video-item-title">SFT21 Službena prezentacija</div>
-                                        <div class="video-item-description">Upoznajte se s konceptom</div>
-                                    </div>
-                                </li>
-                                <!-- KRAJ IZMJENE -->
-
-                                <li class="video-item active" data-youtube-id="xDZNaDX58jg&t=1752s">
-                                    <div class="video-thumbnail"><img src="img/video-thumbnail-2.jpg" alt="Thumbnail"></div>
-                                    <div class="video-info">
-                                        <div class="video-item-title">Kako započeti s SFT21</div>
-                                        <div class="video-item-description">Vodič za nove korisnike</div>
-                                    </div>
-                                </li>
-                                <li class="video-item" data-video-src="videos/sfnet_intro.mp4" data-poster="img/video-poster-3.jpg">
-                                    <div class="video-thumbnail"><img src="img/video-thumbnail-3.jpg" alt="Thumbnail"></div>
-                                    <div class="video-info">
-                                        <div class="video-item-title">SFnet društvena mreža</div>
-                                        <div class="video-item-description">Kako koristiti mrežu</div>
-                                    </div>
-                                </li>
-                                <li class="video-item" data-video-src="videos/poslovna_prezentacija.mp4" data-poster="img/video-poster-4.jpg">
-                                    <div class="video-thumbnail"><img src="img/video-thumbnail-4.jpg" alt="Thumbnail"></div>
-                                    <div class="video-info">
-                                        <div class="video-item-title">Poslovna Prezentacija</div>
-                                        <div class="video-item-description">Detalji poslovnog modela</div>
-                                    </div>
-                                </li>
-                                <li class="video-item" data-video-src="videos/webshop_intro.mp4" data-poster="img/video-poster-5.jpg">
-                                    <div class="video-thumbnail"><img src="img/video-thumbnail-5.jpg" alt="Thumbnail"></div>
-                                    <div class="video-info">
-                                       <div class="video-item-title">SFshop Online Trgovina</div>
-                                       <div class="video-item-description">Kupovina i prodaja</div>
-                                   </div>
-                               </li>
-                            </ul>
-                        </div>
+    <li class="video-item" data-youtube-id="OVDJE_IDE_ID_SLUŽBENE_PREZENTACIJE">
+        <div class="video-thumbnail"><img src="img/SFT21.jpg" alt="Thumbnail"></div>
+        <div class="video-info">
+            <div class="video-item-title">SFT21 Službena prezentacija</div>
+            <div class="video-item-description">Upoznajte se s konceptom</div>
+        </div>
+    </li>
+    <li class="video-item" data-youtube-id="xDZNaDX58jg">
+        <div class="video-thumbnail"><img src="img/video-thumbnail-2.jpg" alt="Thumbnail"></div>
+        <div class="video-info">
+            <div class="video-item-title">Kako započeti s SFT21</div>
+            <div class="video-item-description">Vodič za nove korisnike</div>
+        </div>
+    </li>
+    <li class="video-item" data-youtube-id="ID_ZA_SFNET_VIDEO">
+        <div class="video-thumbnail"><img src="img/video-thumbnail-3.jpg" alt="Thumbnail"></div>
+        <div class="video-info">
+            <div class="video-item-title">SFnet društvena mreža</div>
+            <div class="video-item-description">Kako koristiti mrežu</div>
+        </div>
+    </li>
+    <li class="video-item" data-youtube-id="ID_ZA_POSLOVNU_PREZENTACIJU">
+        <div class="video-thumbnail"><img src="img/video-thumbnail-4.jpg" alt="Thumbnail"></div>
+        <div class="video-info">
+            <div class="video-item-title">Poslovna Prezentacija</div>
+            <div class="video-item-description">Detalji poslovnog modela</div>
+        </div>
+    </li>
+    <li class="video-item" data-youtube-id="ID_ZA_SFSHOP_VIDEO">
+        <div class="video-thumbnail"><img src="img/video-thumbnail-5.jpg" alt="Thumbnail"></div>
+        <div class="video-info">
+           <div class="video-item-title">SFshop Online Trgovina</div>
+           <div class="video-item-description">Kupovina i prodaja</div>
+       </div>
+    </li>
+</ul>
+                    </div>
                     </div>
 
                     <!-- Tab 2: Moje mape -->
@@ -338,140 +335,96 @@
 </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const videoPlayer = document.getElementById('main-video-player');
-            const playPauseBtn = document.getElementById('play-pause-btn');
-            const playPauseIcon = playPauseBtn?.querySelector('i');
-            const currentTimeEl = document.getElementById('current-time');
-            const totalTimeEl = document.getElementById('total-time');
-            const progressContainer = document.getElementById('video-progress-container');
-            const progressFilled = document.getElementById('video-progress-filled');
-            const volumeBtn = document.getElementById('volume-btn');
-            const volumeIcon = volumeBtn?.querySelector('i');
-            const volumeSlider = document.getElementById('volume-slider');
-            const volumeFilled = document.getElementById('volume-filled');
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
-            const playerContainer = document.querySelector('.video-player-page-container');
-            const controlsOverlay = document.getElementById('video-controls-overlay');
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Dohvaćanje osnovnih elemenata ---
+    const player = document.getElementById('main-video-player');
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('video-sidebar');
+    const videoItems = document.querySelectorAll('.video-item');
+    const backLink = document.getElementById('back-link');
+    const sidebarTabs = document.querySelectorAll('.sidebar-tab');
+    const tabPanes = document.querySelectorAll('.tab-pane');
 
-            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
-            const sidebar = document.getElementById('video-sidebar');
-            const videoItems = document.querySelectorAll('.video-item');
-            const backLink = document.getElementById('back-link');
-
-            // --- START ISPRAVLJENE LOGIKE ---
-            // Ovo je puno pouzdanija metoda za pamćenje prethodne stranice.
-            if (backLink) {
-                // 1. Provjeri postoji li URL parametar 'from' (npr. video_player.html?from=sfured.html)
-                const urlParams = new URLSearchParams(window.location.search);
-                const fromPage = urlParams.get('from');
-
-                // 2. Ako parametar postoji, spremi ga u sessionStorage.
-                //    Ovo osigurava da se link ne izgubi ako korisnik osvježi stranicu.
-                if (fromPage) {
-                    sessionStorage.setItem('returnToPage', fromPage);
-                }
-
-                // 3. Dohvati spremljenu stranicu iz sessionStorage.
-                const returnUrl = sessionStorage.getItem('returnToPage');
-
-                // 4. Postavi link.
-                if (returnUrl) {
-                    // Ako imamo spremljeni URL, koristi ga.
-                    backLink.href = returnUrl;
-                } else {
-                    // Ako nema ni parametra ni spremljene vrijednosti (npr. direktan pristup),
-                    // vrati na početnu kao sigurnosnu opciju.
-                    backLink.href = 'index.html';
-                }
-            } else {
-                console.error("Element 'back-link' nije pronađen!");
-            }
-            // --- KRAJ ISPRAVLJENE LOGIKE ---
-
-            // --- KOD ZA TABOVE ---
-            const sidebarTabs = document.querySelectorAll('.sidebar-tab');
-            const tabPanes = document.querySelectorAll('.tab-pane');
-
-            if (sidebarTabs.length > 0 && tabPanes.length > 0) {
-                sidebarTabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        sidebarTabs.forEach(t => t.classList.remove('active'));
-                        tabPanes.forEach(p => p.classList.remove('active'));
-                        tab.classList.add('active');
-                        const targetPaneId = tab.getAttribute('data-tab');
-                        const targetPane = document.getElementById(targetPaneId);
-                        if (targetPane) {
-                            targetPane.classList.add('active');
-                        } else {
-                            console.error(`Tab pane s ID-om '${targetPaneId}' nije pronađen.`);
-                        }
-                    });
-                });
-            } else {
-                 console.warn("Elementi za tabove nisu pronađeni.");
-            }
-
-            // --- Sidebar Toggle ---
-            if (sidebarToggleBtn && sidebar) {
-                sidebarToggleBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Spriječi širenje događaja na body
-                    sidebar.classList.toggle('active');
-                    sidebarToggleBtn.classList.toggle('active');
-                    document.body.classList.toggle('overflow-hidden-mobile', sidebar.classList.contains('active'));
-                });
-                 document.addEventListener('click', (e) => {
-                     if (sidebar?.classList.contains('active') && !sidebar.contains(e.target) && sidebarToggleBtn && !sidebarToggleBtn.contains(e.target)) {
-                         sidebar.classList.remove('active');
-                         sidebarToggleBtn.classList.remove('active');
-                         document.body.classList.remove('overflow-hidden-mobile');
-                     }
-                 });
-            } else { console.error("Sidebar ili toggle gumb nije pronađen!"); }
-
-// --- KONAČNA VERZIJA: Učitavanje YouTube Videa Klikom ---
-if (videoItems.length > 0 && videoPlayer) {
-
-    // Funkcija za promjenu videa u iframe-u
-    function changeVideo(youtubeId) {
-        if (youtubeId && youtubeId.length > 5) { // Provjera da nije placeholder
-            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+    // --- Logika za "Vrati se" link ---
+    if (backLink) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromPage = urlParams.get('from');
+        if (fromPage) {
+            sessionStorage.setItem('returnToPage', fromPage);
         }
+        const returnUrl = sessionStorage.getItem('returnToPage');
+        backLink.href = returnUrl || 'index.html';
     }
 
-    // Postavi 'event listener' na svaki video u listi
-    videoItems.forEach(item => {
-        item.addEventListener('click', () => {
-            videoItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-
-            const youtubeId = item.getAttribute('data-youtube-id');
-            changeVideo(youtubeId);
-
-            // Zatvori sidebar ako je otvoren na mobitelu
-            if (sidebar?.classList.contains('active') && window.innerWidth <= 768) {
+    // --- Logika za tabove unutar sidebara ---
+    if (sidebarTabs.length > 0) {
+        sidebarTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                sidebarTabs.forEach(t => t.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                const targetPane = document.getElementById(tab.getAttribute('data-tab'));
+                if (targetPane) targetPane.classList.add('active');
+            });
+        });
+    }
+    
+    // --- Logika za otvaranje i zatvaranje sidebara ---
+    if (sidebarToggleBtn && sidebar) {
+        sidebarToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('active');
+            sidebarToggleBtn.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !sidebarToggleBtn.contains(e.target)) {
                 sidebar.classList.remove('active');
-                sidebarToggleBtn?.classList.remove('active');
+                sidebarToggleBtn.classList.remove('active');
             }
         });
-    });
-
-    // Automatski učitaj prvi video iz liste kada se stranica otvori
-    const prviVideoItem = videoItems[0];
-    if (prviVideoItem) {
-        const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
-        prviVideoItem.classList.add('active'); // Odmah ga oznaci kao aktivnog
-        // Učitaj prvi video BEZ autoplay-a
-        if (prviVideoId && prviVideoId.toUpperCase().indexOf('YOUTUBE_ID') === -1) { 
-             videoPlayer.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0&modestbranding=1`;
-        }
     }
 
-} else {
-    console.warn("YouTube player ili video itemi nisu pronađeni.");
-}
+    // --- KONAČNA LOGIKA ZA YOUTUBE PLAYER ---
+    if (player && videoItems.length > 0) {
+        
+        // Funkcija za promjenu videa
+        function changeVideo(youtubeId) {
+            if (youtubeId && youtubeId.toUpperCase().indexOf('YOUTUBE_ID') === -1) {
+                player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+            } else {
+                // Ako nema ID-a, ostavi player praznim ili stavi poruku
+                player.src = ''; 
+            }
+        }
+        
+        // Postavi listener na svaki video u listi
+        videoItems.forEach(item => {
+            item.addEventListener('click', () => {
+                videoItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                const youtubeId = item.getAttribute('data-youtube-id');
+                changeVideo(youtubeId);
+
+                if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    sidebarToggleBtn.classList.remove('active');
+                }
+            });
         });
-    });
+
+        // Automatski učitaj prvi video iz liste pri otvaranju stranice
+        const prviVideoItem = videoItems[0];
+        if (prviVideoItem) {
+            const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
+            prviVideoItem.classList.add('active');
+            // Učitaj prvi video BEZ autoplay-a
+            if (prviVideoId && prviVideoId.toUpperCase().indexOf('YOUTUBE_ID') === -1) { 
+                 player.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0`;
+            }
+        }
+    }
+});
 
 </script>
 
