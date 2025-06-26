@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFured - InFace Invest Group</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts (Ostavit ćemo ih jer ih koristi originalni dizajn, ali ćemo prebaciti font-family na Arial Narrow u CSS-u) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to your external CSS file (optional, can embed styles here) -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+
+    <style>
+        /* Custom CSS Variables (copied from index.html for consistency) */
+        :root {
+            --primary-color: #6a1b9a; /* Deep Purple */
+            --secondary-color: #ab47bc; /* Lighter Purple */
+            --fluorescent-green: #80ff00; /* Neon Green */
+            --success-green: #4caf50; /* Success Green */
+            --text-color: #e5e7eb; /* Light Gray Text */
+            --background-color: #0f172a; /* Dark Blue-Gray */
+            --glass-background: rgba(106, 27, 154, 0.15); /* Purple transparent */
+            --glass-border: rgba(128, 255, 0, 0.3); /* Fluorescent green transparent border */
+            --glass-shadow: rgba(0, 0, 0, 0.3); /* Shadow */
+            --fluorescent-orange: #d9ff00; /* Added fluorescent orange variable */
+        }
+
+        body {
+            font-family: 'Arial Narrow', Arial, sans-serif !important; /* Izmijenjen glavni font na Arial Narrow (dodano !important radi sigurnosti) */
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0; /* Uklonjen defaultni margin */
+            padding: 0; /* Uklonjen defaultni padding */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+         /* Specific styles for the top fixed header */
+         .sfured-header {
+             position: fixed; /* Ostaje fiksirano */
+             top: 0; /* Osigurava da je na samom vrhu viewporta */
+             left: 0;
+             width: 100%;
+             height: 64px; /* Standard Tailwind h-16 */
+             background-color: #1f2937; /* Darker gray */
+             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+             z-index: 50; /* Iznad ostalog sadržaja */
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             padding: 0 1.5rem; /* px-6 */
+         }
+
+         /* Kontejner za logo (slika + tekst) unutar headera */
+         .sfured-header .logo-sfured {
+             display: flex;
+             align-items: center; /* Centriraj sliku i tekstualni logo okomito */
+         }
+
+         /* Prilagođen stil tekstualnog logo-nav unutar headera */
+        .sfured-header .logo-nav {
+            font-size: 1.5rem; /* Povećan font veličine SFured */
+            line-height: 1;
+            display: flex; /* Dodano da osigura flex raspored unutar */
+            flex-direction: column; /* Stack items vertically */
+            align-items: flex-start; /* Poravnaj tekst na lijevo */
+        }
+         .sfured-header .logo-nav .small-text {
+             font-size: 0.75rem; /* Povećan font veličine InFace Invest Group */
+             color: #d1d5db;
+             font-weight: 400;
+             margin-bottom: -0.1em; /* Malo smanjen razmak */
+         }
+         .sfured-header .logo-nav .text-logo-orange {
+             color: var(--fluorescent-green);
+         }
+         .sfured-header .logo-sfured img { /* Stil za sliku logotipa unutar headera */
+            width: 48px; /* w-12 */ /* Povećana širina slike */
+            height: auto;
+            margin-right: 0.5rem; /* mr-2 */ /* Malo smanjen razmak do teksta */
+         }
+
+
+         .sfured-header .status-timer {
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             text-align: center;
+             font-size: 0.9rem; /* text-sm */
+             color: #d1d5db; /* gray-400 */
+         }
+         .sfured-header .status-timer .status {
+             font-weight: 600;
+             color: var(--fluorescent-green); /* Green for ACTIVE */
+         }
+         .sfured-header .status-timer .status.inactive {
+             color: #ef4444; /* Red for INACTIVE */
+         }
+         .sfured-header .status-timer .timer-display {
+            font-size: 1rem; /* text-base */
+             font-weight: 700;
+             color: white;
+             margin-top: 0.25rem; /* mt-1 */
+         }
+
+         .sfured-header .user-info {
+             display: flex;
+             align-items: center;
+         }
+         .sfured-header .user-info .user-details {
+             display: flex;
+             flex-direction: column;
+             margin-right: 0.75rem; /* mr-3 */
+             text-align: right;
+         }
+         .sfured-header .user-info .user-name {
+             font-size: 1rem; /* text-base */
+             font-weight: 600;
+             color: white;
+         }
+         .sfured-header .user-info .user-username {
+             font-size: 0.875rem; /* text-sm */
+             color: #d1d5db; /* gray-400 */
+         }
+         .sfured-header .user-info .avatar-placeholder {
+             width: 40px; /* w-10 */
+             height: 40px; /* h-10 */
+             background-color: #6b7280; /* gray-500 */
+             border-radius: 0.375rem; /* rounded-md */
+             margin-right: 0.75rem; /* mr-3 */
+             flex-shrink: 0; /* Prevent shrinking */
+             cursor: pointer; /* DODANO: Čini avatar klikabilnim */
+             transition: opacity 0.2s ease; /* DODANO: Vizualni efekt na hover */
+         }
+        .sfured-header .user-info .avatar-placeholder:hover {
+            opacity: 0.8; /* DODANO: Vizualni efekt na hover */
+        }
+
+         .sfured-header .user-info .logout-icon {
+             color: #d1d5db; /* gray-400 */
+             font-size: 1.25rem; /* text-xl */
+             cursor: pointer;
+             transition: color 0.2s ease;
+         }
+         .sfured-header .user-info .logout-icon:hover {
+             color: #ef4444; /* Red on hover */
+         }
+
+        /* Specific styles for the vertical fixed navigation */
+         .sfured-nav-vertical {
+             position: fixed; /* Ostaje fiksirano */
+             top: 64px; /* Ispod headera */
+             left: 0;
+             bottom: 0; /* Extends to bottom */
+             width: 250px; /* Fixed width */
+             background-color: #111827; /* Darker than header */
+             border-right: 1px solid rgba(255, 255, 255, 0.1);
+             z-index: 40; /* Ispod headera */
+             display: flex;
+             flex-direction: column;
+             padding: 0; /* UKLONJEN defaultni padding ovdje */
+             overflow-y: auto; /* Allow scrolling if content is long */
+             scrollbar-width: thin;
+             scrollbar-color: var(--secondary-color) rgba(255,255,255,0.05);
+         }
+        .sfured-nav-vertical::-webkit-scrollbar { width: 5px; }
+        .sfured-nav-vertical::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .sfured-nav-vertical::-webkit-scrollbar-thumb { background-color: var(--secondary-color); border-radius: 10px; }
+
+         /* STILOVI ZA IKONE NA VRHU VERTIKALNOG MENIJA (SADA SPLITANE) */
+         .sfured-nav-vertical .nav-top-icons { /* Kontejner za dva splitana polja */
+             display: flex;
+             justify-content: space-around; /* Razdvoji lijevu i desnu stranu */
+             align-items: center; /* Centriraj okomito sadržaj */
+             padding: 0.8rem 0; /* Gornji/donji padding */
+             border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Border ispod */
+             margin-bottom: 0.75rem; /* Razmak ispod prije statusa/naslova */
+             width: 100%; /* Zauzmi punu širinu */
+             box-sizing: border-box;
+         }
+          /* Stilovi za lijevo polje (Video Player) */
+         .sfured-nav-vertical .video-player-icon-area {
+             display: flex;
+             flex: 1; /* Zauzmi jednak prostor */
+             justify-content: center; /* Centriraj ikonu unutar polja */
+             align-items: center;
+         }
+         /* Stilovi za desno polje (Notifikacije) */
+         .sfured-nav-vertical .notification-icon-area {
+             display: flex;
+             flex: 1; /* Zauzmi jednak prostor */
+             justify-content: center; /* Centriraj ikonu unutar polja */
+             align-items: center;
+         }
+
+
+          .sfured-nav-vertical .nav-top-icons .icon-link {
+             color: #d1d5db;
+             font-size: 1.5rem;
+             cursor: pointer;
+             transition: color 0.2s ease;
+         }
+         .sfured-nav-vertical .nav-top-icons .icon-link:hover {
+             color: var(--fluorescent-green);
+         }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+         .notification-icon i {
+             font-size: 1.5rem;
+             color: #d1d5db;
+             transition: color 0.2s ease;
+         }
+         .notification-icon i:hover {
+             color: var(--fluorescent-green);
+         }
+         .notification-counter {
+             position: absolute;
+             top: -8px;
+             right: -8px;
+             font-size: 0.75rem;
+             font-weight: 700;
+             border-radius: 9999px;
+             padding: 0.1rem 0.4rem;
+             line-height: 1;
+             min-width: 1.2em;
+             text-align: center;
+             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+             z-index: 10;
+             background-color: rgba(128, 255, 0, 0.1);
+             color: var(--fluorescent-green);
+             border: 1px solid var(--fluorescent-green);
+         }
+         .notification-counter.has-unread {
+             background-color: #ef4444;
+             color: white;
+             border-color: #ef4444;
+         }
+
+
+         .sfured-nav-vertical .sf-status-title {
+             text-align: center;
+             color: white;
+             font-size: 1.1rem;
+             font-weight: 700;
+             padding-bottom: 0.75rem;
+             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+             margin-bottom: 0.75rem;
+         }
+         .sfured-nav-vertical .sf-status-title .larger-sf {
+             font-size: 1.3rem;
+         }
+
+         .sfured-nav-vertical .nav-links-vertical {
+             flex-grow: 1;
+             list-style: none;
+             padding: 0;
+             margin: 0;
+         }
+         .sfured-nav-vertical .nav-link-vertical {
+             display: block;
+             padding: 0.75rem 1.5rem;
+             color: #d1d5db;
+             text-decoration: none;
+             transition: background-color 0.2s ease, color 0.2s ease;
+             font-weight: 500;
+         }
+         .sfured-nav-vertical .nav-link-vertical:hover {
+             background-color: rgba(106, 27, 154, 0.1);
+             color: white;
+         }
+         .sfured-nav-vertical .nav-link-vertical.active {
+             background-color: var(--fluorescent-green);
+             color: #0e076a;
+             font-weight: 700;
+         }
+
+         .sfured-main-content {
+             margin-left: 250px;
+             padding: 1.5rem;
+             padding-top: calc(64px + 1.5rem);
+             min-height: calc(100vh - 64px);
+         }
+
+         .dashboard-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+             gap: 1.5rem;
+         }
+
+         .dashboard-panel {
+             background-color: var(--glass-background);
+             backdrop-filter: blur(8px);
+             -webkit-backdrop-filter: blur(8px);
+             border: 1px solid var(--glass-border);
+             border-radius: 15px;
+             padding: 1.5rem;
+             text-align: center;
+             color: var(--text-color);
+             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+             cursor: pointer;
+             display: flex;
+             flex-direction: column;
+             justify-content: center;
+             align-items: center;
+         }
+         .dashboard-panel:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 10px 25px var(--glass-shadow);
+             border-color: var(--fluorescent-green);
+         }
+
+         .dashboard-panel h4 {
+             font-size: 1.1rem;
+             font-weight: 600;
+             color: white;
+             margin-bottom: 0.5rem;
+             font-family: 'Arial Narrow', Arial, sans-serif;
+         }
+
+         .dashboard-panel .panel-value {
+             font-size: 1.5rem;
+             font-weight: 700;
+             color: var(--fluorescent-green);
+             font-family: 'Arial Narrow', Arial, sans-serif;
+             margin-bottom: 0.25rem;
+         }
+
+         .dashboard-panel .panel-secondary-text {
+             font-size: 0.875rem;
+             color: #d1d5db;
+             line-height: 1.4;
+         }
+
+        .dashboard-panel i {
+             font-size: 2rem;
+             color: var(--secondary-color);
+             margin-bottom: 0.5rem;
+         }
+         .dashboard-panel .panel-value + i {
+              margin-bottom: 0;
+         }
+
+        .panel-status-timer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+         .panel-status-timer .panel-value { /* General .panel-value unutar .panel-status-timer */
+             margin-bottom: 0;
+         }
+         /* Specifičnije pravilo za font size u panelu statusa dana, nadjačava opće .panel-value */
+        .panel-status-timer .panel-value {
+            font-size: 0.875rem !important; /* Veličina text-sm, !important za jaču specifičnost */
+            /* Ostali stilovi (boja, font-weight) će biti naslijeđeni od općeg .panel-value pravila */
+        }
+         .panel-status-timer .panel-secondary-text {
+             margin-top: 0rem;
+         }
+
+
+        /* Specifični stil za SFalgoritam Status panel (ako je klasa .sf-algorithm-status u HTML-u) */
+        /* Ovo je bila vaša druga definicija, ostavljam je ako je namjerno drugačija klasa */
+        .dashboard-panel.sf-algorithm-status {
+            min-height: 80px;
+            max-height: 150px;
+            padding: 0.75rem;
+            width: 200px;
+            min-width: 200px;
+            margin: 0 auto;
+        }
+        .sf-algorithm-status h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+
+        .panel-small-text {
+            font-size: 0.875rem;
+            color: #d1d5db;
+        }
+        .panel-link {
+            color: var(--fluorescent-green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+         .panel-link:hover {
+             color: #aaff44;
+         }
+
+        .personal-info-data-panel {
+             background: rgba(106, 27, 154, 0.1);
+             backdrop-filter: blur(8px);
+             -webkit-backdrop-filter: blur(8px);
+             border: 1px solid var(--fluorescent-green);
+             border-radius: 15px;
+             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+             padding: 1rem;
+             color: var(--text-color);
+             display: flex;
+             flex-direction: column;
+             min-width: 310px; /* ili više, po potrebi */
+        }
+        .personal-info-data-panel > div {
+            margin-bottom: 0.5rem;
+        }
+         .personal-info-data-panel > div:last-child {
+             margin-bottom: 0;
+         }
+
+         .panel-value-subtext {
+            font-size: 0.75rem;
+            color: color: #fff;
+            margin-top: 0.25rem;
+            display: block;
+            text-align: center;
+         }
+
+         .text-fluorescent-orange {
+             color: var(--fluorescent-orange);
+         }
+
+
+        .avatar-upload-modal-overlay {
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background: rgba(0, 0, 0, 0.7);
+             backdrop-filter: blur(5px);
+             -webkit-backdrop-filter: blur(5px);
+             z-index: 9999;
+             display: none;
+             justify-content: center;
+             align-items: center;
+        }
+         .avatar-upload-modal-content {
+             background: #1f2937;
+             border: 1px solid var(--fluorescent-green);
+             border-radius: 15px;
+             padding: 2rem;
+             max-width: 400px;
+             width: 90%;
+             text-align: center;
+             position: relative;
+             box-shadow: 0 8px 32px 0 rgba(128, 255, 0, 0.3);
+             color: var(--text-color);
+        }
+         .avatar-upload-modal-content h4 {
+             color: var(--fluorescent-green);
+             margin-bottom: 1.5rem;
+             font-size: 1.5rem;
+         }
+         .avatar-upload-options {
+             display: flex;
+             flex-direction: column;
+             gap: 1rem;
+         }
+         .avatar-upload-button {
+             background-color: rgba(128, 255, 0, 0.1);
+             color: var(--fluorescent-green);
+             border: 1px solid var(--fluorescent-green);
+             border-radius: 8px;
+             padding: 0.75rem 1.5rem;
+             font-weight: 600;
+             cursor: pointer;
+             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-size: 1rem;
+         }
+         .avatar-upload-button i {
+             margin-right: 0.75rem;
+             font-size: 1.2rem;
+             color: var(--fluorescent-green);
+         }
+         .avatar-upload-button:hover {
+             background-color: var(--fluorescent-green);
+             color: #0e076a;
+         }
+         .avatar-upload-button:hover i {
+             color: #0e076a;
+         }
+
+         .avatar-upload-input {
+             display: none;
+         }
+
+         .modal-close {
+             position: absolute;
+             top: 10px;
+             right: 10px;
+             font-size: 2rem;
+             color: #d1d5db;
+             cursor: pointer;
+             transition: color 0.2s ease;
+         }
+         .modal-close:hover {
+             color: white;
+         }
+
+        .sftim-top-info-container {
+            background-color: var(--glass-background);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+        .sftim-top-info-container .sftim-info-block .info-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.45rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 1rem;
+        }
+        .sftim-top-info-container .sftim-info-block .info-line:last-child {
+            border-bottom: none;
+        }
+        .sftim-top-info-container .sftim-info-block .info-line span:first-child {
+            color: #d1d5db;
+            flex-shrink: 0;
+            margin-right: 1rem;
+        }
+        .sftim-top-info-container .sftim-info-block .info-line span.value-number {
+            font-weight: 700;
+            text-align: right;
+            min-width: 60px;
+            flex-grow: 1;
+        }
+        .sftim-top-info-container .sftim-info-block .info-line span.value-white {
+            color: white;
+        }
+        .sftim-top-info-container .sftim-info-block .info-line span.value-green {
+            color: var(--fluorescent-green);
+        }
+
+        .sftim-panel-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .sftim-panel-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 768px) {
+            .sftim-panel-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .sftim-panel-grid .sftim-span-panel {
+                grid-column: span 2 / span 2;
+            }
+        }
+        .sftim-panel-grid .dashboard-panel .panel-icon-sftim {
+             font-size: 2rem;
+             color: var(--secondary-color);
+             margin-bottom: 0.75rem;
+        }
+        .sftim-panel-grid .panel-sftim-status-clanova h4 {
+             margin-bottom: 0.75rem;
+        }
+        .sftim-panel-grid .panel-sftim-status-clanova .panel-secondary-text {
+            width: 100%;
+            margin-top: 0.1rem;
+            font-size: 0.9rem;
+        }
+        .sftim-panel-grid .panel-sftim-status-clanova .panel-secondary-text span:last-child {
+            font-weight: 600;
+            color: var(--fluorescent-green);
+            margin-left: 0.5rem;
+        }
+
+        /* === ISPRAVLJEN STIL ZA SFALGORITAM STATUS PANEL (SFTIM SEKCIJA) === */
+        /* Pretpostavka: klasa u HTML-u je "sfalgoritam-status-panel" */
+        .sfalgoritam-status-panel {
+            width: 110px;
+            height: 120px;
+            padding: 1rem;
+            justify-self: start; /* Poravnava ovaj grid item na početak (lijevo) njegove grid ćelije */
+            /* align-self: start; */ /* Ako ga želite poravnati na vrh njegove grid ćelije vertikalno */
+        }
+
+        /* Opcionalno: Ako želite dodatno smanjiti fontove unutar ovog specifičnog manjeg panela */
+        .sfalgoritam-status-panel h4 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .sfalgoritam-status-panel .panel-secondary-text {
+            font-size: 0.8rem;
+        }
+        .sfalgoritam-status-panel i {
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
+        }
+
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 0;
+                 padding-left: 0;
+            }
+            .sfured-header {
+                padding: 0 1rem;
+            }
+            .sfured-header .logo-sfured .logo-nav {
+                font-size: 1rem;
+            }
+             .sfured-header .logo-sfured .logo-nav .small-text {
+                 font-size: 0.5rem;
+             }
+             .sfured-header .logo-sfured img {
+                 width: 40px;
+                 margin-right: 0.25rem;
+             }
+             .sfured-header .status-timer {
+                 display: none;
+             }
+            .sfured-header .user-info .user-details {
+                display: none;
+            }
+            .sfured-header .user-info .avatar-placeholder {
+                margin-right: 0.5rem;
+            }
+            .sfured-header .user-info .logout-icon {
+                margin-right: 1rem;
+            }
+
+             .sfured-nav-vertical {
+                 width: 100%;
+                 height: auto;
+                 max-height: calc(100vh - 64px);
+                 top: 64px;
+                 left: 0;
+                 bottom: auto;
+                 border-right: none;
+                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                 transform: translateY(-100%);
+                 transition: transform 0.3s ease-in-out;
+                 padding: 1rem;
+                 overflow-y: auto;
+            }
+             .sfured-nav-vertical.active {
+                 transform: translateY(0);
+            }
+             .sfured-main-content {
+                 margin-left: 0;
+                 padding: 1.5rem 1rem;
+                 padding-top: calc(64px + 1.5rem);
+                 min-height: auto;
+                 margin-top: 0;
+             }
+             .dashboard-grid {
+                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                 gap: 1rem;
+             }
+             .dashboard-panel { /* Općenito smanjenje paddinga panela na mobilnom */
+                 padding: 1rem;
+             }
+             /* Ako .sfalgoritam-status-panel treba drugačiji padding na mobilnom, dodajte ovdje */
+             .sfalgoritam-status-panel { /* Primjer: zadrži manji padding i na mobilnom */
+                padding: 0.75rem; /* Ili prilagodite po potrebi za mobilni */
+             }
+
+            .sfured-nav-vertical .nav-top-icons {
+                 justify-content: center;
+                 gap: 1rem;
+                 padding: 0.5rem 0;
+                 margin-bottom: 0.5rem;
+             }
+            .sfured-nav-vertical .sf-status-title {
+                 font-size: 1rem;
+                 padding-bottom: 0.5rem;
+                 margin-bottom: 0.5rem;
+             }
+             .sfured-nav-vertical .sf-status-title .larger-sf {
+                 font-size: 1.2rem;
+             }
+            .sfured-nav-vertical .nav-links-vertical {
+                 padding: 0.5rem 0;
+                 flex-direction: column;
+            }
+            .sfured-nav-vertical .nav-link-vertical {
+                 padding: 0.75rem 1rem;
+                 text-align: center;
+             }
+
+            .hamburger {
+                 display: block;
+                 cursor: pointer;
+                 margin-right: 0rem;
+                 z-index: 60;
+             }
+             .hamburger .bar {
+                 display: block;
+                 width: 25px;
+                 height: 3px;
+                 margin: 5px auto;
+                 -webkit-transition: all 0.3s ease-in-out;
+                 transition: all 0.3s ease-in-out;
+                 background-color: #d1d5db;
+             }
+             .hamburger.active .bar:nth-child(2) {
+                 opacity: 0;
+             }
+             .hamburger.active .bar:nth-child(1) {
+                 transform: translateY(8px) rotate(45deg);
+             }
+             .hamburger.active .bar:nth-child(3) {
+                 transform: translateY(-8px) rotate(-45deg);
+             }
+        }
+    </style>
+     <!-- Učitavanje Skripti (opcionalno ako već imate globalni setup) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+    <!-- Top Fixed Header -->
+    <header class="sfured-header">
+        <!-- === IZMIJENJENI DIO ZA LOGO U HEADERU - POČETAK === -->
+        <div class="logo-sfured flex items-center">
+            <!-- Slika Logotipa -->
+            <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo-sfured" class="h-auto w-12 mr-2">
+
+            <!-- Tekstualni Logotip -->
+            <div class="flex flex-col logo-nav items-start">
+                 <span class="small-text">InFace Invest Group</span>
+                 <!-- Promijenjen tekst SFT21 u SFured -->
+                 <div class="text-white font-bold text-xl"> <span class="text-logo-orange">SF</span>ured </div>
+            </div>
+            <!-- Tekst "Aplikacija SFured" je UKLONJEN -->
+        </div>
+        <!-- === IZMIJENJENI DIO ZA LOGO U HEADERU - KRAJ === -->
+
+        <!-- Status/Timer (Hidden on mobile) -->
+        <div class="status-timer hidden md:flex">
+             <span id="account-status" class="status active">AKTIVAN</span>
+             <span id="account-timer" class="timer-display">0_ 00:00:00</span> <!-- POČETNA VRIJEDNOST TAJMERA PRIKAZANA U HTML-U -->
+        </div>
+
+        <!-- User Info & Logout -->
+        <div class="user-info">
+            <div class="user-details hidden md:flex">
+                 <span id="user-name" class="user-name">Maja Novak</span>
+                 <span id="user-username" class="user-username">maja.novak@example.com</span> <!-- Koristi email ili korisničko ime -->
+            </div>
+            <!-- Avatar Placeholder (sada klikabilan) -->
+            <div id="avatar-placeholder" class="avatar-placeholder">
+                 <!-- Ovdje ide profilna slika/avatar -->
+                 <!-- Može se dodati i ikona tipa <i class="fas fa-camera"></i> ili <i class="fas fa-user-circle"></i> -->
+            </div>
+            <i class="fas fa-power-off logout-icon" title="Odjava"></i>
+            <!-- Hamburger ikona za mobilni prikaz -->
+            <div class="hamburger md:hidden">
+                 <span class="bar"></span>
+                 <span class="bar"></span>
+                 <span class="bar"></span>
+             </div>
+        </div>
+    </header>
+
+    <!-- Vertical Fixed Navigation Bar -->
+    <nav class="sfured-nav-vertical">
+        <!-- === IKONE NA VRHU VERTIKALNOG MENIJA (SADA SPLITANE) - POČETAK === -->
+        <div class="nav-top-icons">
+             <!-- Lijevo polje: Video Player Icon -->
+            <div class="video-player-icon-area">
+            <div class="video-player-icon-area"><a href="video_player.html?from=sfured.html" class="icon-link" title="Video Player"><i class="fas fa-play-circle"></i></a>
+</div>            </div>
+            <!-- Desno polje: Notification Icon i Brojač -->
+            <div class="notification-icon-area">
+                <div class="notification-icon" title="Obavijesti">
+                     <i class="fas fa-bell"></i>
+                     <!-- Brojač nepročitanih obavijesti (sa klasom za crveni krug u demo verziji) -->
+                     <span class="notification-counter has-unread">1</span>
+                </div>
+            </div>
+        </div>
+         <!-- === IKONE NA VRHU VERTIKALNOG MENIJA (SADA SPLITANE) - KRAJ === -->
+
+
+        <!-- User Status/Title -->
+        <div class="sf-status-title">
+             <span class="larger-sf">SF</span>Franšizer
+        </div>
+
+        <!-- Main Vertical Links -->
+        <ul class="nav-links-vertical">
+             <li><a href="#" class="nav-link-vertical active" data-panel-target="kontrolna-ploca"><i class="fas fa-tachometer-alt mr-3"></i>KONTROLNA PLOČA</a></li>
+             <li><a href="#" class="nav-link-vertical" data-panel-target="moj-racun"><i class="fas fa-user-circle mr-3"></i>MOJ RAČUN</a></li>
+             <li><a href="#" class="nav-link-vertical" data-panel-target="novcanik"><i class="fas fa-wallet mr-3"></i>NOVČANIK</a></li>
+             <li><a href="#" class="nav-link-vertical" data-panel-target="sfteam"><i class="fas fa-users mr-3"></i>SFTIM</a></li>
+             <li><a href="sfkod.html" class="nav-link-vertical" data-panel-target="sfkod"><i class="fas fa-ticket-alt mr-3"></i>SFKOD</a></li>             <li><a href="#" class="nav-link-vertical" data-panel-target="sfnet"><i class="fas fa-network-wired mr-3"></i>SFNET</a></li>
+             <li><a href="#" class="nav-link-vertical" data-panel-target="sfshop"><i class="fas fa-shopping-bag mr-3"></i>SFSHOP</a></li>
+        </ul>
+
+        <!-- UKLONJENO: nav-bottom-icons jer su sada na vrhu -->
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="sfured-main-content">
+        <!-- Dashboard Grid (inicijalno vidljiv) -->
+        <div id="dashboard-grid" class="dashboard-grid">
+
+            <!-- Panel 1: Startni paket -->
+            <div class="dashboard-panel" id="startni-paket-panel">
+                <i class="fas fa-box-open"></i>
+                 <h4>Startni paket</h4>
+                 <span class="panel-value">SP7</span>
+                 <span class="panel-secondary-text">Pretplatnički period: <span style="color: var(--fluorescent-green); font-size: 1.1em;">1 / 21</span>            
+            </div>
+
+            <!-- Panel 2: Zarada -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-coins"></i>
+                 <h4>Zarada</h4>
+                 <span class="panel-value">0,00 SFC</span>
+                 <span class="panel-secondary-text">Blokirano: 0,00 SFC</span>
+                 <!-- <button class="btn-primary mt-4 text-xs px-3 py-1">Detalji</button> -->
+            </div>
+
+            <!-- Panel 3: Radna obaveza -->
+             <div class="dashboard-panel">
+                 <i class="fas fa-tasks"></i>
+                 <h4>Radna obaveza</h4>
+                 <span class="panel-value">Potvrdi</span> <!-- Može biti tekst "Potvrdi" ili status "Obavljena" -->
+                 <span class="panel-secondary-text">Tjedna / mjesečna obaveza</span>
+                 <!-- <button class="btn-primary mt-4 text-xs px-3 py-1">Obavi</button> -->
+             </div>
+
+           <!-- Panel 4: SFpodrška -->
+<div class="dashboard-panel">
+    <i class="fas fa-headset"></i>
+    <h4>SFpodrška</h4>
+    <div style="white-space: nowrap;" class="panel-secondary-text">Nepročitani emailovi: <span style="color: var(--fluorescent-green); font-size: 1.1em;">1</span>
+    </div>
+</div>
+
+            <!-- Panel 5: Dodaj novog člana -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-user-plus"></i>
+                 <h4>Dodaj novog člana</h4>
+                 <span class="panel-secondary-text">Registrirajte novog korisnika</span>
+            </div>
+
+            <!-- Panel 6: Limit maksimalne zarade -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-chart-bar"></i>
+                 <h4>Limit max. zarade</h4>
+                 <span class="panel-value">2100 SFC</span>                <!-- <button class="btn-primary mt-4 text-xs px-3 py-1">Povećaj</button> -->
+            </div>
+
+            <!-- Panel 7: Status aktivnih / neaktivnih dana -->
+            <div class="dashboard-panel panel-status-timer">
+                <i class="fas fa-calendar-alt"></i>
+                <h4>Status aktivnih / neaktivnih dana</h4>
+                <!-- Kontejner za Aktivne dane -->
+                <div class="flex justify-center items-center text-sm"> <!-- Added flex for side-by-side and text-sm for size -->
+                    <span class="panel-secondary-text mr-1">Aktivni dani:</span> <!-- Label -->
+                    <span class="panel-value text-sm" id="panel7-active-days">0</span> <!-- Value, adjusted size to fit -->
+                </div>
+                <!-- Kontejner za Neaktivne dane -->
+                <div class="flex justify-center items-center text-sm mt-1"> <!-- Added flex and text-sm, mt-1 for spacing -->
+                    <span class="panel-secondary-text mr-1">Neaktivni dani:</span> <!-- Label -->
+                    <span class="panel-value text-sm" id="panel7-inactive-days">0</span> <!-- Value, adjusted size -->
+                </div>
+            </div>
+
+            <!-- Panel 8: SFpojmovnik -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-book"></i>
+                 <h4>SFpojmovnik</h4>
+                 <span class="panel-secondary-text">Objašnjenje pojmova</span>
+                 <span class="panel-value"></span>
+            </div>
+
+            <!-- Panel 9: SFbodovi -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-star"></i>
+                 <h4>SFbodovi</h4>
+                 <span class="panel-value">1450</span>                <!-- <button class="btn-primary mt-4 text-xs px-3 py-1">Detalji</button> -->
+             </div>
+
+            <!-- Panel 10: SFkreator -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-pencil-alt"></i>
+                 <h4>SFkreator</h4>
+                 <span class="panel-secondary-text">Kreirajte marketinški materijal</span>
+            </div>
+
+            <!-- Panel 11: SFT21 Business Concept -->
+             <div class="dashboard-panel">
+                 <i class="fas fa-rocket"></i> <!-- Promijenjena ikona u raketu -->
+                 <h4>SFT21 Business Concept</h4>
+                 <span class="panel-secondary-text">Službena prezentacija</span>
+             </div>
+
+            <!-- Panel 12: Preuzimanja -->
+            <div class="dashboard-panel">
+                 <i class="fas fa-file-download"></i> <!-- Promijenjena ikona u file-download -->
+                 <h4>Preuzimanja</h4>
+                 <span class="panel-secondary-text">Važni dokumenti i materijali</span>
+            </div>
+        </div> <!-- End Dashboard Grid -->
+
+        <!-- === MOJ RAČUN CONTENT - POČETAK (Inicijalno sakriven) === -->
+         <div id="moj-racun-content" style="display: none;">
+             <!-- Top Personal Details Block (Slično slici) -->
+             <div class="glass-card mb-8">
+                 <h4 class="text-xl font-bold mb-6 text-center">Moji Podaci</h4>
+                 <!-- Data Panels Grid -->
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-8"> <!-- Original grid structure, added mb-8 for space below -->
+                     <!-- Panel 1: Lijevi stupac -->
+                     <div class="personal-info-data-panel"> <!-- Changed class -->
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Broj dokumenta:</span> <span class="text-white">123456789</span></div>
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">eMail:</span> <span class="text-white">maja.novak@example.com</span></div>
+                         <div class="flex justify-between"><span class="font-semibold text-gray-400">Mobitel:</span> <span class="text-white">+385912345678</span></div>
+                     </div>
+                     <!-- Panel 2: Srednji stupac -->
+                     <div class="personal-info-data-panel"> <!-- Changed class -->
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Adresa:</span> <span class="text-white">Moja ulica 7</span></div>
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Grad / Mjesto:</span> <span class="text-white">Rovinj</span></div>
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Broj pošte:</span> <span class="text-white">52210</span></div>
+                         <div class="flex justify-between"><span class="font-semibold text-gray-400">Država:</span> <span class="text-white">Hrvatska</span></div>
+                     </div>
+                     <!-- Panel 3: Desni stupac -->
+                     <div class="personal-info-data-panel"> <!-- Changed class -->
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Korisnički ID:</span> <span class="text-white">fde3486b891fd8858c83b722938d6527</span></div>
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Korisničko ime:</span> <span class="text-white">majanovak</span></div>
+                         <div class="flex justify-between mb-2"><span class="font-semibold text-gray-400">Preporučitelj:</span> <span class="text-white">dreamhacker</span></div>
+                         <div class="flex justify-between"><span class="font-semibold text-gray-400">Sponzor:</span> <span class="text-white">dreamhacker</span></div>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- Panels Grid for Moj Račun (2 rows of 4) -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                 <!-- Panel 1: Svi računi -->
+                 <div class="dashboard-panel">
+                     <i class="fas fa-layer-group"></i>
+                     <h4>Svi računi</h4>
+                 </div>
+                 <!-- Panel 2: Moji linkovi -->
+                  <div class="dashboard-panel">
+                      <i class="fas fa-link"></i>
+                      <h4>Moji linkovi</h4>
+                  </div>
+                  <!-- Panel 3: Franšizni ugovor -->
+                  <div class="dashboard-panel">
+                      <i class="fas fa-file-contract"></i>
+                      <h4>Franšizni ugovor</h4>
+                  </div>
+                  <!-- Panel 4: Korisnički podaci -->
+                  <div class="dashboard-panel">
+                      <i class="fas fa-id-card"></i>
+                      <h4>Korisnički podaci</h4>
+                  </div>
+                  <!-- Panel 5: Investicijski paketi -->
+                  <div class="dashboard-panel">
+                      <i class="fas fa-percent"></i>
+                      <h4>Investicijski paketi</h4>
+                  </div>
+                  <!-- Panel 6: Drugi vlasnik -->
+                  <div class="dashboard-panel">
+                      <i class="fas fa-user-tie"></i>
+                      <h4>Drugi vlasnik</h4>
+                  </div>
+                  <!-- Panel 7: KYC -->
+                  <div class="dashboard-panel">
+                      <i class="fas fa-user-check"></i>
+                      <h4>KYC</h4>
+                  </div>
+                  <!-- Panel 8: Deaktiviraj Račun (poseban stil) -->
+                  <div class="dashboard-panel" style="color: #ef4444; border-color: #ef4444;"> <!-- Crveni stil -->
+                      <i class="fas fa-times-circle"></i>
+                      <h4>DEAKTIVIRAJ RAČUN</h4>
+                  </div>
+             </div>
+
+         </div>
+         <!-- === MOJ RAČUN CONTENT - KRAJ === -->
+
+         <!-- === SFTIM CONTENT - POČETAK (NOVO DODANO) === -->
+         <div id="sftim-content" style="display: none;">
+            <!-- Top Info Block for SFTIM -->
+            <div class="sftim-top-info-container">
+                <h4 class="text-xl font-bold mb-4 text-center text-white">SFalgoritam Status</h4>
+                <div class="sftim-info-block">
+                    <div class="info-line">
+                        <span>Broj računa u SFalgoritmu:</span>
+                        <span class="value-number value-white">277</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Linija SFalgoritma:</span>
+                        <span class="value-number value-white">8</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Povezani računi u SFalgoritmu:</span>
+                        <span class="value-number value-green">0</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Posljednji registrirani račun u SFalgoritmu:</span>
+                        <span class="value-number value-green">1970</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Vaš slijedeći povezani račun u SFalgoritmu:</span>
+                        <span class="value-number value-green">2069</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panels Grid for SFTIM -->
+            <div class="sftim-panel-grid">
+                <!-- Panel 1: Direktni franšizeri -->
+                <div class="dashboard-panel">
+                    <i class="fas fa-user-tie panel-icon-sftim"></i>
+                    <h4>Direktni franšizeri</h4>
+                    <div class="mt-1">
+                        <span class="text-gray-300 text-xl">DF: </span>
+                        <span class="font-bold text-2xl" style="color: var(--fluorescent-green);">0</span>
+                    </div>
+                </div>
+                <!-- Panel 2: Direktni starteri -->
+                <div class="dashboard-panel">
+                    <i class="fas fa-rocket panel-icon-sftim"></i>
+                    <h4>Direktni starteri</h4>
+                    <div class="mt-1">
+                        <span class="text-gray-300 text-xl">DS: </span>
+                        <span class="font-bold text-2xl" style="color: var(--fluorescent-green);">0</span>
+                    </div>
+                </div>
+                <!-- Panel 3: SFkorisnici / BPR / Članovi na čekanju -->
+                <div class="dashboard-panel panel-sftim-status-clanova">
+                    <i class="fas fa-users-cog panel-icon-sftim"></i>                  
+                    <div class="text-left w-full mt-1">
+                        <p class="panel-secondary-text flex justify-between"><span>SFkorisnici:</span> <span>0</span></p>
+                        <p class="panel-secondary-text flex justify-between"><span>BPR:</span> <span>0</span></p>
+                        <p class="panel-secondary-text flex justify-between"><span>Članovi na čekanju:</span> <span>0</span></p>
+                    </div>
+                </div>
+                <!-- Panel 4: Povezani računi u SFalgoritmu -->
+                <div class="dashboard-panel">
+                    <i class="fas fa-link panel-icon-sftim"></i>
+                    <h4>Povezani računi u SFalgoritmu</h4>
+                    <span class="panel-value">0</span>
+                </div>
+                <!-- Panel 5: Dodaj novog člana (spans 2 cols on md+) -->
+                <div class="dashboard-panel sftim-span-panel"> <!-- Added sftim-span-panel class -->
+                    <i class="fas fa-user-plus panel-icon-sftim"></i>
+                    <h4>Dodaj novog člana</h4>
+                     <span class="panel-secondary-text mt-2"><a href="register.html" class="panel-link">Registriraj</a></span>
+                </div>
+                <!-- Panel 6: SFkarijera (spans 2 cols on md+) -->
+                <div class="dashboard-panel sftim-span-panel"> <!-- Added sftim-span-panel class -->
+                    <i class="fas fa-briefcase panel-icon-sftim"></i>
+                    <h4>SFkarijera</h4>
+                    <span class="panel-secondary-text mt-2"><a href="#" class="panel-link">Pregled</a></span>
+                </div>
+            </div>
+        </div>
+         <!-- === SFTIM CONTENT - KRAJ === -->
+
+         <!-- === NOVČANIK CONTENT - POČETAK (Inicijalno sakriven) === -->
+          <div id="novcanik-content" style="display: none;">
+              <h2 class="text-2xl font-bold mb-6 text-center">Novčanik</h2>
+              <!-- Novčanik Panels Grid (3 rows) -->
+               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                   <!-- Row 1 -->
+                   <div class="dashboard-panel">
+                    <i class="fas fa-coins"></i>
+                    <h4>Zarada</h4>
+                    <span class="panel-value">0,00 SFC</span>
+                    <span class="panel-value-subtext">Blokirano: 0,00 SFC</span> <!-- Smaller, lighter text -->
+                </div>
+                      <div class="dashboard-panel">
+                       <i class="fas fa-wallet"></i>
+                       <h4>Novčanik</h4>
+                       <span class="panel-value">N: 0,00 SFC</span>
+                   </div>
+                    <div class="dashboard-panel">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h4>Webshop novčanik</h4>
+                        <span class="panel-value">WN: 0,00 SFC</span>
+                   </div>
+                   <div class="dashboard-panel">
+                        <i class="fas fa-piggy-bank"></i>
+                       <h4>Rezervni novčanik</h4>
+                       <span class="panel-value">RN: 0,00 SFC</span>
+                       <span class="panel-value-subtext">Blokirano: 0,00 SFC</span> <!-- Smaller, lighter text -->
+                   </div>
+                   <!-- Row 2 -->
+                   <div class="dashboard-panel">
+                       <i class="fas fa-exchange-alt"></i>
+                       <h4>Depozit</h4>
+                       <h4>Povlačenje</h4> <!-- Separate line -->
+                   </div>
+                    <div class="dashboard-panel">
+                        <i class="fas fa-paper-plane"></i>
+                        <h4>Pošalji SFC</h4>
+                   </div>
+                    <div class="dashboard-panel">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <h4>Primi SFC</h4>
+                   </div>
+                   <div class="dashboard-panel">
+                       <i class="fas fa-history"></i>
+                       <h4>Sve transakcije</h4>
+                   </div>
+                   <!-- Row 3 (spans two columns on smaller screens, one row on larger) -->
+                   <div class="dashboard-panel col-span-1 sm:col-span-2 md:col-span-2"> <!-- Spans 2 columns on md and larger -->
+                       <i class="fas fa-money-check-alt"></i>
+                       <h4>Pošalji pozajmice</h4>
+                       <span class="panel-value-subtext">Pošalji SFC sa garancijom povrata</span> <!-- Smaller, lighter text -->
+                   </div>
+                   <div class="dashboard-panel col-span-1 sm:col-span-2 md:col-span-2"> <!-- Spans 2 columns on md and larger -->
+                       <i class="fas fa-handshake"></i>
+                       <h4>Primi pozajmice</h4>
+                       <span class="panel-value-subtext">Primi SFC sa garancijom povrata</span> <!-- Smaller, lighter text -->
+                   </div>
+               </div>
+          </div>
+          <!-- === NOVČANIK CONTENT - KRAJ === -->
+                <!-- === SFTIM CONTENT - POČETAK (Inicijalno sakriven) === -->
+                <div id="sfteam-content" style="display: none;">
+                    <h3 class="text-2xl font-bold mb-6 text-white text-center">SFTIM Pregled</h3>
+                    <div class="dashboard-grid">
+                        <!-- Panel: Sfalgoritam Status (sa posebnom klasom za stilizaciju) -->
+                        <div class="dashboard-panel sfalgoritam-status-panel">
+                            <i class="fas fa-cogs"></i> <!-- Primjer ikone -->
+                            <h4>Sfalgoritam Status</h4>
+                            <div class="dashboard-panel sfalgoritam-status-panel">
+                                <i class="fas fa-cogs"></i>
+                                <h4>SFalgoritam Status</h4>
+                                <div class="panel-secondary-text" style="background: rgba(128,255,0,0.07); border-radius: 8px; padding: 0.7em 1em; margin-top: 0.7em; text-align: left;">
+                                    Broj računa u SFalgoritmu: <span style="color: var(--fluorescent-green); font-weight: bold;">277</span><br>
+                                    Linija SFalgoritma: <span style="color: var(--fluorescent-green); font-weight: bold;">8</span><br>
+                                    Povezani računi u SFalgoritmu: <span style="color: var(--fluorescent-green); font-weight: bold;">0</span><br>
+                                    Posljednji registrirani račun u SFalgoritmu: <span style="color: var(--fluorescent-green); font-weight: bold;">1970</span><br>
+                                    Vaš slijedeći povezani račun u SFalgoritmu: <span style="color: var(--fluorescent-green); font-weight: bold;">2069</span>
+                                </div>
+                            </div>
+                         </div>
+        
+                        <!-- Ovdje možete dodati ostale panele za SFTIM sekciju ako je potrebno -->
+                        <div class="dashboard-panel">
+                            <i class="fas fa-users-cog"></i>
+                            <h4>Članovi Tima</h4>
+                            <span class="panel-value">15</span>
+                        </div>
+                        <div class="dashboard-panel">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Performanse Tima</h4>
+                            <span class="panel-secondary-text">Detalji o performansama...</span>
+                        </div>
+                        <!-- Dodajte još panela po potrebi -->
+        
+                    </div>
+                </div>
+                <!-- === SFTIM CONTENT - KRAJ === -->   
+
+
+    </main> <!-- End Main Content Area -->
+
+    <!-- Simple Footer -->
+    <footer class="py-8 bg-gray-900 text-center text-gray-400 text-sm">
+        <div class="container mx-auto px-6">
+            © 2025 InFace Invest Group d.o.o. Sva prava pridržana.
+        </div>
+    </footer>
+
+    <!-- === MODAL ZA AVATAR UPLOAD/SLIKANJE - POČETAK === -->
+    <div id="avatar-upload-modal-overlay" class="avatar-upload-modal-overlay">
+        <div id="avatar-upload-modal-content" class="avatar-upload-modal-content">
+            <button class="modal-close" aria-label="Zatvori">×</button>
+            <h4>Promjena profilne fotografije</h4>
+            <div class="avatar-upload-options">
+                <!-- Gumb za Učitavanje fotografije (aktivira skriveni file input) -->
+                <button id="upload-photo-button" class="avatar-upload-button">
+                    <i class="fas fa-upload"></i> Učitaj fotografiju
+                </button>
+                 <!-- Skriveni input za odabir datoteke -->
+                <input type="file" id="avatar-file-input" class="avatar-upload-input" accept="image/*">
+
+                <!-- Gumb za Uslikavanje (aktivira kameru - simulacija) -->
+                <button id="take-photo-button" class="avatar-upload-button">
+                    <i class="fas fa-camera"></i> Uslikaj se
+                </button>
+            </div>
+            <!-- Ovdje se može dodati <video> za preview kamere, <canvas> za snimanje slike, itd. -->
+            <!-- Za sada samo gumbi -->
+        </div>
+    </div>
+     <!-- === MODAL ZA AVATAR UPLOAD/SLIKANJE - KRAJ === -->
+
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const verticalNav = document.querySelector('.sfured-nav-vertical');
+            const mainContent = document.querySelector('.sfured-main-content'); // Nije direktno korišteno u logici ali je dobro imati referencu
+            const navLinksVertical = document.querySelectorAll('.sfured-nav-vertical .nav-link-vertical');
+            const statusElement = document.getElementById('account-status');
+            const timerElement = document.getElementById('account-timer');
+            const panel7ActiveDaysEl = document.querySelector('#panel7-active-days');
+            const panel7InactiveDaysEl = document.querySelector('#panel7-inactive-days');
+            // const notificationCounterEl = document.querySelector('.notification-counter'); // Nije direktno korišteno u logici
+            
+            const avatarPlaceholder = document.getElementById('avatar-placeholder');
+            const avatarUploadModalOverlay = document.getElementById('avatar-upload-modal-overlay');
+            const avatarUploadModalClose = document.querySelector('#avatar-upload-modal-content .modal-close');
+            const uploadPhotoButton = document.getElementById('upload-photo-button');
+            const avatarFileInput = document.getElementById('avatar-file-input');
+            const takePhotoButton = document.getElementById('take-photo-button');
+
+            const logoutButton = document.querySelector('.logout-icon'); // Dohvat gumba za odjavu
+        
+            // Kontejneri za različite prikaze sadržaja koji su DIO sfured.html
+            const dashboardGrid = document.getElementById('dashboard-grid');
+            const mojRacunContent = document.getElementById('moj-racun-content');
+            const novcanikContent = document.getElementById('novcanik-content');
+            const sftimContent = document.getElementById('sftim-content'); 
+            // NE DEKLARIRAMO: sfkodContent, sfnetContent, sfshopContent jer su oni (ili će biti) zasebne .html stranice
+        
+        
+            // --- Mobile Menu Toggle ---
+            if (hamburger && verticalNav) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    verticalNav.classList.toggle('active');
+                    document.body.classList.toggle('overflow-hidden-mobile', verticalNav.classList.contains('active'));
+                });
+        
+                // Ovo je već dio opće logike za navLinkove ispod, nema potrebe duplirati
+                // navLinksVertical.forEach(link => {
+                //     link.addEventListener('click', () => {
+                //         if (hamburger.classList.contains('active')) {
+                //             hamburger.classList.remove('active');
+                //             verticalNav.classList.remove('active');
+                //             document.body.classList.remove('overflow-hidden-mobile');
+                //         }
+                //     });
+                // });
+            } else {
+                console.warn("Hamburger or vertical navigation not found.");
+            }
+        
+            // --- Vertical Nav Link Click Handling (Ažurirano za sfured.html) ---
+            if (navLinksVertical.length > 0) {
+                navLinksVertical.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+                        const targetPanel = link.getAttribute('data-panel-target');
+
+                        // Provjeri je li link za vanjsku .html stranicu
+                        if (href && href !== '#' && href.includes('.html') && (!window.location.pathname.endsWith(href) && href !== window.location.pathname)) {
+                            if (hamburger && verticalNav && hamburger.classList.contains('active')) {
+                                hamburger.classList.remove('active');
+                                verticalNav.classList.remove('active');
+                                if (document.body.classList.contains('overflow-hidden-mobile')) {
+                                    document.body.classList.remove('overflow-hidden-mobile');
+                                }
+                            }
+                            return; // NE RADI e.preventDefault() - dopusti prijelaz na drugu stranicu
+                        }
+                        
+                        // Ako nije vanjski link, onda je za promjenu panela na TRENUTNOJ stranici
+                        e.preventDefault(); // Spriječi defaultnu navigaciju (npr. skok na #)
+
+                        navLinksVertical.forEach(otherLink => otherLink.classList.remove('active'));
+                        link.classList.add('active');
+
+                        console.log(`Clicked nav link for panel: ${targetPanel} on sfured.html`);
+
+                        // Definiraj mapping target panela na elemente koji postoje SAMO na sfured.html
+                        const panelMap = {
+                            'kontrolna-ploca': dashboardGrid,
+                            'moj-racun': mojRacunContent,
+                            'novcanik': novcanikContent,
+                            'sfteam': sftimContent
+                            // Nema mapiranja za sfkod, sfnet, sfshop jer su oni vanjske stranice
+                        };
+
+                        // Sakrij sve content blokove koji su dio sfured.html
+                        Object.values(panelMap).forEach(panelElement => {
+                            if (panelElement) { // Provjeri da li element postoji prije sakrivanja
+                                panelElement.style.display = 'none';
+                            }
+                        });
+                        
+                        // Prikaži odgovarajući blok sadržaja ako je definiran u panelMap
+                        const panelToShow = panelMap[targetPanel];
+                        if (panelToShow) {
+                            if (targetPanel === 'kontrolna-ploca') {
+                                panelToShow.style.display = 'grid';
+                            } else {
+                                panelToShow.style.display = 'block';
+                            }
+                        } else if (targetPanel && !href.includes('.html')) {
+                            // Ako je specificiran targetPanel ali nije u mapi i nije .html link, vjerojatno greška ili link za nepostojeći panel
+                            console.warn(`Panel target "${targetPanel}" specified, but not handled or corresponding element not found on sfured.html.`);
+                        }
+
+                        // Ako je mobilni meni otvoren, zatvori ga
+                        if (hamburger && verticalNav && hamburger.classList.contains('active')) {
+                            hamburger.classList.remove('active');
+                            verticalNav.classList.remove('active');
+                            if (document.body.classList.contains('overflow-hidden-mobile')) {
+                                document.body.classList.remove('overflow-hidden-mobile');
+                            }
+                        }
+                    });
+                });
+            } else {
+                console.warn("Vertical navigation links not found in sfured.html.");
+            }
+        
+            // --- Timer Functionality ---
+            let isAccountActive = true;
+            let activeDays = 0;
+            let inactiveDays = 0;
+            let startTime = Date.now(); // Bit će ispravljeno ispod ako je aktivan/neaktivan
+        
+            function updateTimerDisplay() {
+                if (isAccountActive) {
+                    const now = Date.now();
+                    const elapsed = now - startTime; // startTime je već prilagođen
+                    const totalSeconds = Math.floor(elapsed / 1000);
+        
+                    // Ovdje se dani ne bi trebali kumulirati unutar jedne sesije ako je 'activeDays' inicijalna vrijednost
+                    // Radije bismo prikazali 'activeDays' + proteklo vrijeme od početka SESIJE, ili 'activeDays' s servera + proteklo od zadnjeg logina
+                    // Za jednostavan demo:
+                    const currentDaysDisplay = activeDays + Math.floor(totalSeconds / (24 * 60 * 60)); // Kumulira dane od početka sesije povrh početnih
+                    const remainingSecondsToday = totalSeconds % (24 * 60 * 60);
+                    const hours = Math.floor(remainingSecondsToday / (60 * 60));
+                    const minutes = Math.floor((remainingSecondsToday % (60 * 60)) / 60);
+                    const seconds = remainingSecondsToday % 60;
+        
+                    if (timerElement) {
+                        timerElement.textContent = `${currentDaysDisplay}_ ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    }
+        
+                    if (panel7ActiveDaysEl) panel7ActiveDaysEl.textContent = currentDaysDisplay;
+                    if (panel7InactiveDaysEl) panel7InactiveDaysEl.textContent = inactiveDays; 
+        
+                } else {
+                    const now = Date.now();
+                    const elapsedSinceInactive = now - startTime; // startTime je postavljen na početak neaktivnosti
+                    const currentInactiveDaysDisplay = inactiveDays + Math.floor(elapsedSinceInactive / (24 * 60 * 60 * 1000));
+        
+                    if (timerElement) {
+                        timerElement.textContent = `NEAKTIVAN: ${currentInactiveDaysDisplay > 0 ? currentInactiveDaysDisplay : 0} DANA`;
+                    }
+                    if (statusElement) {
+                        statusElement.textContent = 'NEAKTIVAN';
+                        statusElement.classList.remove('active');
+                        statusElement.classList.add('inactive');
+                    }
+                    if (panel7ActiveDaysEl) panel7ActiveDaysEl.textContent = activeDays;
+                    if (panel7InactiveDaysEl) panel7InactiveDaysEl.textContent = currentInactiveDaysDisplay > 0 ? currentInactiveDaysDisplay : 0;
+                }
+                setTimeout(updateTimerDisplay, 1000);
+            }
+        
+            if (statusElement && timerElement && panel7ActiveDaysEl && panel7InactiveDaysEl) {
+                isAccountActive = statusElement.classList.contains('active');
+                // Pretpostavimo da 'activeDays' i 'inactiveDays' mogu doći s servera ili biti postavljeni.
+                // Za demo, koristit ćemo 0 kao početne vrijednosti, a startTime će se prilagoditi.
+                // Npr., ako bi aktivni dani došli s servera: activeDays = parseInt(statusElement.dataset.activeDays) || 0;
+                //        inactiveDays = parseInt(statusElement.dataset.inactiveDays) || 0;
+
+                if (isAccountActive) {
+                    // startTime = Date.now() - (activeDays * 24 * 60 * 60 * 1000); // Ovo bi oduzelo već protekle dane od trenutnog vremena
+                    // Bolje je ako `activeDays` predstavlja *ukupne* protekle dane, a tajmer računa od početka trenutne sesije/stanja.
+                    // Za demo, neka `startTime` bude početak trenutne sesije gledanja stranice.
+                    startTime = Date.now(); // Ili vrijeme zadnje promjene stanja
+                } else {
+                    startTime = Date.now(); // Ili vrijeme zadnje promjene stanja
+                }
+        
+                if(panel7ActiveDaysEl) panel7ActiveDaysEl.textContent = activeDays;
+                if(panel7InactiveDaysEl) panel7InactiveDaysEl.textContent = inactiveDays;
+                updateTimerDisplay();
+            } else {
+                // Smanjimo na warn ako panel7 elementi nisu ključni za osnovnu funkcionalnost
+                 if (!statusElement || !timerElement) {
+                    console.error("Status or timer element not found. Timer will not work.");
+                 } else {
+                    console.warn("Panel 7 (active/inactive days) elements not found. Timer will only show header status.");
+                    // Pokreni tajmer samo za header ako postoje statusElement i timerElement
+                     isAccountActive = statusElement.classList.contains('active');
+                     startTime = Date.now();
+                     updateTimerDisplay(); // Pozvat će se samo za header
+                 }
+            }
+        
+            // --- Panel Clickability ---
+            const dashboardPanels = document.querySelectorAll('.dashboard-panel');
+            if (dashboardPanels.length > 0) {
+                dashboardPanels.forEach(panel => {
+                     if (!panel.classList.contains('panel-status-timer')) { 
+                          panel.addEventListener('click', () => {
+                              const panelTitle = panel.querySelector('h4')?.textContent || 'Panel';
+                               const parentSection = panel.closest('#dashboard-grid, #moj-racun-content, #novcanik-content, #sftim-content');
+                               const parentSectionId = parentSection ? parentSection.id : 'unknown-section-on-sfured';
+                              console.log(`Panel clicked: "${panelTitle}" in section: ${parentSectionId}`);
+                          });
+                     }
+                });
+            } else {
+                console.warn("No dashboard panels found on sfured.html.");
+            }
+        
+            // --- Ensure Main Content Position on Resize/Load ---
+            const adjustLayout = () => {
+                const headerHeight = document.querySelector('.sfured-header')?.offsetHeight || 64;
+                const verticalNavWidth = 250; 
+        
+                if (window.innerWidth > 768) { 
+                    if(verticalNav) {
+                        verticalNav.classList.remove('active'); 
+                        verticalNav.style.transform = 'translateY(0)';
+                        verticalNav.style.position = 'fixed'; 
+                    }
+                    if (hamburger) hamburger.classList.remove('active');
+                    document.body.classList.remove('overflow-hidden-mobile');
+        
+                    if(mainContent) { // mainContent varijabla je sada definirana na vrhu
+                        mainContent.style.marginLeft = `${verticalNavWidth}px`;
+                        mainContent.style.paddingTop = `calc(${headerHeight}px + 1.5rem)`;
+                    }
+        
+                } else { 
+                    if(mainContent) {
+                        mainContent.style.marginLeft = '0';
+                        mainContent.style.paddingTop = `calc(${headerHeight}px + 1.5rem)`;
+                    }
+                    if(verticalNav) {
+                        verticalNav.style.position = 'fixed';
+                    }
+                }
+            };
+        
+            window.addEventListener('resize', adjustLayout);
+            adjustLayout(); 
+        
+            // --- Avatar Upload Modal Functionality ---
+            if (avatarPlaceholder && avatarUploadModalOverlay && avatarUploadModalClose && uploadPhotoButton && avatarFileInput && takePhotoButton) {
+                avatarPlaceholder.addEventListener('click', () => {
+                    if(avatarUploadModalOverlay) avatarUploadModalOverlay.style.display = 'flex';
+                });
+                avatarUploadModalClose.addEventListener('click', () => {
+                    if(avatarUploadModalOverlay) avatarUploadModalOverlay.style.display = 'none';
+                });
+                avatarUploadModalOverlay.addEventListener('click', (e) => {
+                    if (e.target === avatarUploadModalOverlay) {
+                        if(avatarUploadModalOverlay) avatarUploadModalOverlay.style.display = 'none';
+                    }
+                });
+                uploadPhotoButton.addEventListener('click', () => {
+                    if(avatarFileInput) avatarFileInput.click();
+                });
+                avatarFileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        console.log('Odabrana datoteka:', file.name);
+                        if(avatarUploadModalOverlay) avatarUploadModalOverlay.style.display = 'none';
+                    }
+                });
+                takePhotoButton.addEventListener('click', () => {
+                    console.log('Kliknuto na Uslikaj se');
+                    alert("Funkcionalnost uslikavanja nije potpuno implementirana u ovom demou.");
+                });
+            } else {
+                console.warn("Neki od elemenata za modal avatara nisu pronađeni.");
+            }
+        
+            // --- Logout Button Functionality ---
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    console.log('Logout button clicked. Redirecting to index.html');
+                    window.location.href = 'index.html'; 
+                });
+            } else {
+                console.warn("Logout button (.logout-icon) not found.");
+            }
+
+            // --- Update notification counter appearance (ako je potrebno) ---
+            // function updateNotificationCounter(count) { ... }
+        
+            console.log("SFured.html JS scripts initialized.");
+        });
+    </script>
+
+</body>
+</html>

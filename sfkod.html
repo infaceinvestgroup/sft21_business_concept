@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFKOD Generator - InFace Invest Group</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --primary-color: #6a1b9a; --primary-color-rgb: 106, 27, 154; --secondary-color: #ab47bc;
+            --fluorescent-green: #80ff00; --fluorescent-green-rgb: 128, 255, 0;
+            --text-color: #e5e7eb; --background-color: #0f172a;
+            --glass-background: rgba(106, 27, 154, 0.15); --glass-border: rgba(128, 255, 0, 0.3);
+            --fluorescent-orange: #d9ff00; --disabled-color: rgba(229, 231, 235, 0.3);
+            --input-border-color: rgba(128, 255, 0, 0.5);
+        }
+        body { font-family: 'Arial Narrow', Arial, sans-serif !important; background-color: var(--background-color); color: var(--text-color); margin: 0; padding: 0; overflow-x: hidden; }
+        .sfured-header { position: fixed; top: 0; left: 0; width: 100%; height: 64px; background-color: #1f2937; border-bottom: 1px solid rgba(255, 255, 255, 0.1); z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+        .sfured-header .logo-sfured { display: flex; align-items: center; }
+        .sfured-header .logo-nav { font-size: 1.5rem; line-height: 1; display: flex; flex-direction: column; align-items: flex-start; }
+        .sfured-header .logo-nav .small-text { font-size: 0.75rem; color: #d1d5db; font-weight: 400; margin-bottom: -0.1em; }
+        .sfured-header .logo-nav .text-logo-orange { color: var(--fluorescent-green); }
+        .sfured-header .logo-sfured img { width: 48px; height: auto; margin-right: 0.5rem; }
+        .sfured-header .status-timer { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 0.9rem; color: #d1d5db; }
+        .sfured-header .status-timer .status { font-weight: 600; color: var(--fluorescent-green); }
+        .sfured-header .user-info { display: flex; align-items: center; }
+        .sfured-header .user-info .user-details { display: flex; flex-direction: column; margin-right: 0.75rem; text-align: right; }
+        .sfured-header .user-info .user-name { font-size: 1rem; font-weight: 600; color: white; }
+        .sfured-header .user-info .user-username { font-size: 0.875rem; color: #d1d5db; }
+        .sfured-header .user-info .avatar-placeholder { width: 40px; height: 40px; background-color: #6b7280; border-radius: 0.375rem; margin-right: 0.75rem; flex-shrink: 0; cursor: pointer; }
+        .sfured-header .user-info .logout-icon { color: #d1d5db; font-size: 1.25rem; cursor: pointer; }
+        .sfured-nav-vertical { position: fixed; top: 64px; left: 0; bottom: 0; width: 250px; background-color: #111827; border-right: 1px solid rgba(255, 255, 255, 0.1); z-index: 40; display: flex; flex-direction: column; padding: 0; overflow-y: auto; }
+        .sfured-nav-vertical .nav-top-icons { display: flex; justify-content: space-around; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 0.75rem; }
+        .notification-icon { position: relative; }
+        .notification-counter { position: absolute; top: -8px; right: -8px; font-size: 0.75rem; font-weight: 700; border-radius: 9999px; padding: 0.1rem 0.4rem; background-color: #ef4444; color: white; }
+        .sfured-nav-vertical .sf-status-title { text-align: center; color: white; font-size: 1.1rem; font-weight: 700; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 0.75rem; }
+        .sfured-nav-vertical .nav-links-vertical { flex-grow: 1; list-style: none; padding: 0; margin: 0; }
+        .sfured-nav-vertical .nav-link-vertical { display: block; padding: 0.75rem 1.5rem; color: #d1d5db; text-decoration: none; font-weight: 500; }
+        .sfured-nav-vertical .nav-link-vertical:hover { background-color: rgba(106, 27, 154, 0.1); color: white; }
+        .sfured-nav-vertical .nav-link-vertical.active { background-color: var(--fluorescent-green); color: #0e076a; font-weight: 700; }
+        .sfured-main-content { margin-left: 250px; padding: 1.5rem; padding-top: calc(64px + 1.5rem); }
+        .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 10000; display: none; justify-content: center; align-items: center; }
+        .popup-content { background: #1f2937; border: 2px solid var(--fluorescent-green); border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 800px; position: relative; box-shadow: 0 8px 32px 0 rgba(var(--fluorescent-green-rgb), 0.3); color: var(--text-color); max-height: 90vh; overflow-y: auto; text-align: left; }
+        .popup-content h4 { color: var(--fluorescent-green); margin-bottom: 1.5rem; font-size: 1.5rem; text-align: center; }
+        .popup-content p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; }
+        .popup-content ul { list-style-type: decimal; padding-left: 2rem; }
+        .popup-content li { margin-bottom: 0.5rem; }
+        .popup-content strong { color: var(--fluorescent-yellow); }
+        .popup-content .napomena-title { color: var(--fluorescent-green); font-weight: bold; margin-top: 1.5rem; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #d1d5db; cursor: pointer; }
+        .popup-button { background-color: rgba(var(--fluorescent-green-rgb), 0.1); color: var(--fluorescent-green); border: 1px solid var(--fluorescent-green); border-radius: 8px; padding: 0.75rem 1.5rem; font-weight: 600; cursor: pointer; }
+        .popup-button:hover { background-color: var(--fluorescent-green); color: #0e076a; }
+        
+        .sfkod-generator-container { background-color: var(--glass-background); border: 1px solid var(--glass-border); border-radius: 15px; padding: 2rem; }
+        .sfkod-generator-container h1 { color: var(--fluorescent-green); text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 2.5rem; }
+        .sfkod-package-buttons, #sfkod_generatorButtons, #sfkod_numberInputs, #sfkod_confirmButton, #sfkod_kycOptions { display: none; }
+        .visible-flex { display: flex !important; }
+        .visible-block { display: block !important; }
+        .sfkod-package-buttons { justify-content: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; }
+        .sfkod-package-button { background-color: var(--primary-color); color: white; border: 1px solid var(--primary-color); border-radius: 8px; padding: 0.6rem 1rem; cursor: pointer; font-weight: 600; min-width: 90px; text-align: center; }
+        .sfkod-package-button.selected, .sfkod-package-button:not(:disabled):hover { background-color: var(--fluorescent-green); color: #0f172a; border-color: var(--fluorescent-green); }
+        .sfkod-package-button:disabled { background-color: var(--disabled-color); color: rgba(229, 231, 235, 0.6); cursor: not-allowed; opacity: 0.5; border-color: var(--input-border-color); }
+        .sfkod-generator-buttons { justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .sfkod-number-inputs { justify-content: center; gap: 5px; margin-bottom: 1.5rem; }
+        .sfkod-confirm-button { margin: 0 auto; display: block; margin-bottom: 1.5rem; }
+        .sfkod-generator-button, .sfkod-confirm-button { background-color: var(--fluorescent-green); color: #0f172a; border: 2px solid var(--fluorescent-green); border-radius: 8px; padding: 0.6rem 1.2rem; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .sfkod-generator-button.active-mode, .sfkod-confirm-button:hover, .sfkod-generator-button:hover { background-color: transparent; color: var(--fluorescent-green); }
+        .sfkod-number-input-container { display: flex; flex-direction: column; align-items: center; }
+        .sfkod-arrow { cursor: pointer; color: var(--fluorescent-green); font-size: 1.25rem; }
+        .sfkod-number-input { width: 36px; height: 36px; text-align: center; border: 1px solid var(--input-border-color); border-radius: 6px; margin: 3px 0; font-size: 1.1rem; background-color: rgba(var(--primary-color-rgb), 0.2); color: var(--text-color); font-weight: bold; }
+        
+        .sfkod-codes-table-wrapper { background-color: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; }
+        .sfkod-codes-table { width: 100%; border-collapse: collapse; }
+        .sfkod-codes-table th, .sfkod-codes-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(229, 231, 235, 0.15); vertical-align: middle; }
+        .sfkod-codes-table th { background-color: rgba(var(--primary-color-rgb), 0.5); color: white; font-weight: 600; }
+        .info-icon-cell { display: flex; justify-content: space-between; align-items: center; }
+        .info-icon { font-family: 'Lucida Calligraphy', 'Comic Sans MS', cursive; font-style: italic; font-weight: bold; color: var(--fluorescent-green); background-color: rgba(var(--fluorescent-green-rgb), 0.1); border: 1px solid var(--fluorescent-green); border-radius: 50%; width: 24px; height: 24px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; }
+        .sfkod-index-cell { width: 50px; text-align: center; font-weight: bold; color: #0f172a; background-color: rgba(var(--fluorescent-green-rgb), 0.2); border: 1px solid transparent; cursor: default; border-radius: 4px; }
+        .sfkod-index-cell.clickable { background-color: var(--fluorescent-green); cursor: pointer; }
+        .sfkod-index-cell.active { background-color: transparent; border: 2px solid var(--fluorescent-green); color: var(--fluorescent-green); }
+        .sfkod-index-cell.completed { background-color: transparent !important; color: var(--fluorescent-orange) !important; cursor: default; border-color: transparent !important; }
+        .sfkod-code-cell-content { display: flex; align-items: center; justify-content: flex-start; gap: 1.5rem; }
+        .sfkod-code-cell-content span:first-child { font-family: 'Arial', sans-serif; font-size: 1.1rem; letter-spacing: 1px; color: var(--fluorescent-orange); font-weight: bold; }
+        .sfkod-code-suffix { font-size: 0.9rem; color: #a0aec0; margin-left: auto; padding-right: 1rem; }
+        tr.hidden-row { display: none; }
+        .sfkod-kyc-options { margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--glass-border); border-radius: 10px; background-color: rgba(106, 27, 154, 0.3); }
+        .sfkod-kyc-option input[type="checkbox"] { margin-right: 0.75rem; }
+
+        .sfured-nav-vertical .nav-top-icons .icon-link,
+        .sfured-nav-vertical .nav-top-icons .notification-icon {
+            font-size: 1.5rem; 
+            color: #d1d5db; 
+            transition: color 0.2s ease, transform 0.2s ease;
+            cursor: pointer; 
+        }
+
+        .sfured-nav-vertical .nav-top-icons .icon-link:hover,
+        .sfured-nav-vertical .nav-top-icons .notification-icon:hover {
+            color: var(--fluorescent-green); 
+            transform: scale(1.1); 
+        }
+
+        /* Stil za checkbox u popupu */
+        #ne-prikazuj-ponovo {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--fluorescent-green); /* Mijenja boju kvačice */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="sfured-header">
+        <div class="logo-sfured flex items-center">
+            <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo-sfured" class="h-auto w-12 mr-2">
+            <div class="flex flex-col logo-nav items-start">
+                 <span class="small-text">InFace Invest Group</span>
+                 <div class="text-white font-bold text-xl"> <span class="text-logo-orange">SF</span>ured </div>
+            </div>
+        </div>
+        <div class="status-timer hidden md:flex">
+             <span id="account-status" class="status active">AKTIVAN</span>
+             <span id="account-timer" class="timer-display">0_ 00:00:00</span>
+        </div>
+        <div class="user-info">
+            <div class="user-details hidden md:flex"><span id="user-name" class="user-name">Maja Novak</span><span id="user-username" class="user-username">maja.novak@example.com</span></div>
+            <div id="avatar-placeholder" class="avatar-placeholder"></div>
+            <i class="fas fa-power-off logout-icon" title="Odjava"></i>
+            <div class="hamburger md:hidden"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+    </header>
+
+    <nav class="sfured-nav-vertical">
+        <div class="nav-top-icons">
+            <div class="video-player-icon-area"><a href="video_player.html?from=sfkod.html" class="icon-link" title="Video Player"><i class="fas fa-play-circle"></i></a></div>
+            <div class="notification-icon-area"><div class="notification-icon" title="Obavijesti"><i class="fas fa-bell"></i><span class="notification-counter">1</span></div></div>
+        </div>
+        <div class="sf-status-title"> <span class="larger-sf">SF</span>Franšizer </div>
+        <ul class="nav-links-vertical">
+             <li><a href="sfured.html" class="nav-link-vertical"><i class="fas fa-tachometer-alt mr-3"></i>KONTROLNA PLOČA</a></li>
+             <li><a href="sfured.html#moj-racun" class="nav-link-vertical"><i class="fas fa-user-circle mr-3"></i>MOJ RAČUN</a></li>
+             <li><a href="sfured.html#novcanik" class="nav-link-vertical"><i class="fas fa-wallet mr-3"></i>NOVČANIK</a></li>
+             <li><a href="sfured.html#sftim" class="nav-link-vertical"><i class="fas fa-users mr-3"></i>SFTIM</a></li>
+             <li><a href="sfkod.html" class="nav-link-vertical active"><i class="fas fa-ticket-alt mr-3"></i>SFKOD</a></li>
+             <li><a href="sfured.html#sfnet" class="nav-link-vertical"><i class="fas fa-network-wired mr-3"></i>SFNET</a></li>
+             <li><a href="sfured.html#sfshop" class="nav-link-vertical"><i class="fas fa-shopping-bag mr-3"></i>SFSHOP</a></li>
+        </ul>
+    </nav>
+
+    <main class="sfured-main-content">
+        <div id="sfkod-generator-wrapper" style="display: none;">
+            <div class="sfkod-generator-container">
+                <h1>Generator SFkodova</h1>
+                <div class="sfkod-package-buttons" id="sfkod_packageButtons">
+                    <button class="sfkod-package-button" id="sp1" disabled>SP1</button>
+                    <button class="sfkod-package-button" id="sp2" disabled>SP2</button>
+                    <button class="sfkod-package-button" id="sp3" disabled>SP3</button>
+                    <button class="sfkod-package-button" id="sp4" disabled>SP4</button>
+                    <button class="sfkod-package-button" id="sp5" disabled>SP5</button>
+                    <button class="sfkod-package-button" id="sp6" disabled>SP6</button>
+                    <button class="sfkod-package-button" id="sp7" disabled>SP7</button>
+                </div>
+                <div class="sfkod-generator-buttons" id="sfkod_generatorButtons">
+                    <button class="sfkod-generator-button" id="sfkod_createManual">KREIRAJ RUČNO</button>
+                    <button class="sfkod-generator-button" id="sfkod_createAuto">KREIRAJ AUTOMATSKI</button>
+                </div>
+                <div class="sfkod-number-inputs" id="sfkod_numberInputs"></div>
+                <button class="sfkod-confirm-button" id="sfkod_confirmButton">Potvrdi SFkod</button>
+                <div class="sfkod-codes-table-wrapper">
+                    <table class="sfkod-codes-table">
+                        <thead><tr><th style="width: 50px;">#</th><th><div class="info-icon-cell"><span>SFkod</span><i class="info-icon" id="sfkod-info-icon" title="Upute">i</i></div></th></tr></thead>
+                        <tbody id="sfkod_codesTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="sfkod-kyc-options" id="sfkod_kycOptions">
+                    <h3>SFkodovi dobiveni na osnovi registracije novih korisnika sa KYC.</h3>
+                    <div class="sfkod-kyc-option"><input type="checkbox" id="sfkod_kyc10"><label for="sfkod_kyc10">Registrirao sam 10 novih korisnika (KYC)</label></div>
+                    <div class="sfkod-kyc-option"><input type="checkbox" id="sfkod_kyc21"><label for="sfkod_kyc21">Registrirao sam 21 novog korisnika (KYC)</label></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-8 bg-gray-900 text-center text-gray-400 text-sm">© 2025 InFace Invest Group d.o.o.</footer>
+    
+    <div id="sfkod-vrijednost-popup" class="popup">
+        <div class="popup-content">
+            <button class="modal-close" aria-label="Zatvori">×</button>
+            <h4>Vrijednost SFkodova</h4>
+            <p>Kao besplatno registriranom korisniku u znak dobrodošlice kompanija Vam poklanja jedan trajni SFkod, sa kojim možete sudjelovati besplatno u gotovo svakoj nagradnoj igri u organizaciji kompanije, stoga je važno napomenuti vrijednost SFkodova.<br><br>Naime, kompanija će organizirati mnoge nagradne igre u kojima će nagrade biti npr. startni paketi, mobiteli, kompjutori ili mnoge druge vrijedne nagrade...<br><br>Osim nagrada koje će davati kompanija, svaki trgovac, proizvođač, poduzetnik ili kompanija, tvrtka veća ili manja, prilikom ulaska u kompanijski SFshop imati će priliku pripremiti svoj proizvod ili uslugu, paket proizvoda ili bilo koju vrstu nagrade koju će ponuditi kroz naš sistem nagradnih igara čime zauzvrat dobiva svojevrsnu reklamu putem naše kompanije i uz pomoć naših franšizera.<br><br>SFkod možete sami odabrati (Kreiraj ručno) ili možete izabrati automatski generiran SFkod (Kreiraj automatski). Klikom na POTVRDI KOD, trajno ćete spremiti SFkod, kojega nakon toga više ne možete mijenjati.<br><br>Vrlo je važno napomenuti da će SFfranšizer može imati maksimalno 25 SFkodova. (1 besplatnom registracijom + 21 jednokratnom uplatom SP7 + 3 registracijom 21 besplatnog korisnika)<br><br>SFkorisnik / BPR (besplatno registrirani korisnici) mogu imati maksimalno 4 SFkoda. (1 besplatnom registracijom + 3 registracijom 21 besplatnog korisnika)<br><br>Ukoliko započnete sa SP1 ili drugim manjim paketima dobivate određeni broj SFkodova, koje možete povećavati nadogradnjama odnosno uplatama pretplatničkih perioda, pod uvjetom da vam račun nema neaktivnih dana između pretplatničkih perioda.<br><br>Sa većim brojem SFkodova veće su i Vaše mogućnosti dobivanja nagrade, što ne znači da nagradu ne možete dobiti i sa samo jednim kodom. To je već pitanje sreće na koju nitko ne može utjecati.<br><br>Bez obzira sa koliko kodova krenuli i koliko ih na kraju imali od srca Vam želimo sreću prilikom izvlaćenja sretnih dobitnika.</p>
+            
+            <!-- ====== POČETAK IZMJENE: GUMB I CHECKBOX ====== -->
+            <div class="flex flex-col items-center mt-6">
+                <button class="popup-button">Razumijem vrijednost SFkodova</button>
+                <div class="flex items-center mt-4">
+                    <input type="checkbox" id="ne-prikazuj-ponovo">
+                    <label for="ne-prikazuj-ponovo" class="ml-2 text-sm text-gray-300 cursor-pointer">Ne prikazuj ponovo</label>
+                </div>
+            </div>
+            <!-- ====== KRAJ IZMJENE ====== -->
+
+        </div>
+    </div>
+    <div id="sfkod-upute-popup" class="popup">
+        <div class="popup-content">
+            <button class="modal-close" aria-label="Zatvori">×</button>
+            <h4>Upute za generiranje SFkoda</h4>
+            <p>Besplatnom registracijom dobili ste jedan SFkod, sa kojim imate pravo sudjelovanja u nagradnim igrama koje organizira kompanija. Prije svega potrebno je generirati odnosno izabrati brojeve svog SFkoda.</p>
+            <ul>
+                <li>Kliknite na polje sa rednim brojem SFkoda, što će aktivirati generator kodova.</li>
+                <li>Ukoliko želite sami odabrati brojeve svog koda kliknite na <strong>KREIRAJ RUČNO</strong> ili na bilo koju strelicu „gore / dole“ što će vam omogućiti da kreirate SFkod sa vlastito odabranim brojevima.</li>
+                <li>Klikom na <strong>KREIRAJ AUTOMATSKI</strong> sistem će vam nasumice odabrati 10 brojeva za vaš SFkod, kojega možete zadržati ili ga možete izmijeniti klikom na strelice „gore / dole“.</li>
+                <li>Nakon što sami kreirate SFkod ili ga kreirate automatski, klikom na <strong>Potvrdi SFkod</strong>, trajno ga spremate i više ga nije moguće mijenjati.</li>
+            </ul>
+            <p>Uplatom startnog ili investicijskog paketa dobivate nove SFkodove koje ćete na isti način kreirati i aktivirati.</p>
+            <p class="napomena-title">Napomena:</p>
+            <p>Ovo je trenutno demo verzija, gdje na vrhu ove stranice imate mogućnost kliknuti na jedan od sedam startnih paketa, ili na dnu stranice na dva “check box“-a, nakon čega možete kreirati više kodova. Završetkom i puštanjem u rad potrebnih softvera odnosno početkom poslovanja, sukladno odabranom startnom ili investicijskom paketu sistem će vam automatski ponuditi određeni broj SFkodova kao i u slučaju registracije 10. ili 21. besplatno registriranog korisnika.</p>
+        </div>
+    </div>
+    
+     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const verticalNav = document.querySelector('.sfured-nav-vertical');
+            if (hamburger) hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); verticalNav.classList.toggle('active'); });
+            const logoutButton = document.querySelector('.logout-icon');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    console.log('Odjava...');
+                    window.location.href = 'index.html';
+                });
+            }
+            const vrijednostPopup = document.getElementById('sfkod-vrijednost-popup');
+            const uputePopup = document.getElementById('sfkod-upute-popup');
+            const infoIcon = document.getElementById('sfkod-info-icon');
+
+            // ====== POČETAK IZMJENE: Jednostavnija logika zatvaranja za demo ======
+            const closeAllPopups = () => {
+                // Više ne spremamo odabir u localStorage
+                if(vrijednostPopup) vrijednostPopup.style.display = 'none';
+                if(uputePopup) uputePopup.style.display = 'none';
+                const wrapper = document.getElementById('sfkod-generator-wrapper');
+                if (wrapper) wrapper.style.display = 'block';
+            };
+            // ====== KRAJ IZMJENE ======
+
+            document.querySelectorAll('.popup .modal-close, .popup .popup-button').forEach(btn => btn.addEventListener('click', closeAllPopups));
+            if (infoIcon) infoIcon.addEventListener('click', () => uputePopup.style.display = 'flex');
+
+            // ====== POČETAK IZMJENE: Uvijek prikaži popup nakon učitavanja stranice ======
+            // Uklonjena je provjera localStorage-a. Popup će se uvijek pokušati prikazati.
+            setTimeout(() => {
+                if (vrijednostPopup) {
+                     vrijednostPopup.style.display = 'flex';
+                     // Resetiraj checkbox stanje svaki put kad se popup prikaže
+                     const dontShowAgainCheckbox = document.getElementById('ne-prikazuj-ponovo');
+                     if(dontShowAgainCheckbox) dontShowAgainCheckbox.checked = false;
+                }
+            }, 500);
+            // ====== KRAJ IZMJENE ======
+
+
+            const tableBody = document.getElementById('sfkod_codesTableBody');
+            const packageButtonsContainer = document.querySelector('.sfkod-package-buttons');
+            const generatorButtonsEl = document.getElementById('sfkod_generatorButtons');
+            const numberInputsEl = document.getElementById('sfkod_numberInputs');
+            const confirmButtonEl = document.getElementById('sfkod_confirmButton');
+            const kycOptionsEl = document.getElementById('sfkod_kycOptions');
+            const createManualButton = document.getElementById('sfkod_createManual');
+            const createAutoButton = document.getElementById('sfkod_createAuto');
+            const packageButtons = document.querySelectorAll('.sfkod-package-button');
+            const kyc10Checkbox = document.getElementById('sfkod_kyc10');
+            const kyc21Checkbox = document.getElementById('sfkod_kyc21');
+
+            let currentCode = Array(10).fill(0);
+            let activeRowIndex = null;
+            let nextAvailableRow = 2;
+            let completedRows = [];
+            let allConfirmedCodes = [];
+            const packageCodesCount = { sp1: 1, sp2: 4, sp3: 7, sp4: 10, sp5: 13, sp6: 17, sp7: 21 };
+
+            const initializeNumberInputs = () => {
+                let html = '';
+                for(let i=0; i<10; i++) {
+                    html += `<div class="sfkod-number-input-container"><i class="fas fa-chevron-up sfkod-arrow" data-index="${i}"></i><input type="text" class="sfkod-number-input" value="0" readonly data-index="${i}"><i class="fas fa-chevron-down sfkod-arrow" data-index="${i}"></i></div>`;
+                }
+                numberInputsEl.innerHTML = html;
+                document.querySelectorAll('.sfkod-arrow').forEach(arrow => arrow.addEventListener('click', handleArrowClick));
+            };
+
+            const initializeTable = () => {
+                tableBody.innerHTML = '';
+                for (let i = 1; i <= 25; i++) {
+                    const row = document.createElement('tr');
+                    row.classList.add('hidden-row');
+                    const indexCell = document.createElement('td');
+                    indexCell.textContent = i;
+                    indexCell.classList.add('sfkod-index-cell');
+                    indexCell.setAttribute('data-row', i);
+                    row.appendChild(indexCell);
+                    const codeCell = document.createElement('td');
+                    codeCell.innerHTML = `<div class="sfkod-code-cell-content"><span>0000000000</span><span class="sfkod-code-suffix">${i === 1 ? 'Besplatna registracija' : '/'}</span></div>`;
+                    row.appendChild(codeCell);
+                    tableBody.appendChild(row);
+                }
+                const firstRow = tableBody.rows[0];
+                firstRow.classList.remove('hidden-row');
+                const firstIndexCell = firstRow.querySelector('.sfkod-index-cell');
+                firstIndexCell.classList.add('clickable');
+                addClickEventToIndexCell(firstIndexCell);
+            };
+
+            const addClickEventToIndexCell = (cell) => {
+                if (!cell || cell.hasListener) return;
+                cell.addEventListener('click', function() { if (this.classList.contains('clickable')) activateRowForEditing(parseInt(this.dataset.row)); });
+                cell.hasListener = true;
+            };
+
+            const activateRowForEditing = (rowIndex) => {
+                if (completedRows.includes(rowIndex)) return;
+                if (activeRowIndex) tableBody.querySelector(`.sfkod-index-cell.active`)?.classList.remove('active');
+                activeRowIndex = rowIndex;
+                tableBody.querySelector(`.sfkod-index-cell[data-row="${rowIndex}"]`)?.classList.add('active');
+                currentCode = Array(10).fill(0);
+                updateNumberInputs();
+                [generatorButtonsEl, numberInputsEl].forEach(el => el.style.display = 'flex');
+                confirmButtonEl.style.display = 'block';
+            };
+
+            const updateNumberInputs = () => document.querySelectorAll('.sfkod-number-input').forEach((input, i) => input.value = currentCode[i]);
+
+            const unlockNextRows = (count, suffixText) => {
+                for(let i = 0; i < count; i++) {
+                    if(tableBody.rows[nextAvailableRow - 1]) {
+                        const row = tableBody.rows[nextAvailableRow - 1];
+                        row.classList.remove('hidden-row');
+                        const indexCell = row.querySelector('.sfkod-index-cell');
+                        indexCell.classList.add('clickable');
+                        addClickEventToIndexCell(indexCell);
+                        if(suffixText) row.querySelector('.sfkod-code-suffix').textContent = suffixText;
+                        nextAvailableRow++;
+                    }
+                }
+            };
+
+            const resetGeneratorButtons = () => {
+                createManualButton.classList.remove('active-mode');
+                createAutoButton.classList.remove('active-mode');
+            };
+
+            const handleArrowClick = function() {
+                if (numberInputsEl.style.display !== 'flex') return;
+                const index = parseInt(this.dataset.index);
+                currentCode[index] = (currentCode[index] + (this.classList.contains('fa-chevron-up') ? 1 : -1) + 10) % 10;
+                updateNumberInputs();
+                createManualButton.classList.add('active-mode');
+                createAutoButton.classList.remove('active-mode');
+            };
+
+            confirmButtonEl.addEventListener('click', function() {
+                if (activeRowIndex === null) return;
+                if (!createManualButton.classList.contains('active-mode') && !createAutoButton.classList.contains('active-mode')) {
+                    alert("Molimo prvo odaberite 'Kreiraj ručno' ili 'Kreiraj automatski'."); return;
+                }
+                const codeStr = currentCode.join('');
+                if (allConfirmedCodes.includes(codeStr)) { alert("Ovaj kod je već korišten."); return; }
+                allConfirmedCodes.push(codeStr);
+                completedRows.push(activeRowIndex);
+                const row = tableBody.rows[activeRowIndex - 1];
+                row.querySelector('.sfkod-code-cell-content span:first-child').textContent = codeStr;
+                const indexCell = row.querySelector('.sfkod-index-cell');
+                indexCell.classList.remove('clickable', 'active');
+                indexCell.classList.add('completed');
+
+                if (completedRows.length === 1) {
+                    packageButtonsContainer.style.display = 'flex';
+                    kycOptionsEl.style.display = 'block';
+                    packageButtons.forEach(btn => btn.disabled = false);
+                }
+
+                [generatorButtonsEl, numberInputsEl].forEach(el => el.style.display = 'none');
+                confirmButtonEl.style.display = 'none';
+                activeRowIndex = null;
+                resetGeneratorButtons();
+            });
+
+            packageButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.disabled) return;
+                    unlockNextRows(packageCodesCount[this.id], this.id.toUpperCase());
+                    packageButtons.forEach(b => { b.disabled = true; b.classList.remove('selected'); });
+                    this.classList.add('selected');
+                });
+            });
+
+            kyc10Checkbox.addEventListener('change', function() {
+                if(this.checked) { unlockNextRows(1, '10 KYC'); this.disabled = true; }
+            });
+            kyc21Checkbox.addEventListener('change', function() {
+                if(this.checked) {
+                    if(!kyc10Checkbox.checked) { kyc10Checkbox.checked = true; kyc10Checkbox.dispatchEvent(new Event('change')); }
+                    unlockNextRows(2, '21 KYC');
+                    this.disabled = true;
+                }
+            });
+
+            [createManualButton, createAutoButton].forEach(btn => btn.addEventListener('click', function(){
+                if (generatorButtonsEl.style.display !== 'flex') return;
+                resetGeneratorButtons();
+                this.classList.add('active-mode');
+                if(this.id === 'sfkod_createAuto') {
+                    let newCodeArr;
+                    do { newCodeArr = Array(10).fill(0).map(() => Math.floor(Math.random() * 10)); }
+                    while (allConfirmedCodes.includes(newCodeArr.join('')));
+                    currentCode = newCodeArr;
+                    updateNumberInputs();
+                }
+            }));
+
+            initializeNumberInputs();
+            initializeTable();
+        });
+    </script>
+</body>
+</html>

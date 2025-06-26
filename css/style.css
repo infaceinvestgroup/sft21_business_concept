@@ -1,0 +1,1283 @@
+:root {
+    --primary-color: #6a1b9a; /* Purple */
+    --secondary-color: #ab47bc; /* Lighter Purple */
+    --accent-color: #c55bd7; /* Even Lighter Purple (used for original underline) */
+    --success-color: #7b1fa2;
+    --danger-color: #d81b60;
+    --warning-color: #ce93d8;
+    --light-color: #f3e5f5;
+    --dark-color: #0e076a;
+    --gray-color: #5728ac;
+    --text-color: #e5e7eb; /* Adjusted text color for dark background */
+    --fluorescent-orange: #d9ff00; /* A bright, fluorescent orange */
+    --success-green: #4ade80; /* DODANO: Zelena boja za kvačicu */
+    --fluorescent-green: #80ff00; /* A bright, fluorescent green */
+}
+
+body {
+    font-family: 'Arial Narrow', 'Arial Narrow', Arial, sans-serif; /* Changed font family */
+    background-color: #0d0118;
+    color: var(--text-color); /* Use text-color variable */
+    overflow-x: hidden;
+}
+
+/* --- Headings --- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'arial Narrow', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, sans-serif; /* Changed font family for headings */
+    color: var(--fluorescent-green); /* Set heading color to fluorescent green by default */
+}
+
+
+
+/* Explicitly set specific headings to orange (H2 and H3 as requested) */
+/* These are the main section titles that were requested to be orange */
+h1, /* Hero Title */
+#vizualni-model h2, /* Visual Model Title */
+#startni-paketi h2, /* Start Packages Title */
+#faq h2, /* FAQ Title */
+#faq-startni-paketi h2, /* FAQ Start Packages Title */
+#investicija h2, /* Investment Packages Title */
+#kontakt h2, /* Contact Title */
+#cta h2, /* CTA Title */
+/* Explicitly set specific headings to orange (H3 as requested) */
+#fransizni-model h3, /* Franšizni online poslovni model */
+#vazna-napomena h3, /* Važna napomena */
+#jedinstvena-prilika h2 /* Jedinstvena prilika title (was h2) */
+{
+    color: var(--fluorescent-green) !important; /* Ensure these are green */
+}
+
+/* Override footer headings to purple */
+footer h3,
+footer h4 {
+    color: var(--fluorescent-green) !important; /* Ensure these are purple */
+}
+
+
+/* --- Navigation & Logo --- */
+.logo-nav {
+    font-size: 1.75rem; /* Slightly larger than text-2xl (1.5rem) */
+    line-height: 1; /* Adjust line height for stacked text */
+    display: flex; /* Use flex to align items */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+}
+
+.logo-nav .small-text {
+    font-size: 0.75rem; /* Tailwind's text-xs */
+    color: #d1d5db; /* Tailwind's text-gray-400 */
+    font-weight: normal;
+    margin-bottom: -0.2em; /* Adjust spacing */
+}
+
+.text-logo-orange {
+    color: var(--fluorescent-green);
+}
+
+nav.fixed {
+    position: fixed; /* Ensure it's fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50; /* Ensure it's above content */
+    backdrop-filter: blur(10px); /* Slightly stronger blur */
+    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(13, 1, 24, 0.8); /* Slightly more opaque background */
+    /* Changed border color and added subtle glow */
+    border-bottom: 1px solid var(--fluorescent-green);
+    box-shadow: 0 2px 10px rgba(255, 95, 0, 0.3); /* Orange glow */
+}
+
+
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+    color: white; /* Default nav link color */
+}
+
+/* Changed hover/active color to orange */
+.nav-link:hover,
+.nav-link.active {
+     color: var(--fluorescent-green);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--fluorescent-green); /* Green underline */
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after { /* Active state underline */
+    width: 100%;
+}
+
+.nav-menu {
+    /* Existing mobile menu styles */
+     display: none; /* Hide by default */
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        top: 80px; /* Adjust based on your nav height */
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px); /* Adjust based on your nav height */
+        background-color: #0d0118;
+        flex-direction: column; /* Stack links vertically */
+        transition: all 0.5s ease;
+        padding: 20px;
+        z-index: 100;
+        border-right: 1px solid var(--fluorescent-green);
+        display: flex; /* Make it a flex container in mobile view */
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-menu a {
+        color: white; /* Mobile menu link color */
+        display: block; /* Ensure links take full width in mobile menu */
+        padding: 0.75rem 1.5rem; /* Add padding */
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+        color: var(--accent-color); /* Mobile menu hover color - Keep purple hover in mobile for distinction? Or orange? Let's keep orange for consistency with desktop hover/active */
+        color: var(--fluorescent-green);
+        background-color: rgba(255, 95, 0, 0.1); /* Subtle orange hover background */
+    }
+    .nav-menu a.active {
+         color: var(--fluorescent-green); /* Active color in mobile */
+    }
+
+
+    .hamburger {
+        display: block; /* Show hamburger on mobile */
+        cursor: pointer;
+    }
+
+    .hamburger .bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px 0;
+        background-color: white;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+/* Hide hamburger on desktop */
+.hamburger {
+    display: none;
+}
+
+
+/* --- Buttons --- */
+/* Default .btn-primary is now orange */
+.btn-primary {
+    background-color: var(--fluorescent-green);
+    color: #0e076a;
+    padding: 7px 14px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: 2px solid transparent; /* Start with transparent border */
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary:hover {
+    background-color: #66cc00; /* Tamnija zelena - fallback */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 95, 0, 0.4); /* Orange shadow */
+}
+
+/* Remove ::after shimmer effect from all buttons */
+.btn-primary::after {
+   content: none;
+}
+
+/* Specific style for the Registration button */
+/* As requested: purple background with white text */
+.btn-register {
+    background-color: var(--primary-color); /* Purple background */
+    color: white; /* White text */
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-register:hover {
+    background-color: var(--secondary-color); /* Lighter purple on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(106, 27, 154, 0.4); /* Purple shadow */
+}
+.btn-register::after {
+     content: none; /* Remove ::after */
+}
+
+
+.btn-outline {
+    background-color: transparent;
+    /* Promijenjeno: Boja teksta i okvira u narančastu */
+    color: var(--fluorescent-green);
+    border: 2px solid var(--fluorescent-green);
+    padding: 7px 14px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+    background-color: var(--fluorescent-green); /* Purple background on hover */
+    color: white;
+    transform: translateY(-3px);
+     /* Keep purple shadow */
+    box-shadow: 0 10px 20px rgba(106, 27, 154, 0.4);
+}
+
+/* Style for 'Odaberi' buttons in pricing table */
+.pricing-table .btn-primary {
+     background-color: var(--fluorescent-green);  
+     color: white; /* White text */
+     /* Inherits other styles from .btn-primary */
+}
+
+.pricing-table .btn-primary:hover {
+    background-color: var(--secondary-color); /* Lighter purple on hover */
+    /* Inherits other hover styles from .btn-primary */
+}
+
+
+
+/* --- General Styles --- */
+.bg-primary {
+    background-color: var(--primary-color);
+}
+
+.bg-secondary {
+    background-color: var(--secondary-color);
+}
+
+.bg-dark {
+    background-color: var(--dark-color);
+}
+
+/* Keep other text color classes unless they are headings */
+.text-primary {
+    color: var(--primary-color);
+}
+
+.text-secondary {
+    color: var(--secondary-color);
+}
+
+.text-accent {
+    color: var(--accent-color);
+}
+
+/* Changed border color for relevant classes */
+.border-primary {
+    border-color: var(--primary-color);
+}
+
+.border-accent {
+    border-color: var(--accent-color);
+}
+
+.glass-card {
+    background: rgba(106, 27, 154, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* Changed border color */
+    border: 1px solid var(--fluorescent-green);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* Separator line in "O nama" section */
+#o-nama .w-24.h-1 {
+    background-color: var(--fluorescent-green); /* Changed to green */
+}
+
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.bg-dots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* Keep purple dots or change? Sticking to requested changes only */
+    background-image: radial-gradient(rgba(171, 71, 188, 0.3) 2px, transparent 2px);
+    background-size: 40px 40px;
+    animation: moveBackground 60s linear infinite;
+}
+
+@keyframes moveBackground {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 500px 500px;
+    }
+}
+
+.glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    /* Keep purple glow or change? Sticking to requested changes only */
+    background: radial-gradient(circle, rgba(106, 27, 154, 0.8) 0%, rgba(106, 27, 154, 0) 70%);
+    animation: pulse 8s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 0.7;
+        transform: scale(1.2);
+    }
+}
+
+
+.icon-box {
+    transition: all 0.3s ease;
+}
+
+.icon-box:hover {
+    transform: translateY(-10px);
+}
+
+/* Changed icon color on hover */
+.icon-box:hover i {
+    transform: scale(1.2);
+    color: var(--fluorescent-green) !important; /* Use !important to override potential other icon styles */
+}
+
+.icon-box i {
+    transition: all 0.3s ease;
+    /* Changed default icon color */
+    color: var(--fluorescent-green) !important; /* Use !important to override potential other icon styles */
+}
+
+.feature-card {
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    /* Keep purple shadow or change? Sticking to requested changes only */
+    box-shadow: 0 15px 30px rgba(106, 27, 154, 0.3);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 50px;
+}
+
+/* Keep purple timeline elements or change? Sticking to requested changes only */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    border: 2px solid var(--primary-color);
+}
+
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    /* Will be updated by JS, but setting initial color here */
+    background-color: var(--fluorescent-orange);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    left: 0; /* Početna pozicija */
+    top: 0;  /* Početna pozicija */
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s linear; /* Glatka tranzicija pozicije */}
+
+/* Trail is managed by JS, but keeping the class */
+.cursor-trail {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* Will be updated by JS */
+    background-color: rgba(255, 95, 0, 0.2); /* Initial color */
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease; /* Added transition for fallback */
+}
+
+/* Package pricing table styles */
+.pricing-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 15px;
+    overflow: hidden;
+    /* Changed border color */
+    border: 1px solid var(--fluorescent-green);
+}
+
+/* Dodano: Stil za gumbe 'Odaberi' unutar tablice Startnih paketa */
+.pricing-table .btn-primary {
+    /* Smanji vertikalni padding da smanjiš visinu gumba */
+    padding: 6px 15px; /* Prilagodite 6px (gore/dolje) i 15px (lijevo/desno) po potrebi */
+
+    /* Možete ponovno definirati boju ako se ne nasljeđuje ispravno */
+    background-color: var(--fluorescent-green); /* Narančasta pozadina */
+    color:#0e076a; 
+
+    /* Naslijeđuje border-radius, font-weight, transition iz općenitog .btn-primary */
+}
+
+/* Ako želite drugačiji hover efekt samo za ove gumbe, možete dodati i ovo: */
+.pricing-table .btn-primary:hover {
+    /* Ovdje definirajte hover stil, npr. tamnija narančasta */
+    background-color: #66cc00; /* Tamnija zelena - fallback za color-mix */
+    /* transform: none; */
+    /* box-shadow: none; */
+}
+
+.pricing-table th, .pricing-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Changed border color for cells */
+    border-right: 1px solid rgba(255, 255, 255, 0.05); /* Add vertical border */
+}
+/* Remove last cell border */
+.pricing-table th:last-child, .pricing-table td:last-child {
+    border-right: none;
+}
+
+.pricing-table th {
+    background-color: var(--fluorescent-green);
+    color: #0e076a;
+    font-weight: 600;
+}
+
+.pricing-table tbody tr {
+    background-color: rgba(106, 27, 154, 0.1);
+    transition: all 0.3s ease;
+}
+
+.pricing-table tbody tr:hover {
+    background-color: rgba(106, 27, 154, 0.3);
+    transform: scale(1.01);
+}
+
+.pricing-table tbody tr:nth-child(even) {
+    background-color: rgba(106, 27, 154, 0.05);
+}
+
+/* Lock icons in pricing table */
+.pricing-table .lock-icon {
+    display: inline-block; /* Make it inline-block */
+    width: 1.5em; /* Give it some space */
+    text-align: center; /* Center the icon in its space */
+    font-size: 1.2em; /* Adjust size */
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.pricing-table .lock-icon i {
+    color: var(--fluorescent-green) !important; /* Ensure orange color for locks */
+}
+
+
+/* Accordion styles */
+.accordion {
+    margin-bottom: 10px;
+}
+
+.accordion-item {
+    background-color: rgba(106, 27, 154, 0.1); /* Base background for the item */
+}
+
+.accordion-header {
+    background-color: rgba(106, 27, 154, 0.2);
+    padding: 15px;
+    border-radius: 8px; /* Apply border radius to header corners */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Changed border color */
+    border: 1px solid var(--fluorescent-green);
+}
+
+.accordion-header:hover {
+    background-color: rgba(106, 27, 154, 0.3);
+}
+
+.accordion-item.active .accordion-header {
+    border-bottom-left-radius: 0; /* Remove bottom radius when active */
+    border-bottom-right-radius: 0;
+    border-bottom: none; /* Remove bottom border when active */
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.7s ease-in-out, padding 0.7s ease-in-out; /* Adjusted transition */
+    background-color: rgba(106, 27, 154, 0.1);
+    border-radius: 0 0 8px 8px;
+    /* Changed border color for content */
+    border-left: 1px solid var(--fluorescent-green);
+    border-right: 1px solid var(--fluorescent-green);
+    border-bottom: 1px solid var(--fluorescent-green);
+    padding: 0 15px; /* Add horizontal padding here */
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 150vh; /* Adjust if needed for larger content */
+    padding: 15px; /* Add padding when active */
+}
+
+/* Changed icon color in accordion header */
+.accordion-header i {
+    color: var(--fluorescent-green) !important; /* Use !important to override potential other icon styles */
+    transition: transform 0.3s ease-in-out; /* Tranzicija za ikonu */
+}
+
+
+/* Form styles */
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: rgba(106, 27, 154, 0.1);
+    /* Changed border color */
+    border: 1px solid var(--fluorescent-green);
+    border-radius: 8px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    /* Changed focus border color and shadow */
+    border-color: var(--fluorescent-green);
+    box-shadow: 0 0 0 3px rgba(255, 95, 0, 0.3);
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Text justification */
+.text-justify {
+    text-align: justify;
+}
+
+/* Animation classes */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hide hamburger on desktop */
+.hamburger {
+    display: none;
+}
+
+
+/* Responsive Video (ako ne koristiš @tailwindcss/aspect-ratio) */
+.aspect-w-16 { position: relative; padding-bottom: 56.25%; /* 9 / 16 = 0.5625 */}
+.aspect-h-9 { /* Ovaj se ne koristi direktno s padding-bottom */ }
+.aspect-w-16 > iframe,
+.aspect-w-16 > video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Plasma Background Animation */
+@keyframes plasma-flow {
+    0% { transform: translate(-25%, -25%) rotate(0deg); }
+    50% { transform: translate(-25%, -25%) rotate(180deg) scale(1.1); }
+    100% { transform: translate(-25%, -25%) rotate(360deg); }
+}
+
+.animate-plasma-flow {
+    animation: plasma-flow 30s ease-in-out infinite alternate; /* Sporija, glatka animacija */
+    opacity: 0.3; /* Smanji jačinu plazme */
+}
+
+/* Osiguraj da je body scrollable po defaultu */
+body {
+    overflow-x: hidden; /* Spriječi horizontalni skrol */
+    overflow-y: auto;
+}
+
+/* Stil za sprječavanje skrolanja kad je popup otvoren */
+body.overflow-hidden {
+    overflow: hidden;
+}
+
+/* Sitna dorada za popup content da se ne preklapa s scrollbarom */
+#video-popup > div { /* Cilja direktni div unutar popupa */
+    padding-right: 1rem; /* Dodaj malo desnog paddinga */
+}
+
+
+/* Stil za kartice investicijskih paketa */
+.ip-card {
+    background-color: rgba(106, 27, 154, 0.1); /* Tamnija ljubičasta pozadina */
+    /* Changed border color */
+    border: 1px solid var(--fluorescent-green);
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(8px); /* Malo blur efekta */
+    -webkit-backdrop-filter: blur(8px);
+}
+.ip-card:hover {
+    transform: translateY(-5px) scale(1.02);
+     /* Keep purple shadow or change? Sticking to requested changes only */
+    box-shadow: 0 10px 25px rgba(106, 27, 154, 0.4);
+}
+.ip-card-header {
+     background: linear-gradient(to right, var(--fluorescent-green), var(--success-green)); 
+     padding: 1rem 1.5rem;
+     text-align: center;
+     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.ip-card-header h4 {
+    color: #0e076a !important; /* Ensure header title white */
+    font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; /* Changed font family */
+    font-size: 1.25rem; /* Malo manji naslov */
+    font-weight: 700; /* Podebljano */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Blaga sjena teksta */
+}
+.ip-card-body {
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--text-color); /* Svjetlija siva za tekst */
+    font-size: 0.95rem; /* Standardna veličina fonta */
+    flex-grow: 1;
+    line-height: 1.7; /* Malo veći prored */
+}
+ .ip-card-body p {
+     margin-bottom: 1rem; /* Povećan razmak između redaka */
+ }
+ .ip-card-body span.label {
+     color: #d1d5db; /* Malo tamnija siva za labele */
+ }
+ .ip-card-body span.value {
+     font-weight: 700; /* Bold vrijednosti */
+     color: #f3e5f5; /* Svjetlija ljubičasta/bijela */
+ }
+ .ip-card-body span.duration { /* Stil za "(unutar 3 godine)" itd. */
+     display: block; /* Stavi u novi red */
+     font-size: 0.8rem; /* Manji font */
+     color: #9ca3af; /* Još tamnija siva */
+     margin-top: -0.5rem; /* Približi prethodnom redu */
+     margin-bottom: 1rem; /* Osiguraj razmak ispod */
+ }
+.ip-card-footer {
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: auto; /* Gurni na dno */
+}
+
+
+/* Stil za desne info boxove */
+ .info-box {
+    background: rgba(106, 27, 154, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    /* Changed border color */
+    border: 1px solid var(--fluorescent-green);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+ }
+.info-box:hover {
+     background: rgba(106, 27, 154, 0.2);
+     transform: scale(1.03);
+ }
+ .info-box-icon {
+     flex-shrink: 0;
+     margin-right: 1rem;
+     font-size: 1.75rem;
+     /* Color set in style.css */
+     color: var(--fluorescent-green) !important; /* Use !important to override potential other icon styles */
+     width: 40px;
+     text-align: center;
+ }
+.info-box-content h5 {
+     font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; /* Changed font family */
+     font-weight: 600;
+     color: white !important; /* Keep title white */
+     margin-bottom: 0.25rem;
+     font-size: 1.1rem;
+ }
+ .info-box-content p {
+     font-size: 0.8rem;
+     color: #d1d5db;
+     line-height: 1.4;
+     margin-bottom: 0; /* Resetiraj marginu za p unutar info-boxa */
+ }
+
+/* Style for checkmark icons specifically */
+.fa-check-circle, .fas.fa-check {
+     color: var(--fluorescent-green) !important; /* Change checkmark icon color */
+}
+
+/* Broad selector for remaining icons not covered above */
+/* Use cautiously, might affect icons unintentionally */
+.container .fas,
+.container .fab,
+.glass-card .fas,
+.glass-card .fab,
+.info-box .fas,
+.info-box .fab,
+.accordion-item .fas,
+.accordion-item .fab {
+    color: var(--fluorescent-green) !important; /* Apply orange to many icons */
+}
+
+/* Specific icon colors for contact info and footer lists */
+#kontakt .glass-card .fas,
+#kontakt .glass-card .fab {
+     color: var(--fluorescent-green) /* Set contact list icons to purple */
+}
+/* Override social media icons in contact info section to text color */
+#kontakt .glass-card .social-icons a i { /* Target the <i> element */
+     color: #d1d5db !important; /* Match paragraph text color */
+}
+#kontakt .glass-card .social-icons a:hover i { /* Target the <i> element on hover */
+     color: var(--accent-color) !important; /* Keep purple hover for distinction */
+}
+
+
+
+/* Override specific icons if needed */
+/* Example: If hamburger bars shouldn't be orange */
+.hamburger .bar {
+    background-color: white !important;
+    color: white !important; /* Ensure bar color remains white */
+}
+
+
+/* Faze razvoja numbers and circles */
+.faze-card .rounded-full {
+    border-color: var(--fluorescent-green) !important;
+}
+.faze-card .rounded-full span {
+    color: var(--fluorescent-green) !important;
+}
+.faze-card {
+    transition: all 0.5s ease;
+    cursor: pointer;
+    position: relative; /* DODANO: Postavljamo karticu kao referencu za apsolutno pozicioniranje ikone */
+    /* ... ostala svojstva ... */
+}
+/* DODANO: Stil za zelenu kvačicu u Fazi 1 */
+.faze-status-icon {
+    position: absolute; /* Apsolutno pozicioniranje u odnosu na .faze-card */
+    top: 50%; /* Vertikalno centriranje (top je 50% visine roditelja) */
+    transform: translateY(-50%); /* Pomakni element gore za pola svoje visine da bude točno centriran */
+    left: 30px; /* Prilagodite: Udaljenost od lijeve padding margine kartice (24px p-6 + 6px offset) */
+    font-size: 48px; /* Prilagodite: Veličina ikone (otprilike veličina kruga W-12/H-12) */
+    color: var(--success-green) !important; /* Boja kvačice (zelena) */
+    z-index: 10; /* Osigurajte da je ikona iznad ostalih elemenata */
+}
+
+
+/* New IP Wide Card */
+.ip-wide-card {
+    /* Inherits base glass-card styles */
+    /* Adjusted max-width and margin to better align visually */
+     max-width: calc(1200px + 3rem); /* Max width of 3 cards + 2 gaps (assuming container px-6=1.5rem=24px, gap-8 = 32px) - This is an estimation */
+     margin-left: auto;
+     margin-right: auto;
+     padding-left: 2rem; /* Adjust padding to align content */
+     padding-right: 2rem; /* Adjust padding to align content */
+     box-sizing: border-box; /* Include padding in element's total width */
+}
+
+/* Adjust on smaller screens */
+@media (max-width: 1280px) { /* Adjust max-width slightly below typical desktop */
+    .ip-wide-card {
+         max-width: calc(960px + 3rem); /* Example: Adjust based on a smaller container or typical grid width */
+    }
+}
+@media (max-width: 1024px) {
+    .ip-wide-card {
+         max-width: calc(768px + 2rem); /* Example: Adjust for tablet/larger mobile view */
+         padding-left: 1.5rem;
+         padding-right: 1.5rem;
+    }
+}
+@media (max-width: 768px) {
+    .ip-wide-card {
+        max-width: 100%; /* Allow it to take full width on small screens */
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Stilovi za novo zaglavlje široke IP7 kartice */
+.ip-wide-card-header {
+    background: linear-gradient(to right, var(--fluorescent-green), var(--success-green));
+    padding: 1rem 1.5rem; /* Standardni padding */
+    text-align: center;
+    /* Nije potrebno zaobljenje ako roditelj ima overflow-hidden */
+    /* border-top-left-radius: 14px; */
+    /* border-top-right-radius: 14px; */
+    /* Dodaj donju liniju kao kod malih kartica */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Ukloni donju marginu, razmak rješava padding sadržaja */
+    /* margin-bottom: 1.5rem; <-- Ovo je bilo u starom, maknuto je */
+}
+
+/* Prilagodi stil naslova unutar novog zaglavlja */
+.ip-wide-card-header .ip-wide-card-header-title { /* Ciljaj H3 po klasi unutar novog zaglavlja */
+    color:#0e076a !important;
+    font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; /* Uskladi font */
+    font-size: 1.5rem; /* Malo veći naslov za široku karticu? Prilagodi po potrebi */
+    font-weight: 700; /* Uskladi debljinu */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Uskladi sjenu */
+    margin-bottom: 0; /* Ukloni donju marginu sa samog H3 */
+}
+
+/* Ukloni osnovni padding sa same široke kartice, padding je sada u omotaču sadržaja */
+.ip-wide-card {
+    padding: 0 !important; /* Nadjačaj Tailwind padding */
+}
+
+/* Osiguraj da glavna široka kartica zadrži svoj border i ostale stilove */
+.ip-wide-card.glass-card {
+    border: 1px solid var(--fluorescent-green); /* Fluorescentno zeleni rub */
+    border-radius: 15px;
+    /* Zadrži background, backdrop-filter itd. iz .glass-card */
+    overflow: hidden; /* Dodano da bi se osiguralo da header ne prelazi rubove */
+}
+
+/* Prilagodi razmak za input kontejner ako je potrebno (Ovo je za ID specifičan) */
+#ip7-amount-input-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    text-align: center; /* Centriraj sadržaj */
+    /* display: none; <-- Ovo je dodano u općenitom stilu ispod, ovdje nije potrebno */
+}
+
+/* (Zadrži postojeći .ip-wide-card CSS za responzivnu max-width itd. koji je bio prije ovog bloka) */
+
+
+.ip-wide-card .btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Adjust gap between buttons */
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+}
+
+.ip-wide-card .btn-group .btn-primary {
+    /* Specific padding for these buttons if needed */
+    padding: 10px 20px;
+}
+
+/* Općeniti stil za kontejner inputa (sakriven po defaultu) */
+.ip-wide-card .amount-input-container {
+    display: none; /* Hidden by default */
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    text-align: center; /* Center contents */
+}
+
+.ip-wide-card .amount-input-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #d1d5db;
+    text-align: center;
+}
+
+.ip-wide-card .amount-input-wrapper {
+    display: flex;
+    justify-content: center; /* Center the input group */
+    align-items: center;
+     margin-bottom: 1rem; /* Space below the input line */
+}
+
+.ip-wide-card .amount-input {
+     width: 150px; /* Fixed width for input */
+     padding: 10px 12px;
+     border: 1px solid var(--fluorescent-green);
+     border-radius: 8px;
+     background-color: rgba(106, 27, 154, 0.1);
+     color: white;
+     text-align: center;
+     margin-right: 0.5rem; /* Space between input and currency symbol */
+     -moz-appearance: textfield; /* Remove number arrows in Firefox */
+}
+/* Remove number arrows in Chrome, Safari, Edge */
+.ip-wide-card .amount-input::-webkit-outer-spin-button,
+.ip-wide-card .amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ip-wide-card .amount-input:focus {
+    outline: none;
+    border-color: var(--fluorescent-green);
+    /* Koristi zeleni shadow umjesto narančastog za konzistentnost */
+    box-shadow: 0 0 0 3px rgba(128, 255, 0, 0.2); /* Zeleni focus shadow */
+}
+
+.ip-wide-card .amount-input::placeholder {
+     color: rgba(255, 255, 255, 0.5);
+}
+
+.ip-wide-card .currency-symbol {
+    color: white;
+    font-size: 1rem;
+}
+
+.ip-wide-card .input-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem; /* Space above buttons */
+}
+.ip-wide-card .input-buttons .btn-primary {
+     padding: 8px 16px; /* Smaller padding for these buttons */
+     font-size: 0.9rem;
+}
+.ip-wide-card .input-buttons .btn-outline { /* Style for the "OTKAŽI" button */
+     background-color: transparent;
+     color: #aaa; /* Gray text */
+     border: 1px solid #aaa; /* Gray border */
+     /* Dodano radi konzistentnosti s ostalim gumbima */
+     padding: 8px 16px;
+     font-size: 0.9rem;
+     border-radius: 50px;
+     font-weight: 600;
+     letter-spacing: 1px;
+     text-transform: uppercase;
+     transition: all 0.3s ease;
+}
+.ip-wide-card .input-buttons .btn-outline:hover {
+     background-color: #aaa;
+     color: #111; /* Dark text on hover */
+     box-shadow: none;
+     transform: none; /* Remove transform */
+}
+
+/* Popup overlay and general styles (Ovaj dio je bio nakon bloka za IP7, ostavljam ga) */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 9990;
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: #0d0118; /* Dark background for popup */
+    border: 1px solid var(--fluorescent-green);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 700px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    /* Promijenjen shadow na zeleni */
+    box-shadow: 0 8px 32px 0 rgba(128, 255, 0, 0.37);
+    color: var(--text-color);
+}
+/* ================================= */
+/* === Desktop Dropdown Izbornik === */
+/* ================================= */
+
+/* Osnovni stilovi za padajući meni (sakriven po defaultu) */
+/* Koristimo specifičniji selektor da izbjegnemo konflikte */
+nav .sft21-nav-item.dropdown .dropdown-menu {
+    display: none; /* Početno sakriven */
+    position: absolute;
+    top: calc(100% + 5px); /* Pozicija ispod roditelja */
+    left: 50%;
+    transform: translateX(-50%); /* Centriranje */
+    min-width: 140px; /* Minimalna širina */
+    z-index: 100; /* Da bude iznad ostalog sadržaja */
+
+    /* --- Izgled --- */
+    background-color: rgba(13, 1, 24, 0.9); /* Tamna polu-prozirna pozadina */
+    border: 1px solid var(--fluorescent-green); /* Zeleni okvir */
+    border-radius: 8px; /* Zaobljeni rubovi */
+    padding: 0.5rem 0; /* Unutarnji razmak gore/dolje */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sjena */
+    backdrop-filter: blur(5px); /* Zamagljenje pozadine ispod */
+    -webkit-backdrop-filter: blur(5px);
+
+    /* --- Animacija (Fade in) --- */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Prikaz menija kada se pređe mišem preko roditelja */
+/* Selektor mora odgovarati roditelju u HTML-u */
+nav .sft21-nav-item.dropdown:hover .dropdown-menu {
+    display: block; /* Pokaži blok */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Stilovi za linkove unutar padajućeg menija */
+nav .sft21-nav-item.dropdown .dropdown-menu a.dropdown-item {
+    display: block;
+    padding: 0.6rem 1.2rem; /* Padding linkova */
+    color: #e0e0e0; /* Svjetlija boja teksta */
+    text-decoration: none;
+    font-size: 0.875rem; /* text-sm */
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover efekt za linkove unutar padajućeg menija */
+/* Ispravljen hover da odgovara HTML-u (tailwind klase imaju prioritet) */
+/* Ako želite drugačiji hover, možda ćete trebati ukloniti Tailwind hover klase iz HTML-a */
+nav .sft21-nav-item.dropdown .dropdown-menu a.dropdown-item:hover {
+    /* background-color: rgba(128, 255, 0, 0.15); */ /* Tailwind hover klase ovo nadjačavaju */
+    /* color: var(--fluorescent-green); */ /* Tailwind hover klase ovo nadjačavaju */
+    /* Umjesto toga, oslonite se na Tailwind klase: hover:bg-purple-700 hover:text-white */
+}
+
+/* Stil za strelicu (ako je imate pored "Platforme") */
+nav .sft21-nav-item.dropdown .nav-link i.fa-chevron-down { /* Ciljamo nav-link unutar kojeg je ikona */
+    font-size: 0.7rem;
+    margin-left: 0.3rem;
+    transition: transform 0.3s ease;
+    display: inline-block; /* Da bi transform radio */
+}
+
+/* Rotacija strelice na hover */
+nav .sft21-nav-item.dropdown:hover .nav-link i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+/* OVO JE ČISTI CSS KOD ZA PULSIRAJUĆI KRUG. */
+/* KOPIRAJTE SVE ISPOD OVE LINIJE I ZALIJEPITE U VAŠU CSS DATOTEKU (npr. style.css). */
+/* OBRISITE SVE HTML TAGOVE (kao što je <footer>) IZ VAŠE CSS DATOTEKE. */
+
+/* Opći stil za footer (možda već postoji, samo provjerite position) */
+footer {
+    /* position: relative; /* Ostavite ako vam treba za nešto drugo, inače možete ukloniti ako krug ima fixed position */
+    /* Ostali vaši postojeći stilovi za footer... */
+}
+
+/* Stilovi za glavni krug */
+.pulsating-circle {
+    /* Position fixed ga fiksira na vidljivi dio ekrana */
+    position: fixed;
+    left: 1.5em; /* Razmak od lijeve strane ekrana (prilagodi) */
+    bottom: 15px; /* Razmak od dna ekrana (prilagodi da bude u ravnini s chatbotom) */
+
+    /* Dimenzije i izgled kruga */
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #66f804; /* Bordo samog kruga */
+    background-color: rgba(0, 0, 0, 0.4); /* Pozadina samog kruga */
+    color: white; /* Boja teksta/ikone unutar kruga */
+    cursor: pointer;
+    box-sizing: border-box;
+
+    /* Centriranje sadržaja (Flexbox) */
+    display: flex;
+    justify-content: center; /* horizontalno */
+    align-items: center; /* vertikalno */
+    text-align: center; /* fallback */
+
+    z-index: 1000; /* Visok z-index da bude iznad ostalih elemenata */
+    overflow: visible; /* Važno za vidljivost pulsirajućeg ruba */
+    padding: 5px;
+}
+
+/* Omotač sadržaja */
+.pulsating-circle .circle-content {
+    display: flex;
+    flex-direction: column; /* Slaže vertikalno */
+    align-items: center; /* Centriranje unutar kolone */
+    line-height: 1.2; /* Razmak između linija */
+}
+
+/* Zajednički stil za linije */
+.pulsating-circle .circle-line {
+    display: block;
+    margin: 1px 0;
+    color: white;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* Stil za srce */
+.pulsating-circle .heart-symbol {
+    color: red; /* BOJA SRCA */
+    font-size: 1.6em;
+    margin: 2px 0;
+}
+
+/* --------------- DEFINICIJA ANIMACIJE --------------- */
+
+/* Pravilo za animaciju */
+@keyframes pulse-border {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* --------------- PSEUDO-ELEMENT ZA PULSIRANJE --------------- */
+
+/* Element koji stvara pulsirajući efekt */
+.pulsating-circle::before {
+    content: '';
+    position: absolute; /* Pozicioniran unutar .pulsating-circle */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgb(103, 255, 1); /* Rub koji pulsira */
+    border-radius: 50%;
+
+    /* Primjena animacije */
+    animation: pulse-border 1.5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    z-index: -1; /* Postavi ga IZA glavnog kruga */
+}
+/* --- Izmjene za postojeći validation-popup --- */
+
+/* Povećavanje fonta naslova "Informacija" */
+#validation-popup h4 { /* Koristimo h4 jer ga vi koristite u kodu */
+    font-size: 2rem !important; /* Povećan font */
+}
+
+/* Centriranje teksta poruke */
+#validation-popup p {
+    text-align: center !important;
+    min-height: 50px; /* Dodaje malo prostora da ne izgleda prazno */
+}
+
+/* Sakrivanje postojećeg 'X' gumba za zatvaranje */
+#validation-popup .popup-close {
+    display: none !important;
+}
+/* CSS KOD ZA TRAJNO SKRIVANJE 'X' GUMBA */
+#validation-popup .popup-close {
+    display: none !important;
+}
+/* Opcionalni drugi puls */
+/*
+.pulsating-circle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: pulse-border 1.5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+    z-index: -1;
+}
+*/
+
+/* --------------- KRAJ STILOVA --------------- */
