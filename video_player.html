@@ -308,96 +308,28 @@
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Dohvaćanje osnovnih elemenata ---
-    const player = document.getElementById('main-video-player');
+
+    // --- Logika samo za otvaranje i zatvaranje sidebara ---
     const sidebarToggleBtn = document.getElementById('sidebar-toggle');
     const sidebar = document.getElementById('video-sidebar');
-    const videoItems = document.querySelectorAll('.video-item');
-    const backLink = document.getElementById('back-link');
-    const sidebarTabs = document.querySelectorAll('.sidebar-tab');
-    const tabPanes = document.querySelectorAll('.tab-pane');
 
-    // --- Logika za "Vrati se" link ---
-    if (backLink) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const fromPage = urlParams.get('from');
-        if (fromPage) {
-            sessionStorage.setItem('returnToPage', fromPage);
-        }
-        const returnUrl = sessionStorage.getItem('returnToPage');
-        backLink.href = returnUrl || 'index.html';
-    }
-
-    // --- Logika za tabove unutar sidebara ---
-    if (sidebarTabs.length > 0) {
-        sidebarTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                sidebarTabs.forEach(t => t.classList.remove('active'));
-                tabPanes.forEach(p => p.classList.remove('active'));
-                tab.classList.add('active');
-                const targetPane = document.getElementById(tab.getAttribute('data-tab'));
-                if (targetPane) targetPane.classList.add('active');
-            });
-        });
-    }
-    
-    // --- Logika za otvaranje i zatvaranje sidebara ---
     if (sidebarToggleBtn && sidebar) {
-        sidebarToggleBtn.addEventListener('click', (e) => {
+        sidebarToggleBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             sidebar.classList.toggle('active');
             sidebarToggleBtn.classList.toggle('active');
         });
-        document.addEventListener('click', (e) => {
+
+        document.addEventListener('click', function(e) {
             if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && !sidebarToggleBtn.contains(e.target)) {
                 sidebar.classList.remove('active');
                 sidebarToggleBtn.classList.remove('active');
             }
         });
+    } else {
+        console.error("Gumb za meni ili sam meni nisu pronađeni!");
     }
 
-// --- KONAČNA LOGIKA ZA YOUTUBE PLAYER (ISPRAVLJENA VERZIJA) ---
-if (player && videoItems.length > 0) {
-    
-    // Funkcija za promjenu videa u iframe-u
-    function changeVideo(youtubeId) {
-        if (youtubeId && youtubeId.toUpperCase().indexOf('YOUTUBE_ID') === -1) {
-            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
-        } else {
-            player.src = ''; 
-        }
-    }
-    
-    // Postavi 'event listener' na svaki video u listi
-    videoItems.forEach(item => {
-        item.addEventListener('click', () => {
-            videoItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            
-            const youtubeId = item.getAttribute('data-youtube-id');
-            changeVideo(youtubeId);
-
-            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                sidebarToggleBtn.classList.remove('active');
-            }
-        });
-    });
-
-    // Automatski učitaj prvi video iz liste pri otvaranju stranice
-    const prviVideoItem = videoItems[0];
-    if (prviVideoItem) {
-        const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
-        prviVideoItem.classList.add('active'); // Odmah ga oznaci kao aktivnog
-        // Učitaj prvi video BEZ autoplay-a
-        if (prviVideoId && prviVideoId.toUpperCase().indexOf('YOUTUBE_ID') === -1) { 
-             player.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0&modestbranding=1`;
-        }
-    }
-
-} else {
-    console.warn("YouTube player ili video itemi nisu pronađeni.");
-}
 });
 </script>
 
