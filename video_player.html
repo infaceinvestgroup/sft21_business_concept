@@ -356,57 +356,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-// --- KONAČNA LOGIKA ZA YOUTUBE PLAYER (ISPRAVLJENA VERZIJA) ---
-if (player && videoItems.length > 0) {
-    
-    // Funkcija za promjenu videa
-    function changeVideo(youtubeId) {
-        if (youtubeId && youtubeId.toUpperCase().indexOf('YOUTUBE_ID') === -1) {
-            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
-        } else {
-            player.src = ''; 
-        }
-    }
-    
-    // Postavi listener na svaki video u listi
-    videoItems.forEach(item => {
-        item.addEventListener('click', () => {
-            videoItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            
-            const youtubeId = item.getAttribute('data-youtube-id');
-            changeVideo(youtubeId);
-
-            if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                sidebarToggleBtn.classList.remove('active');
-            }
-        });
-    });
-
-    // Automatski učitaj prvi video iz liste pri otvaranju stranice
-    const prviVideoItem = videoItems[0];
-    if (prviVideoItem) {
-        const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
-        prviVideoItem.classList.add('active');
-        // Učitaj prvi video BEZ autoplay-a
-        if (prviVideoId && prviVideoId.toUpperCase().indexOf('YOUTUBE_ID') === -1) { 
-             player.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0`;
-        }
-    }
-}
+    // --- KONAČNA LOGIKA ZA YOUTUBE PLAYER ---
+    if (player && videoItems.length > 0) {
         
         // Funkcija za promjenu videa
         function changeVideo(youtubeId) {
+            // Provjeravamo da ID nije placeholder
             if (youtubeId && youtubeId.toUpperCase().indexOf('YOUTUBE_ID') === -1) {
                 player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
             } else {
-                // Ako nema ID-a, ostavi player praznim ili stavi poruku
                 player.src = ''; 
             }
         }
         
-       // Postavi listener na svaki video u listi
+        // Postavi 'event listener' na svaki video u listi
         videoItems.forEach(item => {
             item.addEventListener('click', () => {
                 videoItems.forEach(i => i.classList.remove('active'));
@@ -415,6 +378,7 @@ if (player && videoItems.length > 0) {
                 const youtubeId = item.getAttribute('data-youtube-id');
                 changeVideo(youtubeId);
 
+                // Zatvori sidebar na mobitelu nakon klika
                 if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
                     sidebar.classList.remove('active');
                     sidebarToggleBtn.classList.remove('active');
