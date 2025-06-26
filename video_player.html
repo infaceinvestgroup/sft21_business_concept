@@ -242,7 +242,7 @@
                                 </li>
                                 <!-- KRAJ IZMJENE -->
 
-                                <li class="video-item" data-video-src="videos/kako_poceti.mp4" data-poster="img/video-poster-2.jpg">
+                                <li class="video-item active" data-youtube-id="xDZNaDX58jg&t=1752s">
                                     <div class="video-thumbnail"><img src="img/video-thumbnail-2.jpg" alt="Thumbnail"></div>
                                     <div class="video-info">
                                         <div class="video-item-title">Kako započeti s SFT21</div>
@@ -325,45 +325,17 @@
             </div> <!-- KRAJ .sidebar-content -->
         </aside>
 
-        <!-- Glavni Video Player -->
-        <div style="width: 100%; height: 100%; background-color: #000; display: flex; align-items: center; justify-content: center;">
-            <video id="main-video-player" class="video-player" poster="img/video-poster-1.jpg" controlsList="nodownload">
-                <source src="videos/sft21_prezentacija.mp4" type="video/mp4">
-                Vaš preglednik ne podržava video tag.
-            </video>
-        </div>
-
-        <!-- Kontrole (Overlay) -->
-        <div id="video-controls-overlay" class="video-controls-overlay">
-            <div class="video-progress-container" id="video-progress-container">
-                <div class="video-progress-filled" id="video-progress-filled"></div>
-            </div>
-            <div class="video-controls-main">
-                <div class="video-controls-left">
-                    <button class="video-control-btn play-pause" id="play-pause-btn">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <div class="video-time">
-                        <span id="current-time">0:00</span> / <span id="total-time">0:00</span>
-                    </div>
-                </div>
-                <div class="video-controls-right">
-                    <div class="video-volume">
-                        <button class="video-control-btn" id="volume-btn">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                        <div class="video-volume-slider" id="volume-slider">
-                            <div class="video-volume-filled" id="volume-filled"></div>
-                        </div>
-                    </div>
-                    <button class="video-control-btn" id="fullscreen-btn">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
+<div style="width: 100%; height: 100%; background-color: #000; display: flex; align-items: center; justify-content: center;">
+    <iframe 
+        id="main-video-player" 
+        style="width: 100%; height: 100%; border:0;"
+        src="" 
+        title="YouTube video player" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen>
+    </iframe>
+</div>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -457,202 +429,60 @@
                  });
             } else { console.error("Sidebar ili toggle gumb nije pronađen!"); }
 
-             // --- Učitavanje Videa Klikom ---
-            if (videoItems.length > 0 && videoPlayer) {
-                videoItems.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const videoSrc = item.getAttribute('data-video-src');
-                        const posterSrc = item.getAttribute('data-poster');
-                        if (videoSrc) {
-                            videoItems.forEach(i => i.classList.remove('active'));
-                            item.classList.add('active');
+// --- KONAČNA VERZIJA: Učitavanje YouTube Videa Klikom ---
+if (videoItems.length > 0 && videoPlayer) {
 
-                            videoPlayer.src = videoSrc;
-                            videoPlayer.poster = posterSrc || '';
-                            videoPlayer.load();
+    // Funkcija za promjenu videa u iframe-u
+    function changeVideo(youtubeId) {
+        if (youtubeId && youtubeId.length > 5) { // Provjera da nije placeholder
+            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+        }
+    }
 
-                            const playPromise = videoPlayer.play();
+    // Postavi 'event listener' na svaki video u listi
+    videoItems.forEach(item => {
+        item.addEventListener('click', () => {
+            videoItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
 
-                            if (playPromise !== undefined) {
-                                playPromise.then(() => {
-                                    if(playPauseIcon) { playPauseIcon.classList.replace('fa-play', 'fa-pause'); }
-                                }).catch(error => {
-                                    console.warn("Automatska reprodukcija spriječena ili nije uspjela:", error);
-                                    if(playPauseIcon) { playPauseIcon.classList.replace('fa-pause', 'fa-play'); }
-                                });
-                            } else {
-                                if(playPauseIcon) { playPauseIcon.classList.replace('fa-play', 'fa-pause'); }
-                            }
+            const youtubeId = item.getAttribute('data-youtube-id');
+            changeVideo(youtubeId);
 
-                            if (controlsOverlay && playerContainer) {
-                                controlsOverlay.style.opacity = '1';
-                                controlsOverlay.style.visibility = 'visible';
-                                playerContainer.classList.add('controls-visible');
-                            }
-
-                            if (sidebar?.classList.contains('active')) {
-                                sidebar.classList.remove('active');
-                                sidebarToggleBtn?.classList.remove('active');
-                                document.body.classList.remove('overflow-hidden-mobile');
-                            }
-                        } else {
-                            console.warn("Video item nema data-video-src atribut:", item);
-                        }
-                    });
-                });
-            } else {
-                console.warn("Video player ili video itemi nisu pronađeni.");
+            // Zatvori sidebar ako je otvoren na mobitelu
+            if (sidebar?.classList.contains('active') && window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                sidebarToggleBtn?.classList.remove('active');
             }
+        });
+    });
 
-            // --- Kontrole Playera (Ovaj dio ostaje nepromijenjen) ---
-             if (videoPlayer && playPauseBtn && currentTimeEl && totalTimeEl && progressContainer && progressFilled && volumeBtn && volumeSlider && volumeFilled && fullscreenBtn && playerContainer && controlsOverlay) {
-                function formatTime(time) {
-                    if (isNaN(time)) return '0:00';
-                    const minutes = Math.floor(time / 60);
-                    const seconds = Math.floor(time % 60).toString().padStart(2, '0');
-                    return `${minutes}:${seconds}`;
-                }
-                function togglePlay() {
-                    if (videoPlayer.paused || videoPlayer.ended) {
-                        videoPlayer.play().catch(e => console.warn("Play spriječen:", e));
-                    } else {
-                        videoPlayer.pause();
-                    }
-                }
-                function updatePlayButton() {
-                    if(playPauseIcon) {
-                        playPauseIcon.classList.toggle('fa-play', videoPlayer.paused);
-                        playPauseIcon.classList.toggle('fa-pause', !videoPlayer.paused);
-                    }
-                }
-                function updateProgress() {
-                    if (videoPlayer.duration) {
-                        const percentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-                        progressFilled.style.width = `${percentage}%`;
-                        currentTimeEl.textContent = formatTime(videoPlayer.currentTime);
-                    } else {
-                        progressFilled.style.width = '0%';
-                        currentTimeEl.textContent = '0:00';
-                    }
-                }
-                function setProgress(e) {
-                    const progressRect = progressContainer.getBoundingClientRect();
-                    const clickX = e.clientX - progressRect.left;
-                    const width = progressRect.width;
-                    const duration = videoPlayer.duration;
-                    if (duration) {
-                        videoPlayer.currentTime = (clickX / width) * duration;
-                    }
-                }
-                function loadVideoMetadata() {
-                    if (videoPlayer.duration) {
-                        totalTimeEl.textContent = formatTime(videoPlayer.duration);
-                    } else {
-                        totalTimeEl.textContent = '0:00';
-                    }
-                    updateVolume();
-                    updateProgress();
-                }
-                function updateVolume() {
-                    if (volumeFilled && volumeIcon) {
-                        volumeFilled.style.width = `${videoPlayer.volume * 100}%`;
-                        if (videoPlayer.muted || videoPlayer.volume === 0) {
-                            volumeIcon.className = 'fas fa-volume-mute';
-                        } else if (videoPlayer.volume < 0.5) {
-                            volumeIcon.className = 'fas fa-volume-down';
-                        } else {
-                            volumeIcon.className = 'fas fa-volume-up';
-                        }
-                    }
-                }
-                function setVolume(e) {
-                    const sliderRect = volumeSlider.getBoundingClientRect();
-                    const clickX = e.clientX - sliderRect.left;
-                    const width = sliderRect.width;
-                    let volume = clickX / width;
-                    volume = Math.max(0, Math.min(1, volume));
-                    videoPlayer.volume = volume;
-                    videoPlayer.muted = false;
-                    updateVolume();
-                }
-                function toggleMute() {
-                    videoPlayer.muted = !videoPlayer.muted;
-                    updateVolume();
-                }
-                function toggleFullscreen() {
-                    if (!document.fullscreenElement) {
-                        playerContainer.requestFullscreen().catch(err => {
-                            console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                            alert("Fullscreen nije podržan ili je onemogućen.");
-                        });
-                    } else {
-                        if (document.exitFullscreen) {
-                            document.exitFullscreen();
-                        }
-                    }
-                }
-                function updateFullscreenButton() {
-                    const icon = fullscreenBtn.querySelector('i');
-                    if(icon) {
-                        if (document.fullscreenElement === playerContainer) {
-                            icon.classList.replace('fa-expand','fa-compress');
-                        } else {
-                            icon.classList.replace('fa-compress','fa-expand');
-                        }
-                    }
-                }
-                playPauseBtn.addEventListener('click', togglePlay);
-                videoPlayer.addEventListener('play', updatePlayButton);
-                videoPlayer.addEventListener('pause', updatePlayButton);
-                videoPlayer.addEventListener('timeupdate', updateProgress);
-                videoPlayer.addEventListener('loadedmetadata', loadVideoMetadata);
-                videoPlayer.addEventListener('volumechange', updateVolume);
-                videoPlayer.addEventListener('click', togglePlay);
-                progressContainer.addEventListener('click', setProgress);
-                volumeSlider.addEventListener('click', setVolume);
-                volumeBtn.addEventListener('click', toggleMute);
-                fullscreenBtn.addEventListener('click', toggleFullscreen);
-                document.addEventListener('fullscreenchange', updateFullscreenButton);
-                let controlsTimeout;
-                playerContainer.addEventListener('mousemove', () => {
-                    controlsOverlay.style.opacity = '1';
-                    controlsOverlay.style.visibility = 'visible';
-                    playerContainer.classList.add('controls-visible');
-                    if (!videoPlayer.paused) {
-                         clearTimeout(controlsTimeout);
-                         controlsTimeout = setTimeout(() => {
-                             controlsOverlay.style.opacity = '0';
-                             controlsOverlay.style.visibility = 'hidden';
-                             playerContainer.classList.remove('controls-visible');
-                         }, 3000);
-                    }
-                });
-                playerContainer.addEventListener('mouseleave', () => {
-                    if (!videoPlayer.paused) {
-                        clearTimeout(controlsTimeout);
-                        controlsOverlay.style.opacity = '0';
-                        controlsOverlay.style.visibility = 'hidden';
-                        playerContainer.classList.remove('controls-visible');
-                    }
-                });
-                videoPlayer.addEventListener('pause', () => {
-                    clearTimeout(controlsTimeout);
-                    controlsOverlay.style.opacity = '1';
-                    controlsOverlay.style.visibility = 'visible';
-                    playerContainer.classList.add('controls-visible');
-                });
-                videoPlayer.addEventListener('play', () => {
-                    clearTimeout(controlsTimeout);
-                    controlsTimeout = setTimeout(() => {
-                        controlsOverlay.style.opacity = '0';
-                        controlsOverlay.style.visibility = 'hidden';
-                        playerContainer.classList.remove('controls-visible');
-                    }, 3000);
-                });
-            } else {
-                console.error("Nisu pronađeni svi elementi za video kontrole.");
-            }
+    // Automatski učitaj prvi video iz liste kada se stranica otvori
+    const prviVideoItem = videoItems[0];
+    if (prviVideoItem) {
+        const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
+        prviVideoItem.classList.add('active'); // Odmah ga oznaci kao aktivnog
+        // Učitaj prvi video BEZ autoplay-a
+        if (prviVideoId && prviVideoId.toUpperCase().indexOf('YOUTUBE_ID') === -1) { 
+             videoPlayer.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0&modestbranding=1`;
+        }
+    }
 
+} else {
+    console.warn("YouTube player ili video itemi nisu pronađeni.");
+}
+        });
+    });
+
+    const prviVideoItem = videoItems[0];
+    if (prviVideoItem) {
+        const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
+        if (prviVideoId) {
+            videoPlayer.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0`;
+        }
+    }
+} else {
+    console.warn("Video player ili video itemi nisu pronađeni.");
+}
         });
     </script>
 
