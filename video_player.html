@@ -310,8 +310,14 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- Logika samo za otvaranje i zatvaranje sidebara ---
-    const sidebarToggleBtn = document.getElementById('sidebar-toggle');
-    const sidebar = document.getElementById('video-sidebar');
+  const sidebar = document.getElementById('video-sidebar');
+const player = document.getElementById('main-video-player');
+const videoItems = document.querySelectorAll('.video-item');
+
+
+// NOVE LINIJE KOJE DODAJETE:
+const player = document.getElementById('main-video-player');
+const videoItems = document.querySelectorAll('.video-item');
 
     if (sidebarToggleBtn && sidebar) {
         sidebarToggleBtn.addEventListener('click', function(e) {
@@ -329,7 +335,46 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error("Gumb za meni ili sam meni nisu pronađeni!");
     }
+// --- LOGIKA ZA YOUTUBE PLAYER ---
+if (player && videoItems.length > 0) {
+    
+    // Funkcija za promjenu videa
+    function changeVideo(youtubeId) {
+        if (youtubeId && youtubeId.toUpperCase().indexOf('YOUTUBE_ID') === -1) {
+            player.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
+        } else {
+            player.src = ''; 
+        }
+    }
+    
+    // Postavi 'event listener' na svaki video u listi
+    videoItems.forEach(item => {
+        item.addEventListener('click', () => {
+            videoItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            
+            const youtubeId = item.getAttribute('data-youtube-id');
+            changeVideo(youtubeId);
 
+            // Zatvori meni nakon klika (korisno na mobitelu)
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                sidebarToggleBtn.classList.remove('active');
+            }
+        });
+    });
+
+    // Automatski učitaj prvi video iz liste pri otvaranju stranice
+    const prviVideoItem = videoItems[0];
+    if (prviVideoItem) {
+        const prviVideoId = prviVideoItem.getAttribute('data-youtube-id');
+        prviVideoItem.classList.add('active'); 
+        // Učitaj prvi video BEZ autoplay-a
+        if (prviVideoId && prviVideoId.toUpperCase().indexOf('YOUTUBE_ID') === -1) { 
+             player.src = `https://www.youtube.com/embed/${prviVideoId}?rel=0`;
+        }
+    }
+}
 });
 </script>
 
