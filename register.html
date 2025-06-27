@@ -88,8 +88,34 @@
 
         /* Forma Kontejner */
         .registration-form-container { background-color: rgba(106, 27, 154, 0.05); border: 1px solid var(--fluorescent-green); /* ZELENI OKVIR */ border-radius: 15px; padding: 2rem 2.5rem; color: var(--text-color); }
-        .btn-account-type { padding: 0.6rem 1.5rem; border: 1px solid var(--fluorescent-green); border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background-color 0.3s, color 0.3s; background-color: transparent; color: var(--fluorescent-green); }
-        .btn-account-type.active, .btn-account-type:hover { background-color: var(--fluorescent-green); color: #0e076a; }
+        
+        /* NOVI STILOVI ZA GUMBE TIPA RAČUNA */
+        .btn-account-type {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--fluorescent-green);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            /* Zadano stanje je sada zeleno */
+            background-color: var(--fluorescent-green);
+            color: #0e076a;
+        }
+        .btn-account-type.active {
+            /* Aktivno (kliknuto) stanje je sada prozirno */
+            background-color: transparent;
+            color: var(--fluorescent-green);
+        }
+        .btn-account-type:not(.active):hover {
+            /* Hover na neaktivnom (zelenom) gumbu */
+            background-color: color-mix(in srgb, var(--fluorescent-green) 85%, black 15%);
+        }
+        .btn-account-type.active:hover {
+            /* Hover na aktivnom (prozirnom) gumbu */
+            background-color: rgba(128, 255, 0, 0.1);
+        }
+        
         .social-login-button { display: flex; align-items: center; justify-content: center; padding: 0.75rem 1rem; border: 1px solid var(--fluorescent-green); border-radius: 8px; color: #e5e7eb; background-color: rgba(128, 255, 0, 0.05); transition: background-color 0.3s, border-color 0.3s; text-decoration: none; font-weight: 500; }
         .social-login-button:hover { background-color: rgba(128, 255, 0, 0.15); border-color: var(--fluorescent-green); color: white; }
         .social-login-button i, .social-login-button svg { width: 20px; height: 20px; }
@@ -387,7 +413,8 @@
 
                         <!-- Gumbi za odabir tipa računa -->
                         <div class="flex justify-center gap-4 mb-6">
-                            <button type="button" class="btn-account-type active">Osobni račun</button>
+                            <!-- HTML IZMJENA: Uklonjena klasa 'active' s prvog gumba -->
+                            <button type="button" class="btn-account-type">Osobni račun</button>
                             <button type="button" class="btn-account-type">Poslovni račun</button>
                         </div>
 
@@ -506,8 +533,7 @@
 
                               <!-- Suglasnost Tekst -->
                               <div class="mt-6 text-xs text-gray-400 leading-relaxed">
-                                 Svoju(e) suglasnost(i) za navedene obrade podataka mogu (pojedinačno) u bilo kojem trenutku opozvati za ubuduće u pisanom obliku slanjem opoziva poštom na adresu myWorld d.o.o., Josipa Marohnića 1, 10000 Zagreb ili e-mailom na e-mail adresu service.hr@myworld.com. Do opoziva izvršena obrada podataka na temelju ove suglasnosti ostaje pravovaljana.
-                              </div>
+                              Ovu suglasnost za obradu nevedenih podataka imam pravo u bilo kojem trenutku opozvati za daljnje korištenje, u pisanom obliku slanjem OPOZIVA OSOBNIH PODATAKA putem emaila na adresu <strong>support@infaceinvestgroup.hr</strong>. Do opoziva izvršena obrada podataka temeljem ove suglasnosti ostaje pravovaljana.</div>
 
                               <!-- Gumbi Dalje/Prekinuti -->
                               <div class="pt-6 space-y-3">
@@ -611,10 +637,10 @@
             { code: 'RS', name: 'Srbija', flagUrl: 'https://flagcdn.com/w20/rs.png', phonePrefix: '+381' },
             { code: 'SI', name: 'Slovenija', flagUrl: 'https://flagcdn.com/w20/si.png', phonePrefix: '+386' },
             { code: 'BA', name: 'Bosna i Hercegovina', flagUrl: 'https://flagcdn.com/w20/ba.png', phonePrefix: '+387' },
-            { code: 'MK', name: 'Makedonija', flagUrl: 'https://flagcdn.com/w20/mk.png', phonePrefix: '+389' },
+            { code: 'MK', name: 'Sjeverna Makedonija', flagUrl: 'https://flagcdn.com/w20/mk.png', phonePrefix: '+389' },
             { code: 'ME', name: 'Crna Gora', flagUrl: 'https://flagcdn.com/w20/me.png', phonePrefix: '+382' },
             { code: 'GB', name: 'Engleska', flagUrl: 'https://flagcdn.com/w20/gb.png', phonePrefix: '+44' },
-            { code: 'RO', name: 'Rumunija', flagUrl: 'https://flagcdn.com/w20/ro.png', phonePrefix: '+40' },
+            { code: 'RO', name: 'Rumunjska', flagUrl: 'https://flagcdn.com/w20/ro.png', phonePrefix: '+40' },
             { code: 'IT', name: 'Italija', flagUrl: 'https://flagcdn.com/w20/it.png', phonePrefix: '+39' },
             { code: 'AT', name: 'Austrija', flagUrl: 'https://flagcdn.com/w20/at.png', phonePrefix: '+43' },
             { code: 'DE', name: 'Njemačka', flagUrl: 'https://flagcdn.com/w20/de.png', phonePrefix: '+49' },
@@ -633,7 +659,7 @@
             { code: 'FI', name: 'Finska', flagUrl: 'https://flagcdn.com/w20/fi.png', phonePrefix: '+358' },
             { code: 'NO', name: 'Norveška', flagUrl: 'https://flagcdn.com/w20/no.png', phonePrefix: '+47' },
             { code: 'SE', name: 'Švedska', flagUrl: 'https://flagcdn.com/w20/se.png', phonePrefix: '+46' },
-            ];
+        ];
 
         // --- ZATVARANJE SVIH OVERLAY ELEMENATA ---
         const closeAllOverlays = (exceptElement = null) => {
@@ -717,8 +743,17 @@
          // --- Custom Cursor (nepromijenjeno) ---
          if (document.querySelector('.custom-cursor')) { /* ... ostaje isto ... */ }
 
-        // --- Prebacivanje aktivne klase između gumba Osobni/Poslovni račun (nepromijenjeno) ---
-        if(accountTypeButtons.length > 0) { /* ... ostaje isto ... */ }
+        // --- Prebacivanje aktivne klase između gumba Osobni/Poslovni račun (Logika ostaje ista) ---
+        if(accountTypeButtons.length > 0) {
+            accountTypeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    accountTypeButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const accountType = button.textContent.includes('Osobni') ? 'personal' : 'business';
+                    console.log('Odabran tip računa:', accountType);
+                });
+            });
+        }
 
          // --- AŽURIRANA Logika za Popup Validacije ---
          function showValidationPopup() { if (validationPopupOverlay) { validationPopupOverlay.style.display = 'flex'; } }
