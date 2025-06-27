@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registracija - SFT21 InFace Invest Group</title>
+    <title>Prijava - SFT21 InFace Invest Group</title>
 
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -12,935 +12,501 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Link na vanjsku CSS datoteku -->
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <link rel="stylesheet" href="css/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
-    <!-- Stilovi za Registracijsku Stranicu -->
-    <style>
-        /* ===== POZADINSKA ANIMACIJA ===== */
-        canvas#network-canvas {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1; /* Ispod svih elemenata */
-            pointer-events: none; /* Da ne ometa klikove */
-            background-color: #0d0118; /* Tamna pozadina */
-        }
 
-        /* --- Osnovne Varijable i Stilovi --- */
+    <!-- Stilovi za Login Stranicu -->
+    <style>
+
+/* ===== POZADINSKA ANIMACIJA ===== */
+canvas#network-canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: #0d0118; /* Tamna pozadina koju ste imali */
+}
+
+
+        /* Osnovni stilovi (mogu biti u style.css) */
         :root {
             --primary-color: #6a1b9a; /* Purple */
             --secondary-color: #ab47bc; /* Lighter Purple */
-            --accent-color: #c55bd7;
-            --success-color: #7b1fa2;
-            --danger-color: #d81b60;
-            --warning-color: #ce93d8;
-            --light-color: #f3e5f5;
-            --dark-color: #0e076a;
-            --gray-color: #5728ac;
+            --accent-color: #c55bd7; /* Even Lighter Purple */
             --text-color: #e5e7eb;
-            --fluorescent-green: #80ff00; /* Fluorescentno zelena */
-            --fluorescent-orange: #d9ff00; /* Fluorescentno narančasta */
+            --fluorescent-orange: #d9ff00;
+            --success-green: #4ade80;
+            --fluorescent-green: #80ff00;
+            --dark-color: #0e076a;
         }
-
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #0d0118;
+            font-family: 'Arial Narrow', Arial, sans-serif;
             color: var(--text-color);
             overflow-x: hidden;
-            cursor: none; /* Sakrijemo standardni kursor */
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--fluorescent-green); /* Glavni naslovi zeleni */
-        }
-        /* --- Navigacija --- */
-        nav.fixed { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background-color: rgba(13, 1, 24, 0.8); border-bottom: 1px solid var(--fluorescent-green); box-shadow: 0 2px 10px rgba(128, 255, 0, 0.2); } /* Zeleni border/shadow */
-        .logo-nav { font-size: 1.75rem; line-height: 1; display: flex; flex-direction: column; align-items: center; }
-        .logo-nav .small-text { font-size: 0.75rem; color: #d1d5db; font-weight: normal; margin-bottom: -0.2em; }
-        .text-logo-orange { color: var(--fluorescent-green); } /* Logo SFT */
+        /* ... (Ovdje možete kopirati i ostale osnovne stilove iz style.css ako želite da sve bude u jednom fajlu, npr. za .logo-nav, nav.fixed, .nav-link, .hamburger, .btn-primary, .btn-outline, itd.) ... */
 
-        /* Gumbi u Headeru za Register Stranicu */
-        nav a.btn-primary.register-login-btn { background-color: var(--fluorescent-green); color: #0e076a; padding: 6px 16px; line-height: 1.4; border-radius: 50px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; border: 1px solid transparent; font-size: 0.75rem; } /* text-xs */
-        nav a.btn-primary.register-login-btn:hover { background-color: color-mix(in srgb, var(--fluorescent-green) 80%, black 20%); transform: translateY(-2px); }
-        nav a.btn-outline.register-register-btn { background-color: transparent; color: var(--fluorescent-green); border: 1px solid var(--fluorescent-green); padding: 6px 16px; line-height: 1.4; border-radius: 50px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; font-size: 0.75rem; } /* text-xs */
-        nav a.btn-outline.register-register-btn:hover { background-color: rgba(128, 255, 0, 0.1); transform: translateY(-2px); }
-
-        /* Izbornik Jezika */
-        .language-dropdown { display: none; position: absolute; background-color: #1f2937; border: 1px solid var(--fluorescent-green); border-radius: 0.375rem; margin-top: 0.5rem; padding: 0.25rem 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); right: 0; z-index: 60; min-width: 85px; width: auto; }
+         /* == STILOVI ZA IZBORNIK JEZIKA (PONOVLJENO RADI SIGURNOSTI) == */
+         .language-dropdown { display: none; position: absolute; background-color: #1f2937; border: 1px solid var(--fluorescent-green); border-radius: 0.375rem; margin-top: 0.5rem; padding: 0.25rem 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); right: 0; z-index: 60; min-width: 80px; }
         .language-dropdown.active { display: block; }
-        .language-item { display: flex; align-items: center; padding: 0.6rem 1rem; font-size: 0.875rem; color: #d1d5db; white-space: nowrap; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+        .language-item { display: flex; align-items: center; padding: 0.5rem 0.75rem; font-size: 0.875rem; color: #d1d5db; white-space: nowrap; cursor: pointer; }
         .language-item:hover { background-color: var(--primary-color); color: white; }
-        .language-item .flag-image, .language-item .flag-icon { width: 20px; height: 15px; object-fit: cover; margin-right: 0.75rem; flex-shrink: 0; }
+        .language-item .flag-image, .language-item .flag-icon { width: 20px; height: auto; margin-right: 0.5rem; flex-shrink: 0; }
         .language-item span:not(.flag-icon) { font-weight: 500; }
-        .language-dropdown-mobile { display: none; position: static; margin-top: 0.5rem; width: 100%; padding: 0.5rem 0; background-color: rgba(0,0,0,0.3); border-top: 1px solid rgba(128, 255, 0, 0.1); }
+        .language-dropdown-mobile { display: none; background-color: #111827; border-radius: 0.375rem; margin-top: 0.5rem; padding: 0.25rem 0; width: 100%; }
         .language-dropdown-mobile.active { display: block; }
-        .language-dropdown-mobile .language-item { justify-content: center; padding: 0.75rem 1.5rem; }
+        .language-dropdown-mobile .language-item { justify-content: center; padding: 0.5rem 1rem; }
         .language-dropdown-mobile .language-item:hover { background-color: var(--primary-color); }
+        /* Padajući meni za platforme (ako postoji u headeru) */
+        .sft21-nav-item.dropdown .dropdown-menu:not(.language-dropdown):not(.language-dropdown-mobile) { position: absolute; display: none; /* ... ostali stilovi ... */ }
+        .sft21-nav-item.dropdown:hover .dropdown-menu:not(.language-dropdown):not(.language-dropdown-mobile) { display: block; }
+        .nav-menu .dropdown-menu:not(.language-dropdown-mobile) { display: none; }
 
-        /* Mobilni Meni */
-        .nav-menu { display: none; }
-        @media (max-width: 768px) {
-            .nav-menu { position: fixed; top: 80px; left: -100%; width: 100%; height: calc(100vh - 80px); background-color: #0d0118; flex-direction: column; transition: all 0.5s ease; padding: 20px 0; z-index: 100; border-right: 1px solid var(--fluorescent-green); display: flex; }
-            .nav-menu.active { left: 0; }
-            .hamburger { display: block; cursor: pointer; }
-            .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px 0; background-color: white; transition: all 0.3s ease; }
-            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-            .hamburger.active .bar:nth-child(2) { opacity: 0; }
-            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-            .nav-menu .mobile-language-selector { padding-left: 1.5rem; padding-right: 1.5rem;}
-            .nav-menu .flex-col.space-y-3 { padding-left: 1.5rem; padding-right: 1.5rem;} /* Ispravljen padding za gumbe */
+        /* Stilovi specifični za login stranicu */
+        body.login-page {
+            background-color: #4a0987;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        .hamburger { display: none; } @media (max-width: 768px) { .hamburger { display: block; } }
-
-        /* --- Registracijska Stranica --- */
-        .registration-section { padding-top: 10rem; padding-bottom: 4rem; } /* Smanjen gornji padding */
-        .image-placeholder { background-color: rgba(106, 27, 154, 0.1); border: 1px dashed var(--fluorescent-green); border-radius: 15px; display: flex; align-items: center; justify-content: center; min-height: 300px; color: rgba(255, 255, 255, 0.3); font-style: italic; background-image: url('https://images.pexels.com/photos/3184431/pexels-photo-3184431.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; }
-        .benefits-list li { display: flex; align-items: flex-start; margin-bottom: 0.8rem; color: #e5e7eb; line-height: 1.6; }
-        .benefits-list i { color: var(--fluorescent-green); margin-right: 0.8rem; margin-top: 0.25rem; flex-shrink: 0; }
-        .glass-card { background: rgba(106, 27, 154, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--fluorescent-green); border-radius: 15px; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); padding: 1.5rem; } /* Dodan padding za glass-card */
-
-        /* Forma Kontejner */
-        .registration-form-container { background-color: rgba(106, 27, 154, 0.05); border: 1px solid var(--fluorescent-green); /* ZELENI OKVIR */ border-radius: 15px; padding: 2rem 2.5rem; color: var(--text-color); }
-        .btn-account-type { padding: 0.6rem 1.5rem; border: 1px solid var(--fluorescent-green); border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background-color 0.3s, color 0.3s; background-color: transparent; color: var(--fluorescent-green); }
-        .btn-account-type.active, .btn-account-type:hover { background-color: var(--fluorescent-green); color: #0e076a; }
-        .social-login-button { display: flex; align-items: center; justify-content: center; padding: 0.75rem 1rem; border: 1px solid var(--fluorescent-green); border-radius: 8px; color: #e5e7eb; background-color: rgba(128, 255, 0, 0.05); transition: background-color 0.3s, border-color 0.3s; text-decoration: none; font-weight: 500; }
-        .social-login-button:hover { background-color: rgba(128, 255, 0, 0.15); border-color: var(--fluorescent-green); color: white; }
-        .social-login-button i, .social-login-button svg { width: 20px; height: 20px; }
-        .social-login-button i.fa-apple { color: #ccc;} .social-login-button:hover i.fa-apple { color: #fff; }
-        .form-label-register { display: block; margin-bottom: 0.3rem; font-size: 0.875rem; color: #cbd5e1; font-weight: 500; }
-        .form-input-register { width: 100%; padding: 0.75rem 1rem; background-color: rgba(106, 27, 154, 0.1); border: 1px solid var(--fluorescent-green); border-radius: 8px; color: white; transition: border-color 0.3s, box-shadow 0.3s; }
-        .form-input-register:focus { outline: none; border-color: var(--fluorescent-green); box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2); }
-        .form-input-register::placeholder { color: rgba(255, 255, 255, 0.4); }
-        #dob-dd, #dob-mm, #dob-yyyy { text-align: center; }
-        .select-wrapper { position: relative; display: flex; align-items: center; border: 1px solid var(--fluorescent-green); border-radius: 8px; background-color: rgba(106, 27, 154, 0.1); padding-left: 0.75rem; }
-        .flag-in-select { width: 20px; height: auto; margin-right: 0.5rem; }
-        .form-select-register { appearance: none; -webkit-appearance: none; -moz-appearance: none; width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.5rem; background-color: transparent; border: none; color: white; cursor: pointer; }
-        .form-select-register:focus { outline: none; }
-        .select-wrapper::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--fluorescent-green); }
-        .form-radio-register { appearance: none; -webkit-appearance: none; -moz-appearance: none; width: 1rem; height: 1rem; border: 1px solid var(--fluorescent-green); border-radius: 50%; cursor: pointer; position: relative; transition: border-color 0.2s; margin-top: 0.1rem; }
-        .form-radio-register:checked { border-color: var(--fluorescent-green); }
-        .form-radio-register:checked::after { content: ''; display: block; width: 0.5rem; height: 0.5rem; background-color: var(--fluorescent-green); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .form-radio-register:focus { box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2); }
-        .phone-input-wrapper { display: flex; align-items: center; border: 1px solid var(--fluorescent-green); border-radius: 8px; background-color: rgba(106, 27, 154, 0.1); overflow: hidden; }
-        .country-code-select { display: flex; align-items: center; padding: 0.75rem; background-color: rgba(106, 27, 154, 0.2); cursor: pointer; border-right: 1px solid var(--fluorescent-green); color: white; }
-        .country-code-select img { width: 20px; height: auto; margin-right: 0.5rem; }
-        .country-code-select span { font-weight: 500; margin-right: 0.3rem;}
-        .form-input-register-phone { flex-grow: 1; border: none; background: none; padding: 0.75rem 1rem; color: white; }
-        .form-input-register-phone:focus { outline: none; box-shadow: none; }
-        .form-checkbox-register { appearance: none; -webkit-appearance: none; -moz-appearance: none; width: 1rem; height: 1rem; border: 1px solid var(--fluorescent-green); border-radius: 3px; cursor: pointer; position: relative; transition: border-color 0.2s, background-color 0.2s; flex-shrink: 0; }
-        .form-checkbox-register:checked { background-color: var(--fluorescent-green); border-color: var(--fluorescent-green); }
-        .form-checkbox-register:checked::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 0.7rem; color: #0e076a; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .form-checkbox-register:focus { box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2); }
-        .btn-cancel { background: none; border: 1px solid #6b7280; color: #9ca3af; border-radius: 50px; font-weight: 500; transition: background-color 0.3s, color 0.3s; padding: 0.6rem 1.5rem; font-size: 0.9rem; }
-        .btn-cancel:hover { background-color: #4b5563; color: white; }
-
-        /* --- Custom Cursor & Trail --- */
-        .custom-cursor {
-            position: fixed;
-            width: 20px; /* Manji osnovni kursor */
-            height: 20px;
-            border-radius: 50%;
-            background-color: rgba(106, 27, 154, 0.6); /* Ljubičasta */
-            pointer-events: none; /* Da ne ometa klikove */
-            z-index: 9999; /* Iznad svih elemenata */
-            mix-blend-mode: difference; /* Stvara lijep kontrast sa svim bojama ispod */
-            left: 0; /* Početna pozicija */
-            top: 0; /* Početna pozicija */
-            transform: translate(-50%, -50%); /* Centriranje */
-            transition: transform 0.1s linear, background-color 0.2s ease, scale 0.2s ease; /* Glatke tranzicije */
-            opacity: 0; /* Početno skriven dok se ne pomakne */
-        }
-
-        .cursor-trail-point {
-            position: fixed;
-            width: 12px; /* Manji od osnovnog */
-            height: 12px;
-            background-color: rgba(206, 147, 216, 0.3); /* Svjetlija ljubičasta */
-            border-radius: 50%;
-            pointer-events: none;
-            left: -50px; /* Početna pozicija izvan ekrana */
-            top: -50px; /* Početna pozicija izvan ekrana */
-            z-index: 9998;
-            transition: transform 60ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; /* Lagani trail */
-            transform: translate(-50%, -50%);
-            opacity: 1;
-        }
-
-        /* Kad se kursor pređe preko interaktivnog elementa */
-        .custom-cursor.hover-effect {
-            background-color: rgba(128, 255, 0, 0.5); /* Fluorescentno zelena */
-            scale: 1.5; /* Povećaj veličinu */
-        }
-        /* --- Kraj Custom Cursor & Trail --- */
-
-        /* Stilovi za validacijski popup (ako se koristi) */
-        #validation-popup-overlay {
-            display: none; /* Sakriven po defaultu */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Crni overlay */
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            justify-content: center;
+        main.login-main {
+            flex-grow: 1;
+            display: flex;
             align-items: center;
-            z-index: 9999; /* Izvanredno visoki z-index */
+            justify-content: center;
+            padding-top: 80px; /* Veći odmak od headera */
+            padding-bottom: 3rem;
+            padding-left: 1rem; /* Padding za manje ekrane */
+            padding-right: 1rem; /* Padding za manje ekrane */
         }
-        #validation-popup-content {
-            background-color: #1f2937; /* Tamna pozadina */
+        .login-card {
+            position: relative;
+            background-color: rgba(13, 1, 24, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-color);
             border: 1px solid var(--fluorescent-green);
-            border-radius: 15px;
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 28rem;
+            width: 100%;
+            padding: 2rem 2.5rem;
+            margin-left: auto;
+            margin-right: auto;
         }
-        #validation-popup-close, #validation-popup-ok {
+        .login-title {
+            color: var(--fluorescent-green);
+        }
+        .login-subtitle {
+            color: var(--fluorescent-green);
+        }
+        .form-input-login {
+            border: 1px solid var(--fluorescent-green);
+            background-color: rgba(13, 1, 24, 0.6);
+            color: white;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+        }
+        .form-input-login::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .form-input-login:focus {
+            outline: none;
+            border-color: var(--fluorescent-orange);
+            background-color: rgba(13, 1, 24, 0.8);
+            box-shadow: 0 0 0 3px rgba(128, 255, 0, 0.3);
+        }
+        .login-label {
+            color: var(--text-color);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        .login-submit-button {
+            background-color: var(--fluorescent-green);
+            color: #0e076a;
             border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            padding: 8px 24px;
-            transition: background-color 0.3s, color 0.3s;
-            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+             cursor: pointer;
+             font-size: 0.875rem;
         }
-        #validation-popup-close {
-            background-color: #4b5563; /* Sivi */
-            color: #e5e7eb;
-            float: right;
+        .login-submit-button:hover {
+            background-color: color-mix(in srgb, var(--fluorescent-green) 85%, black 15%);
+            transform: translateY(-2px);
         }
-        #validation-popup-close:hover {
-            background-color: #374151;
+        .form-checkbox-login {
+            color: var(--fluorescent-green);
+            border-color: var(--fluorescent-green);
+            background-color: transparent;
+            height: 1rem; width: 1rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+             cursor: pointer;
         }
-        /* #validation-popup-ok je definiran u register.html inline stilu */
+        .form-checkbox-login:checked {
+             background-color: var(--fluorescent-green);
+             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%230d0118' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+             background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+        }
+        .form-checkbox-login:focus {
+            outline: none;
+             box-shadow: 0 0 0 3px rgba(128, 255, 0, 0.3);
+        }
+         .checkbox-label-login {
+            display: block; font-size: 0.875rem; color: var(--text-color); cursor: pointer; line-height: 1rem;
+        }
+        .login-link { color: var(--fluorescent-green); font-weight: 500; font-size: 0.875rem; }
+        .login-link:hover { color: var(--fluorescent-orange); text-decoration: underline; }
+        .register-prompt-text { font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.5rem; }
+        .register-link { font-weight: 700; color: var(--fluorescent-green); text-transform: uppercase; font-size: 0.875rem; display: inline-block; }
+        .register-link:hover { color: var(--fluorescent-orange); text-decoration: underline; }
+         .checkbox-container { display: flex; align-items: center; }
+         form > div:not(.checkbox-container):not(.text-sm) { margin-bottom: 1.25rem; }
+         .flex.justify-between + div { margin-top: 1.5rem; }
+         hr { margin-top: 1.5rem; margin-bottom: 1.5rem; border-color: rgba(128, 255, 0, 0.2); border-top-width: 1px; border-style: dashed; }
+         .login-close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--fluorescent-green); line-height: 1; text-decoration: none; opacity: 0.7; transition: opacity 0.2s ease, color 0.2s ease; }
+         .login-close-btn:hover { color: var(--fluorescent-orange); opacity: 1; }
 
+         /* Stilovi za Navigaciju (preuzeto iz style.css za potrebe ove stranice) */
+         .logo-nav { font-size: 1.75rem; line-height: 1; display: flex; flex-direction: column; align-items: center; }
+         .logo-nav .small-text { font-size: 0.75rem; color: #d1d5db; font-weight: normal; margin-bottom: -0.2em; }
+         .text-logo-orange { color: var(--fluorescent-green); }
+         nav.fixed { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background-color: rgba(13, 1, 24, 0.8); border-bottom: 1px solid var(--fluorescent-green); box-shadow: 0 2px 10px rgba(128, 255, 0, 0.3); }
+         /* Smanjenje gumba u nav */
+         nav a.btn-primary, nav button.btn-primary, nav a.btn-outline, nav button.btn-outline { padding: 6px 16px !important; font-size: 0.75rem !important; line-height: 1.4 !important; }
+         /* Hamburger i mobilni meni */
+         .hamburger { display: none; cursor: pointer; } .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px 0; background-color: white; transition: all 0.3s ease; }
+         .nav-menu { display: none; }
+         @media (max-width: 768px) { .nav-menu { position: fixed; top: 80px; left: -100%; width: 100%; height: calc(100vh - 80px); background-color: #0d0118; flex-direction: column; transition: all 0.5s ease; padding: 20px; z-index: 100; border-right: 1px solid var(--fluorescent-green); display: flex; } .nav-menu.active { left: 0; } .nav-menu a { color: white; display: block; padding: 0.75rem 1.5rem; text-align: center; transition: background-color 0.3s ease; } .nav-menu a:hover { color: var(--fluorescent-green); background-color: rgba(128, 255, 0, 0.1); } .hamburger { display: block; } .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); } .hamburger.active .bar:nth-child(2) { opacity: 0; } .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); } }
     </style>
 </head>
-<body class="bg-gray-900">
-    <!-- Custom Cursor Element -->
-    <div class="custom-cursor"></div>
-    <!-- Trail elements will be appended by JavaScript -->
-
-    <!-- Navigation Bar -->
+<body>
+<canvas id="network-canvas"></canvas>
+<div class="custom-cursor"></div>
     <nav class="fixed top-0 left-0 w-full z-50">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <!-- Left Side: Logo -->
-                <div class="flex items-center">
-                    <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo" class="h-auto w-12 mr-4">
-                    <a href="index.html" title="Idi na početnu stranicu" class="flex flex-col logo-nav">
-                         <span class="small-text">InFace Invest Group</span>
-                         <div class="text-white font-bold"> <span class="text-logo-orange">SFT</span>21 </div>
-                    </a>
-                </div>
+    <div class="container mx-auto px-6 py-4">
+        <!-- GLAVNI RED HEADERA: LOGO LIJEVO, GUMBI/HAMBURGER DESNO -->
+        <div class="flex justify-between items-center">
+            <!-- Lijeva strana: Logo (Slika + Tekst) -->
+            <div class="flex items-center">
+                <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo" class="h-auto w-12 mr-4">
+                <a href="index.html" class="flex flex-col logo-nav">
+                     <span class="small-text">InFace Invest Group</span>
+                     <div class="text-white font-bold"> <span class="text-logo-orange">SFT</span>21 </div>
+                </a>
+            </div>
 
-                <!-- Right Side: Language & Buttons -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <!-- Language Selector - Desktop -->
-                    <div class="language-selector relative">
-                        <button id="desktop-lang-trigger" class="language-trigger text-white hover:text-fluorescent-green transition-colors duration-300 text-xl">
-                            <i class="fas fa-globe"></i>
-                        </button>
-                        <div id="desktop-lang-dropdown" class="language-dropdown">
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
-                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
-                        </div>
+            <!-- Desna strana: Desktop Navigacija i Gumbi -->
+            <div class="hidden md:flex items-center space-x-4">
+                <!-- Odabir jezika - Desktop -->
+                <div class="language-selector relative">
+                    <button id="desktop-lang-trigger" class="language-trigger text-white hover:text-fluorescent-green transition-colors duration-300 text-xl">
+                        <i class="fas fa-globe"></i>
+                    </button>
+                    <div id="desktop-lang-dropdown" class="language-dropdown">
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
                     </div>
-                    <!-- Changed Buttons -->
-                    <a href="login.html" class="btn-primary register-login-btn text-xs">Prijava</a>
-                    <a href="register.html" class="btn-outline register-register-btn text-xs">Registracija</a>
                 </div>
+                 <!-- Gumb Prijava (onemogućen na login stranici) -->
+                 <button class="btn-outline text-xs opacity-50 cursor-not-allowed" disabled>Prijava</button>
+                 <!-- Gumb Registracija -->
+                 <a href="register.html" class="btn-primary text-xs">Registracija</a>
+            </div>
 
-                <!-- Hamburger for Mobile -->
-                <div class="md:hidden">
-                    <div class="hamburger"> <span class="bar"></span> <span class="bar"></span> <span class="bar"></span> </div>
-                </div>
+            <!-- Desna strana: Mobilni Hamburger (vidljiv samo na md i manjim ekranima) -->
+            <div class="md:hidden">
+                <div class="hamburger"> <span class="bar"></span> <span class="bar"></span> <span class="bar"></span> </div>
             </div>
         </div>
+    </div>
 
-        <!-- Mobile Menu -->
-        <div class="nav-menu md:hidden">
-             <!-- Mobile Language Selector -->
-             <div class="mobile-language-selector mt-4 mb-4 border-t border-b border-gray-700 py-2 px-6">
+    <!-- Mobilni Navigacijski Meni (Skriven na desktopu, prikazan na mobilnom) -->
+    <div class="nav-menu md:hidden">
+         <!-- Mobilni Odabir jezika -->
+         <div class="flex flex-col space-y-3 mt-5 px-6">
+             <div class="sft21-nav-item dropdown mobile-language-selector mb-3 border-t border-b border-gray-700 py-2">
                  <a href="#" id="mobile-lang-trigger" class="block text-center transition-colors duration-300 sft21-nav-link mobile-language-trigger text-gray-300 hover:text-fluorescent-green">
                      <i class="fas fa-globe mr-2"></i> Odaberi jezik <i class="fas fa-chevron-down ml-1 text-xs"></i>
                  </a>
                  <div id="mobile-lang-dropdown" class="language-dropdown-mobile">
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
-                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
+                     <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
+                     <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
+                       <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
+                        <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
                 </div>
              </div>
-             <!-- Changed Buttons for Mobile Menu -->
-             <div class="flex flex-col space-y-3 px-6 mt-auto pb-4">
-                <a href="login.html" class="btn-primary register-login-btn text-center text-xs">Prijava</a>
-                <a href="register.html" class="btn-outline register-register-btn text-center text-xs">Registracija</a>
-             </div>
+            <!-- Gumbi u mobilnom meniju -->
+            <button class="btn-outline text-center text-xs opacity-50 cursor-not-allowed" disabled>Prijava</button>
+            <a href="register.html" class="btn-primary text-center text-xs">Registracija</a>
         </div>
-    </nav>
+    </div>
 
-    <!-- Main Page Content -->
-    <main class="registration-section">
-        <div class="container mx-auto px-6">
+    <main class="login-main">
+        <div class="login-card">
+            <a href="index.html" title="Povratak na početnu" class="login-close-btn">×</a>
 
-            <!-- Section Title -->
-            <div class="text-center mb-12 md:mb-16 fade-in">
-                <h1 class="text-3xl md:text-5xl font-bold mb-4">Registracija</h1>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Započnite svoje putovanje prema financijskoj neovisnosti
+            <div class="mb-8">
+                <h2 class="text-center text-3xl font-bold login-title">Prijava</h2>
+                <p class="mt-2 text-center text-sm login-subtitle">
+                    Dobrodošli u SFTeam!
                 </p>
-                <p class="text-lg text-gray-300">Pridružite se SFT21 zajednici</p>
             </div>
 
-            <!-- Main Layout: Image + Form -->
-            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+            <form action="#" method="POST">
+                <div>
+                    <label for="username" class="login-label">Korisničko ime ili email</label>
+                    <input id="username" name="username" type="text" autocomplete="username" required
+                           class="form-input-login"
+                           placeholder="Unesite korisničko ime ili email">
+                </div>
 
-                <!-- Left Column: Image & Benefits -->
-                <div class="w-full lg:w-5/12 fade-in" style="animation-delay: 0.2s;">
-                    <div class="image-placeholder mb-8"></div>
-                    <div class="glass-card p-6">
-                        <h4 style="font-family: 'Orbitron', sans-serif !important; color: #80ff00 !important;"><strong>Dobro došli u SFteam!</strong> </h4><br>
-                        <p class="text-gray-300 mb-4">Registriraj se i besplatno koristi usluge naše platforme:</p>
-                        <ul class="benefits-list">
-                            <li><i class="fas fa-check-circle"></i>SFnet - poslovno-društvena mreža</li>
-                            <li><i class="fas fa-check-circle"></i>SFshop - online trgovina</li>
-                            <li><i class="fas fa-check-circle"></i>SFured – jedinstveni multifunkcionalni poslovni prostor</li>
-                            <li><i class="fas fa-check-circle"></i>SFkod – besplatni kod za sudjelovanje u nagradnim igrama</li>
-                            <li><i class="fas fa-check-circle"></i>Mogućnost zarade na više načina</li>
-                        </ul>
+                                <div class="text-right text-sm -mt-4 mb-6"> 
+                    <a href="#" class="login-link">
+                        Zaboravili ste korisničko ime/email?
+                    </a>
+                </div>
+
+                <div>
+                    <label for="password" class="login-label">Lozinka</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                           class="form-input-login"
+                           placeholder="Unesite lozinku">
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="checkbox-container">
+                        <input id="remember-me" name="remember-me" type="checkbox"
+                               class="form-checkbox-login">
+                        <label for="remember-me" class="checkbox-label-login">
+                            Zapamti me
+                        </label>
                     </div>
-                    <div class="glass-card p-6 mt-8">
-                        <h4 style="font-family: 'Orbitron', sans-serif !important; color: #80ff00 !important; margin-top: 2rem !important;"><strong>Verifikacija identiteta - KYC</strong></h4><br>
-                        <p class="text-gray-300 mb-4">Prije nego li započnete sa procesom registracije želimo Vam napomenuti da ćete u procesu registracije trebati potvrditi svoj identitet, unosom osobnog dokumenta i vlastite fotografije. Ukoliko ne želite potvrditi svoj identitet molimo da prekinete proces registracij.</p>
-                        <p class="text-gray-300 mb-4">KYC STANDARD PREDSTAVLJA PROCES U KOJEM SU KLIJENTI OBAVEZNI POTVRDITI SVOJ IDENTITET U SVRHU NASTAVKA LEGALNOG KORIŠTENJA STRANICA NAŠEG PORTALA, KAKO BI SE PRVENSTVENO SPRIJEČILO LAŽNO ILI VIŠESTRUKO REGISTRIRANJE, KRAĐA IDENTITETA, FINANCIJSKE PREVARE, PRANJE NOVCA, FINANCIRANJE TERORIZMA I SL.
-                        </p>
+
+                    <div class="text-sm">
+                        <a href="#" class="login-link">
+                            Zaboravili ste lozinku?
+                        </a>
                     </div>
                 </div>
 
-                 <!-- Right Column: Form -->
-                 <div class="w-full lg:w-7/12 fade-in" style="animation-delay: 0.4s;">
-                    <div class="registration-form-container"> <!-- Start Form Container -->
+                  <div>
+                    <button type="submit" class="login-submit-button">
+                        Prijavi se
+                    </button>
+                </div>
+            </form>
 
-                        <!-- Account Type Buttons -->
-                        <div class="flex justify-center gap-4 mb-6">
-                            <button type="button" class="btn-account-type active">Osobni račun</button>
-                            <button type="button" class="btn-account-type">Poslovni račun</button>
-                        </div>
+            <hr>
 
-                        <!-- Social Login Buttons -->
-                        <div class="space-y-3 mb-8">
-                            <a href="#" class="social-login-button">
-                                <i class="fab fa-facebook-f text-blue-600 mr-3 text-xl"></i>
-                                <span>Dalje s Facebook</span>
-                            </a>
-                            <a href="#" class="social-login-button">
-                                <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48 24C48 22.0217 47.2205 20.1217 45.8579 18.7591C44.4953 17.3966 44.4953 17.3966 44.4953 17.3966 42.5954 16.617 40.617 16.617H24V24H36.417C35.6859 26.6839 33.8541 28.8841 31.3379 30.0195C28.8217 31.1549 25.8652 31.0984 23.383 29.877C20.9008 28.6556 19.1466 26.3738 18.558 23.676C17.9694 20.9782 18.6164 18.144 20.309 16.039L20.334 16.017L14.891 11.904C10.6914 15.7152 8.6045 21.2864 9.66988 26.853C10.7353 32.4196 14.7726 37.0789 20.14 39.047C25.5074 41.0151 31.4688 39.9796 36.001 36.337C40.5332 32.6944 43.1462 27.322 43.1462 21.709H43.17V21.709H43.17V18.709C43.17 17.806 43.017 16.916 42.728 16.084L42.707 16.03L40.617 16.617H40.617Z" fill="#4285F4"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4.891 16.039L4.86601 16.063L10.309 20.176C10.309 20.176 10.309 20.176 10.309 20.176C8.61642 22.281 7.96941 25.1152 8.55801 27.813C9.14661 30.5108 10.9008 32.7926 13.383 34.014C15.8652 35.2354 18.8217 35.2919 21.3379 34.1565C23.8541 33.0211 25.6859 30.8209 26.417 28.137H24V21H4.891V16.039Z" fill="#34A853"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.309 4.316L4.891 0.0409999C-0.143953 4.46181 -0.58501 10.9273 2.039 16.039H4.891V16.039L10.309 11.904C9.29903 10.2565 8.99575 8.31933 9.45833 6.47157C9.9209 4.62381 11.1111 3.03775 12.7846 2.03669C14.458 1.03564 16.4818 0.699072 18.4742 1.09967C20.4666 1.50027 22.2864 2.60773 23.628 4.216L29.149 0.0889999C25.9156 -1.27373 22.1584 -1.53293 18.614 -0.846931C15.0696 -0.160931 11.9246 1.44674 9.73199 4.57907L10.309 4.316Z" fill="#FBBC05"/><path fill-rule="evenodd" clip-rule="evenodd" d="M43.17 0H23.628L18.082 4.101C19.9179 2.70817 22.2576 1.95569 24.666 2.0001C31.9815 2.0001 38.0016 7.83503 38.463 15.088L40.617 14.5H43.17V0Z" fill="#EA4335"/></svg>
-                                <span>Dalje s Google</span>
-                            </a>
-                            <a href="#" class="social-login-button">
-                                <i class="fab fa-apple text-black mr-3 text-xl"></i>
-                                <span>Dalje s Apple</span>
-                            </a>
-                        </div>
-
-                        <!-- "My Details" Heading -->
-                        <h4 class="text-lg font-semibold mb-5 text-gray-300 border-t border-gray-700 pt-6 text-center">... ili nastavite popunjavanjem podataka</h4>
-
-                        <!-- Registration Form -->
-                        <form id="registration-main-form" action="#" method="POST" class="space-y-4">
-
-                             <!-- Country -->
-                             <div class="form-group">
-                                 <label for="country" class="form-label-register">Zemlja*</label>
-                                 <div class="select-wrapper">
-                                     <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatska" class="flag-in-select" id="phone-flag">
-                                     <select id="country" name="country" class="form-select-register">
-                                         <option value="HR" selected data-flag="https://flagcdn.com/w20/hr.png">Hrvatska</option>
-                                         <option value="RS" data-flag="https://flagcdn.com/w20/rs.png">Srbija</option>
-                                         <option value="SI" data-flag="https://flagcdn.com/w20/si.png">Slovenija</option>
-                                         <option value="BA" data-flag="https://flagcdn.com/w20/ba.png">Bosna i Hercegovina</option>
-                                     </select>
-                                 </div>
-                             </div>
-
-                             <!-- Salutation -->
-                             <div class="form-group">
-                                 <label class="form-label-register">Oslovljavanje*</label>
-                                 <div class="flex items-center space-x-6 mt-1">
-                                     <label class="flex items-center cursor-pointer">
-                                         <input type="radio" name="salutation" value="gosp" class="form-radio-register" checked>
-                                         <span class="ml-2 text-sm text-gray-300">GOSP.</span>
-                                     </label>
-                                     <label class="flex items-center cursor-pointer">
-                                         <input type="radio" name="salutation" value="gda" class="form-radio-register">
-                                         <span class="ml-2 text-sm text-gray-300">GĐA.</span>
-                                     </label>
-                                 </div>
-                             </div>
-
-                             <!-- First Name -->
-                             <div class="form-group">
-                                 <label for="first-name" class="form-label-register">Ime*</label>
-                                 <input type="text" id="first-name" name="first_name" required class="form-input-register" placeholder="Unesite vaše ime">
-                             </div>
-
-                             <!-- Last Name -->
-                             <div class="form-group">
-                                 <label for="last-name" class="form-label-register">Prezime*</label>
-                                 <input type="text" id="last-name" name="last_name" required class="form-input-register" placeholder="Unesite vaše prezime">
-                             </div>
-
-                             <!-- Date of Birth -->
-                              <div class="form-group">
-                                  <label class="form-label-register">Datum rođenja*</label>
-                                  <div class="flex space-x-2">
-                                      <input type="text" id="dob-dd" name="dob_dd" required class="form-input-register w-1/3 text-center" placeholder="DD" maxlength="2" pattern="^(0[1-9]|[12]\d|3[01])$">
-                                      <input type="text" id="dob-mm" name="dob_mm" required class="form-input-register w-1/3 text-center" placeholder="MM" maxlength="2" pattern="^(0[1-9]|1[0-2])$">
-                                      <input type="text" id="dob-yyyy" name="dob_yyyy" required class="form-input-register w-1/3 text-center" placeholder="GGGG" maxlength="4" pattern="^(19|20)\d\d$">
-                                  </div>
-                              </div>
-
-                              <!-- Mobile Phone -->
-                             <div class="form-group">
-                                 <label for="mobile-phone" class="form-label-register">Mobilni telefon*</label>
-                                  <div class="flex items-center phone-input-wrapper">
-                                     <div class="country-code-select" id="country-code-selector">
-                                         <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatska" id="phone-flag">
-                                         <span id="phone-prefix">+385</span>
-                                         <i class="fas fa-chevron-down text-xs ml-1"></i>
-                                     </div>
-                                     <input type="tel" id="mobile-phone" name="mobile_phone" required class="form-input-register-phone" placeholder="Vaš broj mobitela" pattern="\+?[0-9\s]*">
-                                 </div>
-                             </div>
-
-                             <!-- E-mail -->
-                             <div class="form-group">
-                                 <label for="reg-email" class="form-label-register">E-mail*</label>
-                                 <input type="email" id="reg-email" name="email" required class="form-input-register" placeholder="Vaša e-mail adresa">
-                             </div>
-
-                              <!-- Checkboxes -->
-                              <div class="space-y-3 pt-4">
-                                 <label class="flex items-start cursor-pointer">
-                                     <input type="checkbox" name="terms_oup" required class="form-checkbox-register mt-1">
-                                     <span class="ml-2 text-sm text-gray-300">Pročitao/la sam i prihvaćam <a href="#" class="text-fluorescent-green underline hover:text-green-400">OUP</a>.*</span>
-                                 </label>
-                                 <label class="flex items-start cursor-pointer">
-                                     <input type="checkbox" name="terms_privacy" required class="form-checkbox-register mt-1">
-                                      <span class="ml-2 text-sm text-gray-300">Pročitao/la sam i prihvaćam <a href="#" class="text-fluorescent-green underline hover:text-green-400">Izjavu o zaštiti podataka</a> i <a href="#" class="text-fluorescent-green underline hover:text-green-400">Suglasnost za prosljeđivanje i korištenje podataka</a>.*</span>
-                                 </label>
-                                 <label class="flex items-start cursor-pointer">
-                                     <input type="checkbox" name="terms_newsletter" class="form-checkbox-register mt-1">
-                                     <span class="ml-2 text-sm text-gray-300">Da, želim primati obavijesti o Cashbacku i posebnim ponudama, kao i o vaučerima i akcijama putem emaila i telefona. Mogu se odjaviti u bilo kojem trenutku.</span>
-                                 </label>
-                             </div>
-
-                              <!-- Consent Text -->
-                              <div class="mt-6 text-xs text-gray-400 leading-relaxed">
-                                 Svoju(e) suglasnost(i) za navedene obrade podataka mogu (pojedinačno) u bilo kojem trenutku opozvati za ubuduće u pisanom obliku slanjem opoziva poštom na adresu myWorld d.o.o., Josipa Marohnića 1, 10000 Zagreb ili e-mailom na e-mail adresu service.hr@myworld.com. Do opoziva izvršena obrada podataka na temelju ove suglasnosti ostaje pravovaljana.
-                              </div>
-
-                              <!-- Buttons: Next/Cancel -->
-                              <div class="pt-6 space-y-3">
-                                <!-- Gumb "Dalje" -->
-                                <button type="button" id="dalje-button" class="btn-primary w-full py-3">Dalje</button>
-                              </div>
-
-                              <!-- Required Fields Note -->
-                              <p class="text-xs text-gray-400 mt-4">*Obvezna polja</p>
-
-                        </form>
-
-                    </div> <!-- End Form Container -->
-                </div> <!-- End Right Column -->
+            <div class="text-center">
+                <p class="register-prompt-text">Nemate korisnički račun?</p>
+                <a href="register.html" class="register-link">
+                    REGISTRIRAJ SE
+                </a>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="py-16 bg-gray-900 border-t border-gray-800 mt-16">
+    <footer class="py-16 bg-gray-900 border-t border-gray-800">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                <div class="md:col-span-1">
-                    <h3 class="text-2xl font-bold mb-6 text-white">InFace Invest Group</h3>
-                    <p class="text-gray-400 mb-8">Na jakim lokalnim i regionalnim temeljima stvaramo globalnu online zajednica koja povezuje ljude na jedan novi, humaniji i prije svega pošteniji način.</p>
-                    <div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-facebook-f text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-twitter text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-instagram text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-linkedin-in text-xl"></i></a></div>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">Brzi linkovi</h4>
-                    <ul class="space-y-3">
-                        <li><a href="index.html#pocetna" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Početna</a></li>
-                        <li><a href="index.html#poslovni-koncept" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Poslovni koncept</a></li>
-                        <li><a href="index.html#startni-paketi" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Startni paketi</a></li>
-                        <li><a href="index.html#investicija" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">SFudjeli</a></li>
-                        <li><a href="register.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Registracija</a></li>
-                        <li><a href="login.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Prijava</a></li>
-                        <li><a href="index.html#kontakt" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Kontakt</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">Kontakt</h4>
-                    <ul class="space-y-3">
-                        <li class="text-gray-400">InFace Invest Group d.o.o.</li>
-                        <li class="text-gray-400">Rovinj, Hrvatska</li>
-                        <li><a href="mailto:info@sft21.com" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">info@sft21.com</a></li>
-                        <li class="text-gray-400">+385 XX XXX XXXX</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-6 text-white">Pravne informacije</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Uvjeti korištenja</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Politika privatnosti</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">GDPR</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Pravila poslovanja</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
-                <p class="text-gray-400">© 2025 InFace Invest Group d.o.o. Sva prava pridržana.</p>
+                 <div class="md:col-span-1"> <h3 class="text-2xl font-bold mb-6 text-white">InFace Invest Group</h3> <p class="text-gray-400 mb-8">Na jakim lokalnim i regionalnim temeljima stvaramo globalnu online zajednica koja povezuje ljude na jedan novi, humaniji i prije svega pošteniji način.</p> <div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-facebook-f text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-twitter text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-instagram text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-linkedin-in text-xl"></i></a></div> </div>
+                 <div> <h4 class="text-lg font-bold mb-6 text-white">Brzi linkovi</h4> <ul class="space-y-3"> <li><a href="index.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Početna</a></li> <li><a href="index.html#poslovni-koncept" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Poslovni koncept</a></li> <li><a href="index.html#startni-paketi" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Startni paketi</a></li> <li><a href="index.html#investicija" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Investicijski paketi</a></li> <li><a href="register.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Registracija</a></li> <li><a href="index.html#kontakt" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Kontakt</a></li> </ul> </div>
+                 <div> <h4 class="text-lg font-bold mb-6 text-white">Kontakt</h4> <ul class="space-y-3"> <li class="text-gray-400">InFace Invest Group d.o.o.</li> <li class="text-gray-400">Rovinj, Hrvatska</li> <li><a href="mailto:info@sft21.com" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">info@sft21.com</a></li> <li class="text-gray-400">+385 XX XXX XXXX</li> </ul> </div>
+                 <div> <h4 class="text-lg font-bold mb-6 text-white">Pravne informacije</h4> <ul class="space-y-3"> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Uvjeti korištenja</a></li> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Politika privatnosti</a></li> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">GDPR</a></li> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Pravila poslovanja</a></li> </ul> </div>
+             </div>
+             <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                 <p class="text-gray-400">© 2025 InFace Invest Group d.o.o. Sva prava pridržana.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Validation Popup (skriven po defaultu) -->
-    <div id="validation-popup-overlay">
-        <div id="validation-popup-content">
-            <button id="validation-popup-close" title="Zatvori">×</button>
-            <h4 class="text-xl font-bold mb-4 text-fluorescent-green">Greška pri unosu</h4>
-            <p class="text-gray-300 mb-6">Molimo provjerite unesene podatke i ispravite polja označena crvenom bojom.</p>
-            <button id="validation-popup-ok">U redu</button>
-        </div>
-    </div>
-
-    <!-- Loading Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/Draggable.min.js"></script> <!-- Potreban za trail effect -->
-
-    <!-- Custom JavaScript -->
     <script>
-        // Helper funkcija za dobivanje apsolutne pozicije
-        function getAbsoluteOffsetTop(element) { let top = 0; let el = element; while (el) { top += el.offsetTop; el = el.offsetParent; } return top; }
-
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM spreman - register.html loaded.");
             const body = document.body;
-
-            // --- ELEMENTI ---
-            const hamburger = document.querySelector('.hamburger');
-            const navMenu = document.querySelector('.nav-menu');
             const desktopLangTrigger = document.getElementById('desktop-lang-trigger');
             const desktopLangDropdown = document.getElementById('desktop-lang-dropdown');
             const mobileLangTrigger = document.getElementById('mobile-lang-trigger');
             const mobileLangDropdown = document.getElementById('mobile-lang-dropdown');
-            const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas');
-            const accountTypeButtons = document.querySelectorAll('.btn-account-type');
-            const validationPopupOverlay = document.getElementById('validation-popup-overlay');
-            const validationPopupClose = document.getElementById('validation-popup-close');
-            const validationPopupOk = document.getElementById('validation-popup-ok');
-            const daljeButton = document.getElementById('dalje-button'); // Dohvati gumb "Dalje"
-            const registrationForm = document.getElementById('registration-main-form'); // Dohvati formu
-            const countrySelect = document.getElementById('country');
-            const countryFlag = document.getElementById('phone-flag');
-            const phonePrefix = document.getElementById('phone-prefix');
-            const countryCodeSelector = document.getElementById('country-code-selector');
+            const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas.fa-chevron-down');
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
 
+            const closeAllLanguageDropdowns = () => { if (desktopLangDropdown?.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); } if (mobileLangDropdown?.classList.contains('active')) { mobileLangDropdown.classList.remove('active'); if (mobileLangIcon) { mobileLangIcon.classList.remove('fa-chevron-up'); mobileLangIcon.classList.add('fa-chevron-down'); } } };
+            const toggleLanguageDropdown = (dropdownElement, otherDropdownElement, triggerIcon) => { if (!dropdownElement) return; const isActive = dropdownElement.classList.contains('active'); if (otherDropdownElement?.classList.contains('active')) { otherDropdownElement.classList.remove('active'); const otherIcon = document.getElementById('mobile-lang-trigger')?.querySelector('i.fas'); if (otherDropdownElement.id === 'mobile-lang-dropdown' && otherIcon?.classList.contains('fa-chevron-up')){ otherIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); } } dropdownElement.classList.toggle('active', !isActive); if (triggerIcon && dropdownElement.id === 'mobile-lang-dropdown') { triggerIcon.classList.toggle('fa-chevron-down', !isActive); triggerIcon.classList.toggle('fa-chevron-up', isActive); } };
 
-            // --- PROVJERA POSTOJANJA KLUČNIH ELEMENATA ---
-            if (!daljeButton) console.error("Gumb 'Dalje' (id='dalje-button') NIJE pronađen!");
-            if (!registrationForm) console.error("Forma (id='registration-main-form') NIJE pronađena!");
-            if (!validationPopupOverlay) console.error("Popup overlay (id='validation-popup-overlay') NIJE pronađen!");
-            if (!countrySelect) console.error("Select element za zemlju (id='country') NIJE pronađen!");
-            if (!countryFlag) console.error("Flag image (id='phone-flag') NIJE pronađen!");
-            if (!phonePrefix) console.error("Phone prefix span (id='phone-prefix') NIJE pronađen!");
-            if (!countryCodeSelector) console.error("Country code selector (id='country-code-selector') NIJE pronađen!");
+            if (desktopLangTrigger && desktopLangDropdown) { desktopLangTrigger.addEventListener('click', (event) => { event.stopPropagation(); toggleLanguageDropdown(desktopLangDropdown, mobileLangDropdown); }); desktopLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', (event) => { event.stopPropagation(); closeAllLanguageDropdowns(); }); }); desktopLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); }); }
+            if (mobileLangTrigger && mobileLangDropdown) { mobileLangTrigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); toggleLanguageDropdown(mobileLangDropdown, desktopLangDropdown, mobileLangIcon); }); mobileLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', (event) => { event.stopPropagation(); closeAllLanguageDropdowns(); }); }); mobileLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); }); }
+            if (hamburger && navMenu && body) { hamburger.addEventListener('click', () => { const isActive = hamburger.classList.toggle('active'); navMenu.classList.toggle('active', isActive); body.classList.toggle('overflow-hidden', isActive); closeAllLanguageDropdowns(); }); document.querySelectorAll('.nav-menu a').forEach(link => { link.addEventListener('click', (event) => { if (!link.closest('.mobile-language-selector')) { if (hamburger.classList.contains('active')) { hamburger.classList.remove('active'); navMenu.classList.remove('active'); body.classList.remove('overflow-hidden'); } } }); }); }
+            document.addEventListener('click', (event) => { const isClickInsideLangDesktop = desktopLangDropdown?.contains(event.target); const isClickInsideLangMobile = mobileLangDropdown?.contains(event.target); const isClickOnLangDesktopTrigger = desktopLangTrigger?.contains(event.target); const isClickOnLangMobileTrigger = mobileLangTrigger?.contains(event.target); if (!isClickInsideLangDesktop && !isClickInsideLangMobile && !isClickOnLangDesktopTrigger && !isClickOnLangMobileTrigger) { closeAllLanguageDropdowns(); } });
+            document.addEventListener('keydown', (event) => { if (event.key === 'Escape') { if (hamburger?.classList.contains('active')) { hamburger.classList.remove('active'); navMenu.classList.remove('active'); body?.classList.remove('overflow-hidden'); } closeAllLanguageDropdowns(); } });
 
-
-            // --- ZATVARANJE SVIH OVERLAY ELEMENATA ---
-            const closeAllOverlays = (exceptElement = null) => {
-                if (desktopLangDropdown && desktopLangDropdown !== exceptElement && desktopLangDropdown.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); }
-                if (mobileLangDropdown && mobileLangDropdown !== exceptElement && mobileLangDropdown.classList.contains('active')) {
-                    mobileLangDropdown.classList.remove('active');
-                    if (mobileLangIcon && mobileLangIcon.classList.contains('fa-chevron-up')) { mobileLangIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); }
-                }
-                // Sakrij i validacijski popup ako je otvoren
-                if (validationPopupOverlay && validationPopupOverlay !== exceptElement && validationPopupOverlay.style.display !== 'none') { hideValidationPopup(); }
-            };
-
-            // --- IZBORNIK JEZIKA ---
-            if (desktopLangTrigger && desktopLangDropdown) {
-                 desktopLangTrigger.addEventListener('click', (event) => { event.stopPropagation(); closeAllOverlays(desktopLangDropdown); desktopLangDropdown.classList.toggle('active'); });
-                 desktopLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', () => { console.log('Jezik (desktop):', item.querySelector('span:not(.flag-icon)')?.textContent); closeAllOverlays(); }); });
-                 desktopLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); });
-            }
-            if (mobileLangTrigger && mobileLangDropdown && mobileLangIcon) {
-                 mobileLangTrigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); closeAllOverlays(mobileLangDropdown); const isActive = mobileLangDropdown.classList.toggle('active'); mobileLangIcon.classList.toggle('fa-chevron-up', isActive); mobileLangIcon.classList.toggle('fa-chevron-down', !isActive); });
-                 mobileLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', () => { console.log('Jezik (mobile):', item.querySelector('span:not(.flag-icon)')?.textContent); closeAllOverlays(); }); });
-                 mobileLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); });
-            }
-
-            // --- HAMBURGER ---
-            if (hamburger && navMenu) {
-                hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); body.classList.toggle('no-scroll'); closeAllOverlays(); });
-                navMenu.querySelectorAll('a:not(.mobile-dropdown-toggle):not(.mobile-language-trigger)').forEach(link => { link.addEventListener('click', () => { if (hamburger.classList.contains('active')) hamburger.click(); }); });
-            }
-
-            // --- GLOBAL CLICK LISTENER ZA ZATVARANJE ---
-            document.addEventListener('click', (event) => {
-                const target = event.target;
-                if ( (!desktopLangTrigger || !desktopLangTrigger.contains(target)) && (!mobileLangTrigger || !mobileLangTrigger.contains(target)) && (!desktopLangDropdown || !desktopLangDropdown.contains(target)) && (!mobileLangDropdown || !mobileLangDropdown.contains(target)) ) { closeAllOverlays(); }
-                // Dodajemo zatvaranje validacijskog popupa klikom izvan njega
-                if (validationPopupOverlay && validationPopupOverlay.style.display !== 'none' && event.target === validationPopupOverlay) {
-                    hideValidationPopup();
-                }
-            });
-
-            // --- GSAP Animacije ---
-            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                gsap.registerPlugin(ScrollTrigger);
-                gsap.utils.toArray('.fade-in').forEach((element) => {
-                    gsap.set(element, { opacity: 0, y: 30 });
-                    ScrollTrigger.create({ trigger: element, start: 'top 90%', once: true, onEnter: () => gsap.to(element, { opacity: 1, y: 0, duration: 0.8, delay: parseFloat(element.style.animationDelay) || 0 }) });
-                    element.style.animationDelay = ''; // Clear inline delay after setting
-                });
-            } else { console.warn("GSAP or ScrollTrigger library not loaded."); document.querySelectorAll('.fade-in').forEach(el => { el.style.opacity = 1; el.style.transform = 'translateY(0)';}); }
-
-            // --- Custom Cursor & Trail ---
-            const cursor = document.querySelector('.custom-cursor');
-            const trailElements = Array.from(document.querySelectorAll('.cursor-trail-point')); // Osiguraj da su elementi već u DOM-u ili će se dodati JS-om
-
-            if (cursor) {
-                let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0; const speed = 0.1;
-                const updateCursorPosition = () => {
-                    cursorX += (mouseX - cursorX) * speed;
-                    cursorY += (mouseY - cursorY) * speed;
-                    cursor.style.left = `${cursorX}px`;
-                    cursor.style.top = `${cursorY}px`;
-                    requestAnimationFrame(updateCursorPosition);
-                };
-                requestAnimationFrame(updateCursorPosition);
-                window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-                document.addEventListener('mouseleave', () => { if(cursor) cursor.style.opacity = '0'; });
-                document.addEventListener('mouseenter', () => { if(cursor) cursor.style.opacity = '1'; }); // Pokaži kursor kada miš uđe nazad
-
-                // Efekti na interaktivnim elementima
-                document.querySelectorAll('a, button, input, textarea, select, .hamburger, .language-trigger, .language-item').forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                        if(cursor && typeof gsap !== 'undefined') {
-                            gsap.to(cursor, { duration: 0.3, scale: 1.5, backgroundColor: 'rgba(128, 255, 0, 0.5)' }); // Zelena boja i povećanje
-                        }
-                    });
-                    el.addEventListener('mouseleave', () => {
-                        if(cursor && typeof gsap !== 'undefined') {
-                            gsap.to(cursor, { duration: 0.3, scale: 1, backgroundColor: 'rgba(106, 27, 154, 0.6)' }); // Vraćanje na početnu boju i veličinu
-                        }
-                    });
-                });
-            }
-
-            // Trail effect logic
-            let mousePos = { x: -50, y: -50 }; // Početna pozicija izvan ekrana
-            let currentCursorPos = { x: -50, y: -50 };
-            const trailSpeed = 0.15; // Malo sporiji trail
-            const trailElementsData = []; // Sprema reference na trail elemente i njihove pozicije
-
-            // Inicijalizacija trail elemenata ako ne postoje
-            if (trailElements.length === 0 && body) {
-                const numTrailPoints = 5;
-                const pointSizeStart = 12;
-                const pointOpacityStart = 0.3;
-                const baseDelay = 30;
-                const lightPurpleRGBA = 'rgba(206, 147, 216,'; // Boja trail točkica
-
-                for (let i = 0; i < numTrailPoints; i++) {
-                    const point = document.createElement('div');
-                    point.className = 'cursor-trail-point';
-                    point.style.cssText = `
-                        position: fixed;
-                        width: ${pointSizeStart - i * 1.5}px;
-                        height: ${pointSizeStart - i * 1.5}px;
-                        background-color: ${lightPurpleRGBA}${pointOpacityStart - i * 0.05});
-                        border-radius: 50%;
-                        pointer-events: none;
-                        left: -50px; top: -50px; /* Početna pozicija izvan ekrana */
-                        z-index: 9998;
-                        transition: transform ${baseDelay + i * 15}ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease;
-                        transform: translate(-50%, -50%);
-                        opacity: 1;
-                    `;
-                    body.appendChild(point);
-                    trailElementsData.push({ element: point, x: -50, y: -50 });
-                }
-            } else {
-                // Ako trail elementi već postoje, samo ih koristimo
-                trailElements.forEach(el => {
-                    trailElementsData.push({ element: el, x: -50, y: -50 });
-                });
-            }
-
-            window.addEventListener('mousemove', (e) => {
-                mousePos.x = e.clientX;
-                mousePos.y = e.clientY;
-            });
-
-            const updateTrail = () => {
-                // Ažuriranje glavnog kursora
-                currentCursorPos.x += (mousePos.x - currentCursorPos.x) * trailSpeed;
-                currentCursorPos.y += (mousePos.y - currentCursorPos.y) * trailSpeed;
-                if (cursor) {
-                    cursor.style.left = `${currentCursorPos.x}px`;
-                    cursor.style.top = `${currentCursorPos.y}px`;
-                }
-
-                // Ažuriranje trail točkica
-                trailElementsData.forEach((p, i) => {
-                    let targetX = i === 0 ? currentCursorPos.x : trailElementsData[i - 1].x;
-                    let targetY = i === 0 ? currentCursorPos.y : trailElementsData[i - 1].y;
-                    p.x = targetX;
-                    p.y = targetY;
-                    p.element.style.left = `${p.x}px`;
-                    p.element.style.top = `${p.y}px`;
-                });
-                requestAnimationFrame(updateTrail);
-            };
-            requestAnimationFrame(updateTrail); // Pokreni animaciju za trail
-
-            document.addEventListener('mouseleave', () => {
-                if(cursor) cursor.style.opacity = '0';
-                trailElementsData.forEach(p => p.element.style.opacity = '0');
-            });
-            document.addEventListener('mouseenter', () => {
-                if(cursor) cursor.style.opacity = '1';
-                trailElementsData.forEach(p => p.element.style.opacity = '1');
-            });
-            // --- Kraj Custom Cursor & Trail ---
-
-            // --- PREBACIVANJE AKTIVNE KLASE IZMEĐU GUMBA OSOBNI/POSLOVNI RAČUN ---
-            if(accountTypeButtons.length > 0) {
-                accountTypeButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        accountTypeButtons.forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                        const accountType = button.textContent.includes('Osobni') ? 'personal' : 'business';
-                        console.log('Odabran tip računa:', accountType);
-                        // OVDJE IDE LOGIKA ZA PRIKAZ/SKRIVANJE POLJA OVISNO O TIPU
-                    });
-                });
-            }
-
-            // --- Promjena zastavice i prefiksa za odabranu zemlju ---
-            if (countrySelect && countryFlag && phonePrefix && countryCodeSelector) {
-                countrySelect.addEventListener('change', () => {
-                    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
-                    const flagUrl = selectedOption.getAttribute('data-flag');
-                    const prefix = selectedOption.getAttribute('data-prefix') || '+1'; // Fallback prefix
-
-                    if (flagUrl) {
-                        countryFlag.src = flagUrl;
-                        countryFlag.alt = selectedOption.text;
-                    }
-                    if (prefix) {
-                         // Ovo je samo primjer, ovdje bi se dohvatili točni prefiksi iz podataka
-                        phonePrefix.textContent = selectedOption.getAttribute('data-prefix') || "+?"; // Potrebno dodati atribute data-prefix na <option>
-                    }
-                });
-
-                // Dodajte listener na selector zemlje za promjenu prefiksa
-                countryCodeSelector.addEventListener('click', () => {
-                    // Možda ovdje želite prikazati dropdown s prefiksima zemalja ako ga implementirate
-                    // Za sada, samo klikom označavamo da je fokus na tom dijelu
-                    console.log('Kliknuto na selector zemlje');
-                    // countrySelect.focus(); // Možda fokusirate select element
-                });
-            }
-
-            // --- AŽURIRANA Logika za Popup Validacije ---
-            // Funkcija za prikazivanje popup-a
-            function showValidationPopup() {
-                if (validationPopupOverlay) {
-                    console.log("Prikazujem validation popup...");
-                    validationPopupOverlay.style.display = 'flex';
-                    // Centriramo popup ako je potrebno (obično se rješava CSS-om)
-                } else {
-                    console.error("Validation popup overlay element nije pronađen za prikaz!");
-                }
-            }
-
-            // Funkcija za skrivanje popup-a
-            function hideValidationPopup() {
-                if (validationPopupOverlay) {
-                    validationPopupOverlay.style.display = 'none';
-                }
-            }
-
-            // Funkcija za validaciju registracijske forme
-            function validateRegistrationForm() {
-                if (!registrationForm) {
-                    console.error("Forma nije pronađena za validaciju!");
-                    return false; // Ne možemo validirati ako nema forme
-                }
-                console.log("Pokrećem validaciju forme...");
-
-                let isValid = true;
-                let firstErrorElement = null; // Za fokusiranje na prvo polje s greškom
-
-                // Očisti prethodne stilove grešaka
-                registrationForm.querySelectorAll('.border-red-500, .text-red-500, .form-label-register.text-red-500').forEach(el => el.classList.remove('border-red-500', 'text-red-500'));
-
-                // Provjera input i select polja
-                registrationForm.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
-                    let isFieldValid = true;
-                    const label = registrationForm.querySelector(`label[for="${field.id}"]`);
-
-                    // Dodatne provjere za specifična polja
-                    if (field.id.startsWith('dob-')) { // Datum rođenja - provjeravamo ga skupno
-                        return; // Preskačemo pojedinačnu provjeru
-                    }
-
-                    const value = field.value.trim();
-                    if (!value) {
-                        isFieldValid = false;
-                        console.warn(`Polje ${field.id || field.name} je prazno.`);
-                    } else if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                        isFieldValid = false;
-                        console.warn(`Polje ${field.id || field.name} nema ispravan email format.`);
-                    } else if (field.type === 'tel' && !/^\+?[0-9\s()-]+$/.test(value)) {
-                         isFieldValid = false;
-                         console.warn(`Polje ${field.id || field.name} ima nevažeći format telefonskog broja.`);
-                    } else if (field.pattern && !new RegExp(field.pattern).test(value)) {
-                        // Provjera za custom pattern (kao kod DD/MM/GGGG)
-                        isFieldValid = false;
-                        console.warn(`Polje ${field.id || field.name} ne odgovara uzorku: ${field.pattern}.`);
-                    }
-
-                    if (!isFieldValid) {
-                        isValid = false;
-                        field.classList.add('border-red-500');
-                        if (label) { label.classList.add('text-red-500'); }
-                        // Fokusiraj prvo polje s greškom
-                        if (!firstErrorElement) { firstErrorElement = field; }
-                        // Stil za wrapper oko select ili phone
-                        const wrapper = field.closest('.select-wrapper, .phone-input-wrapper');
-                        if (wrapper) { wrapper.classList.add('border-red-500'); }
-                    }
-                });
-
-                // Provjera datuma rođenja (skupna)
-                const dobDd = document.getElementById('dob-dd');
-                const dobMm = document.getElementById('dob-mm');
-                const dobYyyy = document.getElementById('dob-yyyy');
-                if (dobDd && dobMm && dobYyyy && (dobDd.hasAttribute('required') || dobMm.hasAttribute('required') || dobYyyy.hasAttribute('required'))) {
-                    const ddVal = dobDd.value.trim();
-                    const mmVal = dobMm.value.trim();
-                    const yyyyVal = dobYyyy.value.trim();
-                    if (!ddVal || !mmVal || !yyyyVal) {
-                        isValid = false;
-                        console.warn("Datum rođenja nije potpun.");
-                        dobDd.classList.add('border-red-500');
-                        dobMm.classList.add('border-red-500');
-                        dobYyyy.classList.add('border-red-500');
-                        // Pokušaj pronaći labelu za datum rođenja
-                        const dobLabel = Array.from(registrationForm.querySelectorAll('.form-label-register')).find(label => label.getAttribute('for')?.startsWith('dob-'));
-                        if (dobLabel) { dobLabel.classList.add('text-red-500'); }
-                        if (!firstErrorElement) { firstErrorElement = dobDd; }
-                    } else {
-                         // Dodatna validacija ispravnosti datuma (npr. 31.02.2023. nije validno)
-                         const day = parseInt(ddVal, 10);
-                         const month = parseInt(mmVal, 10);
-                         const year = parseInt(yyyyVal, 10);
-                         const dateObj = new Date(year, month - 1, day); // Mjeseci su 0-bazirani u Date objektu
-                         if (dateObj.getFullYear() !== year || dateObj.getMonth() !== month - 1 || dateObj.getDate() !== day) {
-                             isValid = false;
-                             console.warn("Uneseni datum rođenja je nevažeći.");
-                             dobDd.classList.add('border-red-500'); dobMm.classList.add('border-red-500'); dobYyyy.classList.add('border-red-500');
-                             const dobLabel = Array.from(registrationForm.querySelectorAll('.form-label-register')).find(label => label.getAttribute('for')?.startsWith('dob-'));
-                             if (dobLabel) { dobLabel.classList.add('text-red-500'); }
-                             if (!firstErrorElement) { firstErrorElement = dobDd; }
-                         }
-                    }
-                }
-
-                // Provjera obaveznih checkboxova
-                checkboxes.forEach(checkbox => {
-                    if (!checkbox.checked) {
-                        isValid = false;
-                        console.warn(`Checkbox ${checkbox.id || checkbox.name} nije označen.`);
-                        const label = checkbox.closest('label'); // Pronađi labelu za stiliziranje
-                        if (label) { label.classList.add('text-red-500'); } // Dodajemo klasu na labelu
-                        if (!firstErrorElement) { firstErrorElement = checkbox; }
-                    }
-                });
-
-                console.log("Validacija završena. Rezultat:", isValid);
-
-                // Fokusiraj prvo polje s greškom ako forma nije validna
-                if (!isValid && firstErrorElement) {
-                    console.log("Fokusiram prvo polje s greškom:", firstErrorElement.id || firstErrorElement.name);
-                    firstErrorElement.focus();
-                }
-
-                return isValid;
-            }
-
-            // Dodaj event listener na gumb "Dalje"
-            if (daljeButton) {
-                console.log("Dodajem event listener na gumb 'Dalje'.");
-                daljeButton.addEventListener('click', (event) => {
-                    console.log("Gumb 'Dalje' kliknut!");
-                    event.preventDefault(); // Spriječi defaultno ponašanje
-
-                    if (validateRegistrationForm()) {
-                        console.log('Forma je validna, simuliram preusmjeravanje...');
-                        // Ovdje možete dodati AJAX poziv za slanje podataka ako je potrebno prije preusmjeravanja
-                        // alert("Podaci uspješno validirani!");
-                        window.location.href = 'userdata.html'; // Preusmjeri na sljedeći korak
-                    } else {
-                        console.error('Forma nije validna. Prikazujem popup.');
-                        showValidationPopup(); // Pokaži popup ako forma nije validna
-                    }
-                });
-            } else {
-                console.error("Nije moguće dodati event listener jer gumb 'Dalje' nije pronađen.");
-            }
-
-            // Dodaj event listenere za kontrole popup-a
-            if (validationPopupClose) { validationPopupClose.addEventListener('click', hideValidationPopup); }
-            if (validationPopupOk) { validationPopupOk.addEventListener('click', hideValidationPopup); }
-            // Listener za klik na overlay je već u globalnom listeneru
-
-            // Opcionalno: Zatvaranje popup-a tipkom Escape
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && validationPopupOverlay && validationPopupOverlay.style.display !== 'none') {
-                    hideValidationPopup();
-                }
-            });
-            // --- KRAJ: Logika za Popup Validacije ---
-
-
-            console.log("Register page JS initialization complete.");
-        }); // Kraj DOMContentLoaded
+            console.log("Login JS inicijaliziran.");
+        });
     </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('network-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const mouse = { x: null, y: null };
+
+    const options = {
+        particleColor: "rgba(128, 255, 0, 0.85)",
+        lineColor: "rgba(170, 0, 255, 0.8)",
+        particleAmount: 120,
+        defaultRadius: 1.3,
+        linkRadius: 150,
+        lineWidth: 0.4,
+        mouseInteractionRadius: 150,
+        mouseEffectStrength: 2,
+        particleSpeed: 0.25
+    };
+
+    const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.z = Math.random() * 2 - 1;
+            this.radius = options.defaultRadius * (1 + this.z * 0.5);
+            this.vx = (Math.random() - 0.5) * options.particleSpeed;
+            this.vy = (Math.random() - 0.5) * options.particleSpeed;
+        }
+
+        draw() {
+            let finalRadius = this.radius;
+            let opacity = 1;
+
+            if (mouse.x !== null) {
+                const dx = this.x - mouse.x;
+                const dy = this.y - mouse.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < options.mouseInteractionRadius) {
+                    const effect = (1 - dist / options.mouseInteractionRadius);
+                    finalRadius += effect * options.mouseEffectStrength;
+                    opacity += effect * 0.5;
+                }
+            }
+            
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, finalRadius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(128, 255, 0, ${opacity * 0.85})`;
+            ctx.fill();
+        }
+
+        update() {
+            this.x += this.vx * (1 + this.z * 0.5);
+            this.y += this.vy * (1 + this.z * 0.5);
+
+            if (this.x > canvas.width + 5) this.x = -5;
+            else if (this.x < -5) this.x = canvas.width + 5;
+            if (this.y > canvas.height + 5) this.y = -5;
+            else if (this.y < -5) this.y = canvas.height + 5;
+        }
+    }
+
+    const initParticles = () => {
+        particles = [];
+        for (let i = 0; i < options.particleAmount; i++) {
+            particles.push(new Particle());
+        }
+    };
+
+    const drawLines = () => {
+        let pulse = Math.sin(Date.now() * 0.001) * 0.2 + 0.8;
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const p1 = particles[i];
+                const p2 = particles[j];
+                const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+
+                if (dist < options.linkRadius) {
+                    let opacity = 1 - (dist / options.linkRadius);
+                    opacity *= pulse;
+
+                    if (mouse.x !== null) {
+                       const distToMouse1 = Math.sqrt(Math.pow(p1.x - mouse.x, 2) + Math.pow(p1.y - mouse.y, 2));
+                       const distToMouse2 = Math.sqrt(Math.pow(p2.x - mouse.x, 2) + Math.pow(p2.y - mouse.y, 2));
+                       if(distToMouse1 < options.mouseInteractionRadius || distToMouse2 < options.mouseInteractionRadius) {
+                           opacity = Math.min(1, opacity + 0.5);
+                       }
+                    }
+
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = `rgba(170, 0, 255, ${opacity * 0.5})`;
+                    ctx.lineWidth = options.lineWidth;
+                    ctx.stroke();
+                }
+            }
+        }
+    };
+    
+    const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => p.update());
+        drawLines();
+        particles.forEach(p => p.draw());
+        requestAnimationFrame(animate);
+    };
+
+    initParticles();
+    animate();
+});
+</script>
 
 </body>
+
 </html>
