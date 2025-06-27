@@ -47,6 +47,8 @@ canvas#network-canvas {
             font-family: 'Arial Narrow', Arial, sans-serif;
             color: var(--text-color);
             overflow-x: hidden;
+            /* Važno za sakrivanje defaultnog kursora */
+            cursor: none; 
         }
         /* ... (Ovdje možete kopirati i ostale osnovne stilove iz style.css ako želite da sve bude u jednom fajlu, npr. za .logo-nav, nav.fixed, .nav-link, .hamburger, .btn-primary, .btn-outline, itd.) ... */
 
@@ -195,11 +197,40 @@ canvas#network-canvas {
          .hamburger { display: none; cursor: pointer; } .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px 0; background-color: white; transition: all 0.3s ease; }
          .nav-menu { display: none; }
          @media (max-width: 768px) { .nav-menu { position: fixed; top: 80px; left: -100%; width: 100%; height: calc(100vh - 80px); background-color: #0d0118; flex-direction: column; transition: all 0.5s ease; padding: 20px; z-index: 100; border-right: 1px solid var(--fluorescent-green); display: flex; } .nav-menu.active { left: 0; } .nav-menu a { color: white; display: block; padding: 0.75rem 1.5rem; text-align: center; transition: background-color 0.3s ease; } .nav-menu a:hover { color: var(--fluorescent-green); background-color: rgba(128, 255, 0, 0.1); } .hamburger { display: block; } .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); } .hamburger.active .bar:nth-child(2) { opacity: 0; } .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); } }
+        
+        /* ===== STILOVI ZA CUSTOM CURSOR ===== */
+        .custom-cursor {
+            position: fixed; /* Pozicioniranje u odnosu na viewport */
+            width: 25px; /* Veličina kruga */
+            height: 25px;
+            background-color: transparent; /* Prozirna pozadina */
+            border: 2px solid var(--fluorescent-green); /* Fluorescentno zeleni obrub */
+            border-radius: 50%; /* Oblik kruga */
+            pointer-events: none; /* Da ne ometa klikove */
+            z-index: 9999; /* Da bude iznad svih elemenata */
+            transform: translate(-50%, -50%); /* Centriranje na kursor */
+            opacity: 0; /* Početno skriven */
+            transition: opacity 0.3s ease, width 0.3s ease, height 0.3s ease, border-width 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Glatke tranzicije */
+            box-shadow: 0 0 15px rgba(128, 255, 0, 0.7); /* Mali sjaj */
+        }
+
+        /* Kada kursor prelazi preko linkova ili gumba, možete dodati ovu klasu preko JS-a */
+        .custom-cursor.hover-effect {
+            width: 40px; /* Veći kursor */
+            height: 40px;
+            border-width: 3px;
+            border-color: var(--fluorescent-orange); /* Narandžasti obrub */
+            background-color: rgba(128, 255, 0, 0.1); /* Lagana zelena pozadina */
+            box-shadow: 0 0 25px rgba(217, 255, 0, 0.9);
+        }
     </style>
 </head>
 <body>
-<canvas id="network-canvas"></canvas>
-<div class="custom-cursor"></div>
+    <!-- Ovo je element za custom kursor -->
+    <div class="custom-cursor"></div>
+
+    <canvas id="network-canvas"></canvas>
+    
     <nav class="fixed top-0 left-0 w-full z-50">
     <div class="container mx-auto px-6 py-4">
         <!-- GLAVNI RED HEADERA: LOGO LIJEVO, GUMBI/HAMBURGER DESNO -->
@@ -364,6 +395,45 @@ canvas#network-canvas {
             const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas.fa-chevron-down');
             const hamburger = document.querySelector('.hamburger');
             const navMenu = document.querySelector('.nav-menu');
+
+            // --- Custom Kursor Kod ---
+            const customCursor = document.querySelector('.custom-cursor');
+            if (customCursor) {
+                // Postavite body da koristi naš custom kursor
+                body.style.cursor = 'none';
+
+                document.addEventListener('mousemove', (e) => {
+                    // Animiranje pozicije custom kursora
+                    gsap.to(customCursor, {
+                        x: e.clientX - customCursor.offsetWidth / 2, // Centriranje po X osi
+                        y: e.clientY - customCursor.offsetHeight / 2, // Centriranje po Y osi
+                        duration: 0.1, // Brzina animacije
+                        ease: "power2.out", // Tip animacije
+                        opacity: 1 // Učini kursor vidljivim čim se mišem počne micati
+                    });
+                });
+
+                // Dodajemo slušače za promjenu klase na elementima koji bi trebali promijeniti izgled kursora
+                const interactiveElements = document.querySelectorAll('a, button, input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], label');
+                interactiveElements.forEach(element => {
+                    element.addEventListener('mouseenter', () => {
+                        customCursor.classList.add('hover-effect');
+                    });
+                    element.addEventListener('mouseleave', () => {
+                        customCursor.classList.remove('hover-effect');
+                    });
+                });
+
+                 // Sakrij kursor ako napusti prozor
+                 document.addEventListener('mouseleave', () => {
+                     gsap.to(customCursor, { opacity: 0, duration: 0.3 });
+                 });
+                 // Ponovo prikaži kursor ako uđe u prozor
+                 document.addEventListener('mouseenter', () => {
+                     gsap.to(customCursor, { opacity: 1, duration: 0.3 });
+                 });
+            }
+            // --- Kraj Custom Kursor Koda ---
 
             const closeAllLanguageDropdowns = () => { if (desktopLangDropdown?.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); } if (mobileLangDropdown?.classList.contains('active')) { mobileLangDropdown.classList.remove('active'); if (mobileLangIcon) { mobileLangIcon.classList.remove('fa-chevron-up'); mobileLangIcon.classList.add('fa-chevron-down'); } } };
             const toggleLanguageDropdown = (dropdownElement, otherDropdownElement, triggerIcon) => { if (!dropdownElement) return; const isActive = dropdownElement.classList.contains('active'); if (otherDropdownElement?.classList.contains('active')) { otherDropdownElement.classList.remove('active'); const otherIcon = document.getElementById('mobile-lang-trigger')?.querySelector('i.fas'); if (otherDropdownElement.id === 'mobile-lang-dropdown' && otherIcon?.classList.contains('fa-chevron-up')){ otherIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); } } dropdownElement.classList.toggle('active', !isActive); if (triggerIcon && dropdownElement.id === 'mobile-lang-dropdown') { triggerIcon.classList.toggle('fa-chevron-down', !isActive); triggerIcon.classList.toggle('fa-chevron-up', isActive); } };
