@@ -125,35 +125,45 @@
         .custom-cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: rgba(106, 27, 154, 0.6); pointer-events: none; z-index: 9999; mix-blend-mode: difference; left: 0; top: 0; transform: translate(-50%, -50%); transition: transform 0.1s linear, background-color 0.2s ease, scale 0.2s ease; }
         .cursor-trail-point { position: fixed; width: 12px; height: 12px; background-color: rgba(206, 147, 216, 0.3); border-radius: 50%; pointer-events: none; left: -50px; top: -50px; z-index: 9998; transition: transform 60ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; transform: translate(-50%, -50%); opacity: 1; }
        
-    /* Promjena fonta u Century Gothic */
-    body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
-        font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important;
-    }
-    
-    /* Zeleni naslovi za specifične sekcije */
-    .glass-card h4, 
-    div:contains("Dobro došli u SFteam!"),
-    div:contains("Verifikacija identiteta - KYC") {
-        color: #80ff00 !important;
-    }
-    
-    /* Razmak između sekcija */
-    div:contains("Verifikacija identiteta - KYC") {
-        margin-top: 2rem !important;
-    }
-    
-    /* Zeleni gumb Dalje */
-    button:contains("Dalje"),
-    .btn-primary,
-    [type="submit"] {
-        background-color: #80ff00 !important;
-        color: #0e076a !important;
-    }
-    
-    /* Centrirani tekst */
-    div:contains("... ili nastavite popunjavanjem podataka") {
-        text-align: center !important;
-    }
+        /* Promjena fonta u Century Gothic */
+        body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
+            font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important;
+        }
+        
+        /* Zeleni naslovi za specifične sekcije */
+        .glass-card h4, 
+        div:contains("Dobro došli u SFteam!"),
+        div:contains("Verifikacija identiteta - KYC") {
+            color: #80ff00 !important;
+        }
+        
+        /* Razmak između sekcija */
+        div:contains("Verifikacija identiteta - KYC") {
+            margin-top: 2rem !important;
+        }
+        
+        /* Zeleni gumb Dalje */
+        button:contains("Dalje"),
+        .btn-primary,
+        [type="submit"] {
+            background-color: #80ff00 !important;
+            color: #0e076a !important;
+        }
+        
+        /* Centrirani tekst */
+        div:contains("... ili nastavite popunjavanjem podataka") {
+            text-align: center !important;
+        }
+
+        /* DODANI STILOVI ZA ANIMACIJU POZADINE */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Postavlja platno iza svog sadržaja */
+        }
 
     </style>
 </head>
@@ -210,6 +220,9 @@
          }
 </style>
 <body class="bg-gray-900">
+    <!-- Platno za animaciju pozadine -->
+    <canvas id="network-canvas"></canvas>
+
     <!-- Custom Cursor -->
     <div class="custom-cursor"></div>
     <!-- Trail elementi se dodaju JS-om -->
@@ -513,9 +526,9 @@
     <!-- Učitavanje Skripti -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
-    <!-- Kompletan JavaScript kod -->
     
-       <script>
+    <!-- POSTOJEĆA SKRIPTA ZA STRANICU -->
+    <script>
     // Helper funkcija za dobivanje apsolutne pozicije
     function getAbsoluteOffsetTop(element) { let top = 0; let el = element; while (el) { top += el.offsetTop; el = el.offsetParent; } return top; }
 
@@ -778,9 +791,160 @@
 
         console.log("Register page JS loaded successfully.");
     }); // Kraj DOMContentLoaded
-</script>
-    <!-- Uklonite form-validation.js ako je njegova logika sada uključena ovdje -->
-    <!-- <script src="form-validation.js"></script> -->
+    </script>
+    
+    <!-- DODANA SKRIPTA ZA ANIMACIJU POZADINE -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('network-canvas');
+        if (!canvas) return; // Zaštita ako canvas ne postoji
 
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        // --- FINALNI PARAMETRI ZA "WOW" EFEKT ---
+        const options = {
+            particleColor: "rgba(128, 255, 0, 0.85)", // #80ff00 s prozirnošću
+            lineColor: "rgba(170, 0, 255, 0.8)",     // #aa00ff s prozirnošću
+            particleAmount: 120,                     // Optimalan broj za pokrivenost
+            defaultRadius: 1.3,                      // Manji, suptilniji čvorovi
+            rotationSpeed: 0.0003,                   // Malo sporija rotacija radi fokusa na interakciju
+            linkRadius: 150,                         // Radijus za povezivanje
+            perspective: 1000,                       // Jača 3D perspektiva
+            cameraZ: 300,
+            particleSpeed: 0.25,
+            lineWidth: 0.4,
+            // Parametri za interakciju s mišem
+            mouseInteractionRadius: 150, // Domet utjecaja miša
+            mouseEffectStrength: 2,      // Koliko će se čvorovi povećati
+        };
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Praćenje pozicije miša za interakciju s česticama
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+             mouse.x = null;
+             mouse.y = null;
+        });
+
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.z = Math.random() * 2 - 1; // Z-os za parallax efekt
+                this.radius = options.defaultRadius * (1 + this.z * 0.5);
+                this.vx = (Math.random() - 0.5) * options.particleSpeed;
+                this.vy = (Math.random() - 0.5) * options.particleSpeed;
+            }
+
+            draw() {
+                let finalRadius = this.radius;
+                let opacity = 1;
+
+                // Provjera blizine miša
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < options.mouseInteractionRadius) {
+                        const effect = (1 - dist / options.mouseInteractionRadius);
+                        finalRadius += effect * options.mouseEffectStrength;
+                        opacity += effect * 0.5;
+                    }
+                }
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, finalRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(128, 255, 0, ${opacity * 0.85})`;
+                ctx.fill();
+            }
+
+            // Nova logika kretanja - "wraparound"
+            update() {
+                this.x += this.vx * (1 + this.z * 0.5); // Parallax efekt brzine
+                this.y += this.vy * (1 + this.z * 0.5);
+
+                if (this.x > canvas.width + 5) this.x = -5;
+                else if (this.x < -5) this.x = canvas.width + 5;
+                if (this.y > canvas.height + 5) this.y = -5;
+                else if (this.y < -5) this.y = canvas.height + 5;
+            }
+        }
+
+        const initParticles = () => {
+            particles = [];
+            for (let i = 0; i < options.particleAmount; i++) {
+                particles.push(new Particle());
+            }
+        };
+
+        const drawLines = () => {
+            let pulse = Math.sin(Date.now() * 0.001) * 0.2 + 0.8; // Faktor pulsiranja (0.6 do 1.0)
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+                    
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < options.linkRadius) {
+                        let opacity = 1 - (dist / options.linkRadius);
+                        opacity *= pulse; // Primijeni pulsiranje
+
+                        // Linije su jače ako je miš blizu
+                        if (mouse.x !== null) {
+                           const distToMouse1 = Math.sqrt(Math.pow(p1.x - mouse.x, 2) + Math.pow(p1.y - mouse.y, 2));
+                           const distToMouse2 = Math.sqrt(Math.pow(p2.x - mouse.x, 2) + Math.pow(p2.y - mouse.y, 2));
+                           if(distToMouse1 < options.mouseInteractionRadius || distToMouse2 < options.mouseInteractionRadius) {
+                               opacity = Math.min(1, opacity + 0.5);
+                           }
+                        }
+
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(170, 0, 255, ${opacity * 0.5})`;
+                        ctx.lineWidth = options.lineWidth;
+                        ctx.stroke();
+                    }
+                }
+            }
+        };
+
+        // Glavna petlja animacije
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.update();
+            });
+            
+            drawLines();
+            
+            particles.forEach(p => {
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        };
+
+        initParticles();
+        animate();
+    });
+    </script>
 </body>
 </html>
