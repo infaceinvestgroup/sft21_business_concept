@@ -11,10 +11,24 @@
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Link to your external CSS file (Opcionalno, većina stilova je inline) -->
+    <!-- Link na vanjsku CSS datoteku -->
     <!-- <link rel="stylesheet" href="css/style.css"> -->
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <!-- Stilovi za Registracijsku Stranicu -->
     <style>
+        /* ===== POZADINSKA ANIMACIJA ===== */
+        canvas#network-canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Ispod svih elemenata */
+            pointer-events: none; /* Da ne ometa klikove */
+            background-color: #0d0118; /* Tamna pozadina */
+        }
+
         /* --- Osnovne Varijable i Stilovi --- */
         :root {
             --primary-color: #6a1b9a; /* Purple */
@@ -28,6 +42,7 @@
             --gray-color: #5728ac;
             --text-color: #e5e7eb;
             --fluorescent-green: #80ff00; /* Fluorescentno zelena */
+            --fluorescent-orange: #d9ff00; /* Fluorescentno narančasta */
         }
 
         body {
@@ -35,6 +50,7 @@
             background-color: #0d0118;
             color: var(--text-color);
             overflow-x: hidden;
+            cursor: none; /* Sakrijemo standardni kursor */
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Orbitron', sans-serif;
@@ -121,114 +137,109 @@
         .btn-cancel { background: none; border: 1px solid #6b7280; color: #9ca3af; border-radius: 50px; font-weight: 500; transition: background-color 0.3s, color 0.3s; padding: 0.6rem 1.5rem; font-size: 0.9rem; }
         .btn-cancel:hover { background-color: #4b5563; color: white; }
 
-        /* Custom Cursor */
-        .custom-cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: rgba(106, 27, 154, 0.6); pointer-events: none; z-index: 9999; mix-blend-mode: difference; left: 0; top: 0; transform: translate(-50%, -50%); transition: transform 0.1s linear, background-color 0.2s ease, scale 0.2s ease; }
-        .cursor-trail-point { position: fixed; width: 12px; height: 12px; background-color: rgba(206, 147, 216, 0.3); border-radius: 50%; pointer-events: none; left: -50px; top: -50px; z-index: 9998; transition: transform 60ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; transform: translate(-50%, -50%); opacity: 1; }
-       
-    /* Promjena fonta u Century Gothic */
-    body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
-        font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important;
-    }
-    
-    /* Zeleni naslovi za specifične sekcije */
-    .glass-card h4, 
-    div:contains("Dobro došli u SFteam!"),
-    div:contains("Verifikacija identiteta - KYC") {
-        color: #80ff00 !important;
-    }
-    
-    /* Razmak između sekcija */
-    div:contains("Verifikacija identiteta - KYC") {
-        margin-top: 2rem !important;
-    }
-    
-    /* Zeleni gumb Dalje */
-    button:contains("Dalje"),
-    .btn-primary,
-    [type="submit"] {
-        background-color: #80ff00 !important;
-        color: #0e076a !important;
-    }
-    
-    /* Centrirani tekst */
-    div:contains("... ili nastavite popunjavanjem podataka") {
-        text-align: center !important;
-    }
+        /* --- Custom Cursor & Trail --- */
+        .custom-cursor {
+            position: fixed;
+            width: 20px; /* Manji osnovni kursor */
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(106, 27, 154, 0.6); /* Ljubičasta */
+            pointer-events: none; /* Da ne ometa klikove */
+            z-index: 9999; /* Iznad svih elemenata */
+            mix-blend-mode: difference; /* Stvara lijep kontrast sa svim bojama ispod */
+            left: 0; /* Početna pozicija */
+            top: 0; /* Početna pozicija */
+            transform: translate(-50%, -50%); /* Centriranje */
+            transition: transform 0.1s linear, background-color 0.2s ease, scale 0.2s ease; /* Glatke tranzicije */
+            opacity: 0; /* Početno skriven dok se ne pomakne */
+        }
+
+        .cursor-trail-point {
+            position: fixed;
+            width: 12px; /* Manji od osnovnog */
+            height: 12px;
+            background-color: rgba(206, 147, 216, 0.3); /* Svjetlija ljubičasta */
+            border-radius: 50%;
+            pointer-events: none;
+            left: -50px; /* Početna pozicija izvan ekrana */
+            top: -50px; /* Početna pozicija izvan ekrana */
+            z-index: 9998;
+            transition: transform 60ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; /* Lagani trail */
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+
+        /* Kad se kursor pređe preko interaktivnog elementa */
+        .custom-cursor.hover-effect {
+            background-color: rgba(128, 255, 0, 0.5); /* Fluorescentno zelena */
+            scale: 1.5; /* Povećaj veličinu */
+        }
+        /* --- Kraj Custom Cursor & Trail --- */
+
+        /* Stilovi za validacijski popup (ako se koristi) */
+        #validation-popup-overlay {
+            display: none; /* Sakriven po defaultu */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Crni overlay */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Izvanredno visoki z-index */
+        }
+        #validation-popup-content {
+            background-color: #1f2937; /* Tamna pozadina */
+            border: 1px solid var(--fluorescent-green);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        #validation-popup-close, #validation-popup-ok {
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 8px 24px;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+        #validation-popup-close {
+            background-color: #4b5563; /* Sivi */
+            color: #e5e7eb;
+            float: right;
+        }
+        #validation-popup-close:hover {
+            background-color: #374151;
+        }
+        /* #validation-popup-ok je definiran u register.html inline stilu */
 
     </style>
 </head>
-<style>
-    body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
-        font-family: 'Arial Narrow', Arial, sans-serif !important;
-    }
-        /* Vraćanje zelene boje za globus u headeru */
-        .fa-globe, 
-    .language-trigger i,
-    i.fas.fa-globe {
-        color: #80ff00 !important;
-    }
-    
-    /* Ako je globus unutar buttona ili linka */
-    button i.fas.fa-globe,
-    a i.fas.fa-globe {
-        color: #80ff00 !important;
-    }
-            /* Stanje greške za input/select polja */
-            .form-input-register.border-red-500,
-        .select-wrapper.border-red-500,
-        .phone-input-wrapper.border-red-500 {
-            border-color: #ef4444 !important; /* Tailwind red-500 */
-        }
-        .form-input-register.border-red-500:focus,
-        .form-select-register:focus + .select-wrapper.border-red-500, /* Treba prilagoditi ako se struktura selecta promijeni */
-        .form-input-register-phone:focus + .phone-input-wrapper.border-red-500 {
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3) !important; /* Crveni focus ring */
-        }
-
-        /* Stanje greške za labele (povezane s inputima ili checkboxima) */
-        label.text-red-500 {
-            color: #ef4444 !important; /* Tailwind red-500 */
-        }
-
-        /* Stil za gumb "U redu" u popupu za validaciju */
-        #validation-popup-ok {
-             background-color: var(--fluorescent-green) !important;
-             color: #0e076a !important;
-             border: none;
-             border-radius: 50px;
-             font-weight: 600;
-             padding: 8px 24px; /* Malo manji padding */
-             transition: background-color 0.3s;
-        }
-        #validation-popup-ok:hover {
-             background-color: color-mix(in srgb, var(--fluorescent-green) 85%, black 15%) !important;
-        }
-
-        /* Osiguraj da je popup overlay iznad ostalih elemenata */
-         #validation-popup-overlay {
-            z-index: 9999; /* Visoki z-index */
-         }
-</style>
 <body class="bg-gray-900">
-    <!-- Custom Cursor -->
+    <!-- Custom Cursor Element -->
     <div class="custom-cursor"></div>
-    <!-- Trail elementi se dodaju JS-om -->
+    <!-- Trail elements will be appended by JavaScript -->
 
-    <!-- Navigation (Pojednostavljena) -->
+    <!-- Navigation Bar -->
     <nav class="fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                
-                <!-- Lijeva Strana: Logo -->
+                <!-- Left Side: Logo -->
                 <div class="flex items-center">
                     <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo" class="h-auto w-12 mr-4">
-                    <a href="index.html" title="Idi na početnu stranicu" class="flex flex-col logo-nav"> <!-- UKLONJENA klasa 'items-center' -->
+                    <a href="index.html" title="Idi na početnu stranicu" class="flex flex-col logo-nav">
                          <span class="small-text">InFace Invest Group</span>
                          <div class="text-white font-bold"> <span class="text-logo-orange">SFT</span>21 </div>
                     </a>
                 </div>
 
-                <!-- Desna Strana: Globus i Gumbi -->
+                <!-- Right Side: Language & Buttons -->
                 <div class="hidden md:flex items-center space-x-4">
                     <!-- Language Selector - Desktop -->
                     <div class="language-selector relative">
@@ -248,21 +259,21 @@
                             <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
                         </div>
                     </div>
-                    <!-- Izmijenjeni Gumbi -->
+                    <!-- Changed Buttons -->
                     <a href="login.html" class="btn-primary register-login-btn text-xs">Prijava</a>
                     <a href="register.html" class="btn-outline register-register-btn text-xs">Registracija</a>
                 </div>
 
-                <!-- Hamburger za Mobilni Prikaz -->
+                <!-- Hamburger for Mobile -->
                 <div class="md:hidden">
                     <div class="hamburger"> <span class="bar"></span> <span class="bar"></span> <span class="bar"></span> </div>
                 </div>
             </div>
         </div>
 
-        <!-- Mobilni Meni (Pojednostavljen) -->
+        <!-- Mobile Menu -->
         <div class="nav-menu md:hidden">
-             <!-- Mobilni Izbornik Jezika -->
+             <!-- Mobile Language Selector -->
              <div class="mobile-language-selector mt-4 mb-4 border-t border-b border-gray-700 py-2 px-6">
                  <a href="#" id="mobile-lang-trigger" class="block text-center transition-colors duration-300 sft21-nav-link mobile-language-trigger text-gray-300 hover:text-fluorescent-green">
                      <i class="fas fa-globe mr-2"></i> Odaberi jezik <i class="fas fa-chevron-down ml-1 text-xs"></i>
@@ -280,7 +291,7 @@
                     <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
                 </div>
              </div>
-             <!-- Izmijenjeni Gumbi za Mobilni Meni -->
+             <!-- Changed Buttons for Mobile Menu -->
              <div class="flex flex-col space-y-3 px-6 mt-auto pb-4">
                 <a href="login.html" class="btn-primary register-login-btn text-center text-xs">Prijava</a>
                 <a href="register.html" class="btn-outline register-register-btn text-center text-xs">Registracija</a>
@@ -288,26 +299,27 @@
         </div>
     </nav>
 
-    <!-- Glavni Sadržaj Stranice -->
+    <!-- Main Page Content -->
     <main class="registration-section">
         <div class="container mx-auto px-6">
 
-            <!-- Naslov Sekcije -->
+            <!-- Section Title -->
             <div class="text-center mb-12 md:mb-16 fade-in">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4">Registracija</h1>
                 <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Započnite svoje putovanje prema financijskoj neovisnosti<p>
-                    <p>Pridružite se SFT21 zajednici</p>
-                </div>
+                    Započnite svoje putovanje prema financijskoj neovisnosti
+                </p>
+                <p class="text-lg text-gray-300">Pridružite se SFT21 zajednici</p>
+            </div>
 
-            <!-- Glavni Layout: Slika + Forma -->
+            <!-- Main Layout: Image + Form -->
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
 
-                <!-- Lijeva Kolona: Slika i Pogodnosti -->
+                <!-- Left Column: Image & Benefits -->
                 <div class="w-full lg:w-5/12 fade-in" style="animation-delay: 0.2s;">
                     <div class="image-placeholder mb-8"></div>
                     <div class="glass-card p-6">
-                        <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>Dobro došli u SFteam!</strong> </h4><br>
+                        <h4 style="font-family: 'Orbitron', sans-serif !important; color: #80ff00 !important;"><strong>Dobro došli u SFteam!</strong> </h4><br>
                         <p class="text-gray-300 mb-4">Registriraj se i besplatno koristi usluge naše platforme:</p>
                         <ul class="benefits-list">
                             <li><i class="fas fa-check-circle"></i>SFnet - poslovno-društvena mreža</li>
@@ -317,32 +329,32 @@
                             <li><i class="fas fa-check-circle"></i>Mogućnost zarade na više načina</li>
                         </ul>
                     </div>
-                <div class="glass-card p-6 mt-8">
-                    <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important; margin-top: 2rem !important;"><strong>Verifikacija identiteta - KYC</strong></h4><br>
-                    <p class="text-gray-300 mb-4">Prije nego li započnete sa procesom registracije želimo Vam napomenuti da ćete u procesu registracije trebati potvrditi svoj identitet, unosom osobnog dokumenta i vlastite fotografije. Ukoliko ne želite potvrditi svoj identitet molimo da prekinete proces registracij.</p>
-                      <p class="text-gray-300 mb-4">KYC STANDARD PREDSTAVLJA PROCES U KOJEM SU KLIJENTI OBAVEZNI POTVRDITI SVOJ IDENTITET U SVRHU NASTAVKA LEGALNOG KORIŠTENJA STRANICA NAŠEG PORTALA, KAKO BI SE PRVENSTVENO SPRIJEČILO LAŽNO ILI VIŠESTRUKO REGISTRIRANJE, KRAĐA IDENTITETA, FINANCIJSKE PREVARE, PRANJE NOVCA, FINANCIRANJE TERORIZMA I SL. 
+                    <div class="glass-card p-6 mt-8">
+                        <h4 style="font-family: 'Orbitron', sans-serif !important; color: #80ff00 !important; margin-top: 2rem !important;"><strong>Verifikacija identiteta - KYC</strong></h4><br>
+                        <p class="text-gray-300 mb-4">Prije nego li započnete sa procesom registracije želimo Vam napomenuti da ćete u procesu registracije trebati potvrditi svoj identitet, unosom osobnog dokumenta i vlastite fotografije. Ukoliko ne želite potvrditi svoj identitet molimo da prekinete proces registracij.</p>
+                        <p class="text-gray-300 mb-4">KYC STANDARD PREDSTAVLJA PROCES U KOJEM SU KLIJENTI OBAVEZNI POTVRDITI SVOJ IDENTITET U SVRHU NASTAVKA LEGALNOG KORIŠTENJA STRANICA NAŠEG PORTALA, KAKO BI SE PRVENSTVENO SPRIJEČILO LAŽNO ILI VIŠESTRUKO REGISTRIRANJE, KRAĐA IDENTITETA, FINANCIJSKE PREVARE, PRANJE NOVCA, FINANCIRANJE TERORIZMA I SL.
                         </p>
                     </div>
                 </div>
 
-                 <!-- Desna Kolona: Forma -->
+                 <!-- Right Column: Form -->
                  <div class="w-full lg:w-7/12 fade-in" style="animation-delay: 0.4s;">
-                    <div class="registration-form-container"> <!-- Početak kontejnera forme -->
+                    <div class="registration-form-container"> <!-- Start Form Container -->
 
-                        <!-- Gumbi za odabir tipa računa -->
+                        <!-- Account Type Buttons -->
                         <div class="flex justify-center gap-4 mb-6">
                             <button type="button" class="btn-account-type active">Osobni račun</button>
                             <button type="button" class="btn-account-type">Poslovni račun</button>
                         </div>
 
-                        <!-- Gumbi za društvene mreže -->
+                        <!-- Social Login Buttons -->
                         <div class="space-y-3 mb-8">
                             <a href="#" class="social-login-button">
                                 <i class="fab fa-facebook-f text-blue-600 mr-3 text-xl"></i>
                                 <span>Dalje s Facebook</span>
                             </a>
                             <a href="#" class="social-login-button">
-                                <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48 24C48 22.0217 47.2205 20.1217 45.8579 18.7591C44.4953 17.3966 42.5954 16.617 40.617 16.617H24V24H36.417C35.6859 26.6839 33.8541 28.8841 31.3379 30.0195C28.8217 31.1549 25.8652 31.0984 23.383 29.877C20.9008 28.6556 19.1466 26.3738 18.558 23.676C17.9694 20.9782 18.6164 18.144 20.309 16.039L20.334 16.017L14.891 11.904C10.6914 15.7152 8.6045 21.2864 9.66988 26.853C10.7353 32.4196 14.7726 37.0789 20.14 39.047C25.5074 41.0151 31.4688 39.9796 36.001 36.337C40.5332 32.6944 43.1462 27.322 43.1462 21.709H43.17V21.709V18.709C43.17 17.806 43.017 16.916 42.728 16.084L42.707 16.03L40.617 16.617H40.617Z" fill="#4285F4"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4.891 16.039L4.86601 16.063L10.309 20.176C10.309 20.176 10.309 20.176 10.309 20.176C8.61642 22.281 7.96941 25.1152 8.55801 27.813C9.14661 30.5108 10.9008 32.7926 13.383 34.014C15.8652 35.2354 18.8217 35.2919 21.3379 34.1565C23.8541 33.0211 25.6859 30.8209 26.417 28.137H24V21H4.891V16.039Z" fill="#34A853"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.309 4.316L4.891 0.0409999C-0.143953 4.46181 -0.58501 10.9273 2.039 16.039H4.891V16.039L10.309 11.904C9.29903 10.2565 8.99575 8.31933 9.45833 6.47157C9.9209 4.62381 11.1111 3.03775 12.7846 2.03669C14.458 1.03564 16.4818 0.699072 18.4742 1.09967C20.4666 1.50027 22.2864 2.60773 23.628 4.216L29.149 0.0889999C25.9156 -1.27373 22.1584 -1.53293 18.614 -0.846931C15.0696 -0.160931 11.9246 1.44674 9.73199 4.57907L10.309 4.316Z" fill="#FBBC05"/><path fill-rule="evenodd" clip-rule="evenodd" d="M43.17 0H23.628L18.082 4.101C19.9179 2.70817 22.2576 1.95569 24.666 2.0001C31.9815 2.0001 38.0016 7.83503 38.463 15.088L40.617 14.5H43.17V0Z" fill="#EA4335"/></svg>
+                                <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48 24C48 22.0217 47.2205 20.1217 45.8579 18.7591C44.4953 17.3966 44.4953 17.3966 44.4953 17.3966 42.5954 16.617 40.617 16.617H24V24H36.417C35.6859 26.6839 33.8541 28.8841 31.3379 30.0195C28.8217 31.1549 25.8652 31.0984 23.383 29.877C20.9008 28.6556 19.1466 26.3738 18.558 23.676C17.9694 20.9782 18.6164 18.144 20.309 16.039L20.334 16.017L14.891 11.904C10.6914 15.7152 8.6045 21.2864 9.66988 26.853C10.7353 32.4196 14.7726 37.0789 20.14 39.047C25.5074 41.0151 31.4688 39.9796 36.001 36.337C40.5332 32.6944 43.1462 27.322 43.1462 21.709H43.17V21.709H43.17V18.709C43.17 17.806 43.017 16.916 42.728 16.084L42.707 16.03L40.617 16.617H40.617Z" fill="#4285F4"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4.891 16.039L4.86601 16.063L10.309 20.176C10.309 20.176 10.309 20.176 10.309 20.176C8.61642 22.281 7.96941 25.1152 8.55801 27.813C9.14661 30.5108 10.9008 32.7926 13.383 34.014C15.8652 35.2354 18.8217 35.2919 21.3379 34.1565C23.8541 33.0211 25.6859 30.8209 26.417 28.137H24V21H4.891V16.039Z" fill="#34A853"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.309 4.316L4.891 0.0409999C-0.143953 4.46181 -0.58501 10.9273 2.039 16.039H4.891V16.039L10.309 11.904C9.29903 10.2565 8.99575 8.31933 9.45833 6.47157C9.9209 4.62381 11.1111 3.03775 12.7846 2.03669C14.458 1.03564 16.4818 0.699072 18.4742 1.09967C20.4666 1.50027 22.2864 2.60773 23.628 4.216L29.149 0.0889999C25.9156 -1.27373 22.1584 -1.53293 18.614 -0.846931C15.0696 -0.160931 11.9246 1.44674 9.73199 4.57907L10.309 4.316Z" fill="#FBBC05"/><path fill-rule="evenodd" clip-rule="evenodd" d="M43.17 0H23.628L18.082 4.101C19.9179 2.70817 22.2576 1.95569 24.666 2.0001C31.9815 2.0001 38.0016 7.83503 38.463 15.088L40.617 14.5H43.17V0Z" fill="#EA4335"/></svg>
                                 <span>Dalje s Google</span>
                             </a>
                             <a href="#" class="social-login-button">
@@ -351,28 +363,27 @@
                             </a>
                         </div>
 
-                        <!-- Naslov "Moji podaci" -->
+                        <!-- "My Details" Heading -->
                         <h4 class="text-lg font-semibold mb-5 text-gray-300 border-t border-gray-700 pt-6 text-center">... ili nastavite popunjavanjem podataka</h4>
 
-                        <!-- Forma -->
+                        <!-- Registration Form -->
                         <form id="registration-main-form" action="#" method="POST" class="space-y-4">
 
-                             <!-- Zemlja -->
+                             <!-- Country -->
                              <div class="form-group">
                                  <label for="country" class="form-label-register">Zemlja*</label>
                                  <div class="select-wrapper">
-                                     <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatska" class="flag-in-select">
+                                     <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatska" class="flag-in-select" id="phone-flag">
                                      <select id="country" name="country" class="form-select-register">
-                                         <option value="HR" selected>Hrvatska</option>
-                                         <option value="RS">Srbija</option>
-                                         <option value="SI">Slovenija</option>
-                                         <option value="BA">Bosna i Hercegovina</option>
-                                         
+                                         <option value="HR" selected data-flag="https://flagcdn.com/w20/hr.png">Hrvatska</option>
+                                         <option value="RS" data-flag="https://flagcdn.com/w20/rs.png">Srbija</option>
+                                         <option value="SI" data-flag="https://flagcdn.com/w20/si.png">Slovenija</option>
+                                         <option value="BA" data-flag="https://flagcdn.com/w20/ba.png">Bosna i Hercegovina</option>
                                      </select>
                                  </div>
                              </div>
 
-                             <!-- Oslovaljavanje -->
+                             <!-- Salutation -->
                              <div class="form-group">
                                  <label class="form-label-register">Oslovljavanje*</label>
                                  <div class="flex items-center space-x-6 mt-1">
@@ -387,38 +398,38 @@
                                  </div>
                              </div>
 
-                             <!-- Ime -->
+                             <!-- First Name -->
                              <div class="form-group">
                                  <label for="first-name" class="form-label-register">Ime*</label>
                                  <input type="text" id="first-name" name="first_name" required class="form-input-register" placeholder="Unesite vaše ime">
                              </div>
 
-                             <!-- Prezime -->
+                             <!-- Last Name -->
                              <div class="form-group">
                                  <label for="last-name" class="form-label-register">Prezime*</label>
                                  <input type="text" id="last-name" name="last_name" required class="form-input-register" placeholder="Unesite vaše prezime">
                              </div>
 
-                             <!-- Datum Rođenja -->
+                             <!-- Date of Birth -->
                               <div class="form-group">
                                   <label class="form-label-register">Datum rođenja*</label>
                                   <div class="flex space-x-2">
-                                      <input type="text" id="dob-dd" name="dob_dd" required class="form-input-register w-1/3 text-center" placeholder="DD" maxlength="2">
-                                      <input type="text" id="dob-mm" name="dob_mm" required class="form-input-register w-1/3 text-center" placeholder="MM" maxlength="2">
-                                      <input type="text" id="dob-yyyy" name="dob_yyyy" required class="form-input-register w-1/3 text-center" placeholder="GGGG" maxlength="4">
+                                      <input type="text" id="dob-dd" name="dob_dd" required class="form-input-register w-1/3 text-center" placeholder="DD" maxlength="2" pattern="^(0[1-9]|[12]\d|3[01])$">
+                                      <input type="text" id="dob-mm" name="dob_mm" required class="form-input-register w-1/3 text-center" placeholder="MM" maxlength="2" pattern="^(0[1-9]|1[0-2])$">
+                                      <input type="text" id="dob-yyyy" name="dob_yyyy" required class="form-input-register w-1/3 text-center" placeholder="GGGG" maxlength="4" pattern="^(19|20)\d\d$">
                                   </div>
                               </div>
 
-                              <!-- Mobilni telefon -->
+                              <!-- Mobile Phone -->
                              <div class="form-group">
                                  <label for="mobile-phone" class="form-label-register">Mobilni telefon*</label>
                                   <div class="flex items-center phone-input-wrapper">
-                                     <div class="country-code-select">
+                                     <div class="country-code-select" id="country-code-selector">
                                          <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatska" id="phone-flag">
                                          <span id="phone-prefix">+385</span>
                                          <i class="fas fa-chevron-down text-xs ml-1"></i>
                                      </div>
-                                     <input type="tel" id="mobile-phone" name="mobile_phone" required class="form-input-register-phone" placeholder="Vaš broj mobitela">
+                                     <input type="tel" id="mobile-phone" name="mobile_phone" required class="form-input-register-phone" placeholder="Vaš broj mobitela" pattern="\+?[0-9\s]*">
                                  </div>
                              </div>
 
@@ -428,7 +439,7 @@
                                  <input type="email" id="reg-email" name="email" required class="form-input-register" placeholder="Vaša e-mail adresa">
                              </div>
 
-                              <!-- Checkboxovi -->
+                              <!-- Checkboxes -->
                               <div class="space-y-3 pt-4">
                                  <label class="flex items-start cursor-pointer">
                                      <input type="checkbox" name="terms_oup" required class="form-checkbox-register mt-1">
@@ -444,22 +455,24 @@
                                  </label>
                              </div>
 
-                              <!-- Suglasnost Tekst -->
+                              <!-- Consent Text -->
                               <div class="mt-6 text-xs text-gray-400 leading-relaxed">
                                  Svoju(e) suglasnost(i) za navedene obrade podataka mogu (pojedinačno) u bilo kojem trenutku opozvati za ubuduće u pisanom obliku slanjem opoziva poštom na adresu myWorld d.o.o., Josipa Marohnića 1, 10000 Zagreb ili e-mailom na e-mail adresu service.hr@myworld.com. Do opoziva izvršena obrada podataka na temelju ove suglasnosti ostaje pravovaljana.
                               </div>
 
-                              <!-- Gumbi Dalje/Prekinuti -->
+                              <!-- Buttons: Next/Cancel -->
                               <div class="pt-6 space-y-3">
-                                <button type="button" id="dalje-button" class="btn-primary w-full py-3" style="background-color: #80ff00 !important; color: #0e076a !important; border-radius: 50px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 12px 24px; border: none;">Dalje</button>                            </div>
+                                <!-- Gumb "Dalje" -->
+                                <button type="button" id="dalje-button" class="btn-primary w-full py-3">Dalje</button>
+                              </div>
 
-                              <!-- Obvezna polja -->
+                              <!-- Required Fields Note -->
                               <p class="text-xs text-gray-400 mt-4">*Obvezna polja</p>
 
                         </form>
 
-                    </div> <!-- Kraj kontejnera forme -->
-                </div> <!-- Kraj desne kolone -->
+                    </div> <!-- End Form Container -->
+                </div> <!-- End Right Column -->
             </div>
         </div>
     </main>
@@ -510,277 +523,424 @@
         </div>
     </footer>
 
-    <!-- Učitavanje Skripti -->
+    <!-- Validation Popup (skriven po defaultu) -->
+    <div id="validation-popup-overlay">
+        <div id="validation-popup-content">
+            <button id="validation-popup-close" title="Zatvori">×</button>
+            <h4 class="text-xl font-bold mb-4 text-fluorescent-green">Greška pri unosu</h4>
+            <p class="text-gray-300 mb-6">Molimo provjerite unesene podatke i ispravite polja označena crvenom bojom.</p>
+            <button id="validation-popup-ok">U redu</button>
+        </div>
+    </div>
+
+    <!-- Loading Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
-    <!-- Kompletan JavaScript kod -->
-    
-       <script>
-    // Helper funkcija za dobivanje apsolutne pozicije
-    function getAbsoluteOffsetTop(element) { let top = 0; let el = element; while (el) { top += el.offsetTop; el = el.offsetParent; } return top; }
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/Draggable.min.js"></script> <!-- Potreban za trail effect -->
 
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log("DOM spreman - register.html v2");
-        const body = document.body;
+    <!-- Custom JavaScript -->
+    <script>
+        // Helper funkcija za dobivanje apsolutne pozicije
+        function getAbsoluteOffsetTop(element) { let top = 0; let el = element; while (el) { top += el.offsetTop; el = el.offsetParent; } return top; }
 
-        // --- ELEMENTI ---
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        const desktopLangTrigger = document.getElementById('desktop-lang-trigger');
-        const desktopLangDropdown = document.getElementById('desktop-lang-dropdown');
-        const mobileLangTrigger = document.getElementById('mobile-lang-trigger');
-        const mobileLangDropdown = document.getElementById('mobile-lang-dropdown');
-        const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas');
-        const accountTypeButtons = document.querySelectorAll('.btn-account-type');
-        const validationPopupOverlay = document.getElementById('validation-popup-overlay');
-        const validationPopupClose = document.getElementById('validation-popup-close');
-        const validationPopupOk = document.getElementById('validation-popup-ok');
-        const daljeButton = document.getElementById('dalje-button'); // Dohvati gumb "Dalje"
-        const registrationForm = document.getElementById('registration-main-form'); // Dohvati formu
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM spreman - register.html loaded.");
+            const body = document.body;
 
-        // --- Provjera postojanja ključnih elemenata ---
-        if (!daljeButton) console.error("Gumb 'Dalje' (id='dalje-button') NIJE pronađen!");
-        if (!registrationForm) console.error("Forma (id='registration-main-form') NIJE pronađena!");
-        if (!validationPopupOverlay) console.error("Popup overlay (id='validation-popup-overlay') NIJE pronađen!");
+            // --- ELEMENTI ---
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            const desktopLangTrigger = document.getElementById('desktop-lang-trigger');
+            const desktopLangDropdown = document.getElementById('desktop-lang-dropdown');
+            const mobileLangTrigger = document.getElementById('mobile-lang-trigger');
+            const mobileLangDropdown = document.getElementById('mobile-lang-dropdown');
+            const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas');
+            const accountTypeButtons = document.querySelectorAll('.btn-account-type');
+            const validationPopupOverlay = document.getElementById('validation-popup-overlay');
+            const validationPopupClose = document.getElementById('validation-popup-close');
+            const validationPopupOk = document.getElementById('validation-popup-ok');
+            const daljeButton = document.getElementById('dalje-button'); // Dohvati gumb "Dalje"
+            const registrationForm = document.getElementById('registration-main-form'); // Dohvati formu
+            const countrySelect = document.getElementById('country');
+            const countryFlag = document.getElementById('phone-flag');
+            const phonePrefix = document.getElementById('phone-prefix');
+            const countryCodeSelector = document.getElementById('country-code-selector');
 
-        // --- ZATVARANJE SVIH OVERLAY ELEMENATA ---
-        const closeAllOverlays = (exceptElement = null) => {
-            if (desktopLangDropdown && desktopLangDropdown !== exceptElement && desktopLangDropdown.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); }
-            if (mobileLangDropdown && mobileLangDropdown !== exceptElement && mobileLangDropdown.classList.contains('active')) {
-                mobileLangDropdown.classList.remove('active');
-                if (mobileLangIcon && mobileLangIcon.classList.contains('fa-chevron-up')) { mobileLangIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); }
+
+            // --- PROVJERA POSTOJANJA KLUČNIH ELEMENATA ---
+            if (!daljeButton) console.error("Gumb 'Dalje' (id='dalje-button') NIJE pronađen!");
+            if (!registrationForm) console.error("Forma (id='registration-main-form') NIJE pronađena!");
+            if (!validationPopupOverlay) console.error("Popup overlay (id='validation-popup-overlay') NIJE pronađen!");
+            if (!countrySelect) console.error("Select element za zemlju (id='country') NIJE pronađen!");
+            if (!countryFlag) console.error("Flag image (id='phone-flag') NIJE pronađen!");
+            if (!phonePrefix) console.error("Phone prefix span (id='phone-prefix') NIJE pronađen!");
+            if (!countryCodeSelector) console.error("Country code selector (id='country-code-selector') NIJE pronađen!");
+
+
+            // --- ZATVARANJE SVIH OVERLAY ELEMENATA ---
+            const closeAllOverlays = (exceptElement = null) => {
+                if (desktopLangDropdown && desktopLangDropdown !== exceptElement && desktopLangDropdown.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); }
+                if (mobileLangDropdown && mobileLangDropdown !== exceptElement && mobileLangDropdown.classList.contains('active')) {
+                    mobileLangDropdown.classList.remove('active');
+                    if (mobileLangIcon && mobileLangIcon.classList.contains('fa-chevron-up')) { mobileLangIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); }
+                }
+                // Sakrij i validacijski popup ako je otvoren
+                if (validationPopupOverlay && validationPopupOverlay !== exceptElement && validationPopupOverlay.style.display !== 'none') { hideValidationPopup(); }
+            };
+
+            // --- IZBORNIK JEZIKA ---
+            if (desktopLangTrigger && desktopLangDropdown) {
+                 desktopLangTrigger.addEventListener('click', (event) => { event.stopPropagation(); closeAllOverlays(desktopLangDropdown); desktopLangDropdown.classList.toggle('active'); });
+                 desktopLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', () => { console.log('Jezik (desktop):', item.querySelector('span:not(.flag-icon)')?.textContent); closeAllOverlays(); }); });
+                 desktopLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); });
             }
-            // Sakrij i validacijski popup ako je otvoren
-            if (validationPopupOverlay && validationPopupOverlay !== exceptElement && validationPopupOverlay.style.display !== 'none') { hideValidationPopup(); }
-        };
+            if (mobileLangTrigger && mobileLangDropdown && mobileLangIcon) {
+                 mobileLangTrigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); closeAllOverlays(mobileLangDropdown); const isActive = mobileLangDropdown.classList.toggle('active'); mobileLangIcon.classList.toggle('fa-chevron-up', isActive); mobileLangIcon.classList.toggle('fa-chevron-down', !isActive); });
+                 mobileLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', () => { console.log('Jezik (mobile):', item.querySelector('span:not(.flag-icon)')?.textContent); closeAllOverlays(); }); });
+                 mobileLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); });
+            }
 
-        // --- IZBORNIK JEZIKA (nepromijenjeno) ---
-        if (desktopLangTrigger && desktopLangDropdown) {
-             desktopLangTrigger.addEventListener('click', (event) => { event.stopPropagation(); closeAllOverlays(desktopLangDropdown); desktopLangDropdown.classList.toggle('active'); });
-             desktopLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', () => { console.log('Jezik (desktop):', item.querySelector('span:not(.flag-icon)')?.textContent); closeAllOverlays(); }); });
-             desktopLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); });
-        }
-         if (mobileLangTrigger && mobileLangDropdown && mobileLangIcon) {
-             mobileLangTrigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); closeAllOverlays(mobileLangDropdown); const isActive = mobileLangDropdown.classList.toggle('active'); mobileLangIcon.classList.toggle('fa-chevron-up', isActive); mobileLangIcon.classList.toggle('fa-chevron-down', !isActive); });
-             mobileLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', () => { console.log('Jezik (mobile):', item.querySelector('span:not(.flag-icon)')?.textContent); closeAllOverlays(); }); });
-             mobileLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); });
-        }
+            // --- HAMBURGER ---
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); body.classList.toggle('no-scroll'); closeAllOverlays(); });
+                navMenu.querySelectorAll('a:not(.mobile-dropdown-toggle):not(.mobile-language-trigger)').forEach(link => { link.addEventListener('click', () => { if (hamburger.classList.contains('active')) hamburger.click(); }); });
+            }
 
-        // --- HAMBURGER (nepromijenjeno) ---
-         if (hamburger && navMenu) {
-             hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); body.classList.toggle('no-scroll'); closeAllOverlays(); });
-             navMenu.querySelectorAll('a:not(.mobile-dropdown-toggle):not(.mobile-language-trigger)').forEach(link => { link.addEventListener('click', () => { if (hamburger.classList.contains('active')) hamburger.click(); }); });
-        }
+            // --- GLOBAL CLICK LISTENER ZA ZATVARANJE ---
+            document.addEventListener('click', (event) => {
+                const target = event.target;
+                if ( (!desktopLangTrigger || !desktopLangTrigger.contains(target)) && (!mobileLangTrigger || !mobileLangTrigger.contains(target)) && (!desktopLangDropdown || !desktopLangDropdown.contains(target)) && (!mobileLangDropdown || !mobileLangDropdown.contains(target)) ) { closeAllOverlays(); }
+                // Dodajemo zatvaranje validacijskog popupa klikom izvan njega
+                if (validationPopupOverlay && validationPopupOverlay.style.display !== 'none' && event.target === validationPopupOverlay) {
+                    hideValidationPopup();
+                }
+            });
 
-         // --- GLOBAL CLICK LISTENER ZA ZATVARANJE (nepromijenjeno) ---
-        document.addEventListener('click', (event) => {
-             const target = event.target;
-             if ( (!desktopLangTrigger || !desktopLangTrigger.contains(target)) && (!mobileLangTrigger || !mobileLangTrigger.contains(target)) && (!desktopLangDropdown || !desktopLangDropdown.contains(target)) && (!mobileLangDropdown || !mobileLangDropdown.contains(target)) ) { closeAllOverlays(); }
-             // Dodajemo zatvaranje validacijskog popupa klikom izvan njega
-             if (validationPopupOverlay && validationPopupOverlay.style.display !== 'none' && event.target === validationPopupOverlay) {
-                 hideValidationPopup();
-             }
-        });
+            // --- GSAP Animacije ---
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.utils.toArray('.fade-in').forEach((element) => {
+                    gsap.set(element, { opacity: 0, y: 30 });
+                    ScrollTrigger.create({ trigger: element, start: 'top 90%', once: true, onEnter: () => gsap.to(element, { opacity: 1, y: 0, duration: 0.8, delay: parseFloat(element.style.animationDelay) || 0 }) });
+                    element.style.animationDelay = ''; // Clear inline delay after setting
+                });
+            } else { console.warn("GSAP or ScrollTrigger library not loaded."); document.querySelectorAll('.fade-in').forEach(el => { el.style.opacity = 1; el.style.transform = 'translateY(0)';}); }
 
-        // --- GSAP Animacije (nepromijenjeno) ---
-         if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-             gsap.registerPlugin(ScrollTrigger);
-             gsap.utils.toArray('.fade-in').forEach((element) => {
-                 gsap.set(element, { opacity: 0, y: 30 });
-                 ScrollTrigger.create({ trigger: element, start: 'top 90%', once: true, onEnter: () => gsap.to(element, { opacity: 1, y: 0, duration: 0.8, delay: parseFloat(element.style.animationDelay) || 0 }) });
-                 element.style.animationDelay = '';
-             });
-         } else { console.warn("GSAP or ScrollTrigger library not loaded."); document.querySelectorAll('.fade-in').forEach(el => { el.style.opacity = 1; el.style.transform = 'translateY(0)';}); }
+            // --- Custom Cursor & Trail ---
+            const cursor = document.querySelector('.custom-cursor');
+            const trailElements = Array.from(document.querySelectorAll('.cursor-trail-point')); // Osiguraj da su elementi već u DOM-u ili će se dodati JS-om
 
-         // --- Custom Cursor (nepromijenjeno) ---
-         const cursor = document.querySelector('.custom-cursor');
-         if (cursor && body) {
-             let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0; const speed = 0.1;
-             const updateCursorPosition = () => { cursorX += (mouseX - cursorX) * speed; cursorY += (mouseY - cursorY) * speed; cursor.style.left = `${cursorX}px`; cursor.style.top = `${cursorY}px`; requestAnimationFrame(updateCursorPosition); };
-             requestAnimationFrame(updateCursorPosition);
-             window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-             document.addEventListener('mouseleave', () => { if(cursor) cursor.style.opacity = '0'; }); document.addEventListener('mouseenter', () => { if(cursor) cursor.style.opacity = '1'; });
-             document.querySelectorAll('a, button, input, textarea, select, .hamburger, .language-trigger, .language-item').forEach(el => {
-                 el.addEventListener('mouseenter', () => { if(cursor && typeof gsap !== 'undefined') gsap.to(cursor, { duration: 0.3, scale: 1.5, backgroundColor: 'rgba(128, 255, 0, 0.5)' }); });
-                 el.addEventListener('mouseleave', () => { if(cursor && typeof gsap !== 'undefined') gsap.to(cursor, { duration: 0.3, scale: 1, backgroundColor: 'rgba(106, 27, 154, 0.6)' }); });
-             });
-             const numTrailPoints = 5; const pointSizeStart = 12; const pointOpacityStart = 0.3; const baseDelay = 30; const lightPurpleRGBA = 'rgba(206, 147, 216,'; let trailPoints = [];
-             for (let i = 0; i < numTrailPoints; i++) { const point = document.createElement('div'); point.className = 'cursor-trail-point'; point.style.cssText = `position: fixed; width: ${pointSizeStart - i * 1.5}px; height: ${pointSizeStart - i * 1.5}px; background-color: ${lightPurpleRGBA}${pointOpacityStart - i * 0.05}); border-radius: 50%; pointer-events: none; left: -50px; top: -50px; z-index: 9998; transition: transform ${baseDelay + i * 15}ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; transform: translate(-50%, -50%); opacity: 1;`; body.appendChild(point); trailPoints.push({ element: point, x: -50, y: -50 }); }
-             window.addEventListener('mousemove', (e) => { const x = e.clientX; const y = e.clientY; trailPoints.forEach((p, i) => { const targetX = i === 0 ? x : trailPoints[i - 1].x; const targetY = i === 0 ? y : trailPoints[i - 1].y; p.x = targetX; p.y = targetY; p.element.style.left = `${p.x}px`; p.element.style.top = `${p.y}px`; }); });
-             document.addEventListener('mouseleave', () => { trailPoints.forEach(p => p.element.style.opacity = '0'); }); document.addEventListener('mouseenter', () => { trailPoints.forEach(p => p.element.style.opacity = '1'); });
-         }
+            if (cursor) {
+                let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0; const speed = 0.1;
+                const updateCursorPosition = () => {
+                    cursorX += (mouseX - cursorX) * speed;
+                    cursorY += (mouseY - cursorY) * speed;
+                    cursor.style.left = `${cursorX}px`;
+                    cursor.style.top = `${cursorY}px`;
+                    requestAnimationFrame(updateCursorPosition);
+                };
+                requestAnimationFrame(updateCursorPosition);
+                window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+                document.addEventListener('mouseleave', () => { if(cursor) cursor.style.opacity = '0'; });
+                document.addEventListener('mouseenter', () => { if(cursor) cursor.style.opacity = '1'; }); // Pokaži kursor kada miš uđe nazad
 
-          // --- Prebacivanje aktivne klase između gumba Osobni/Poslovni račun (nepromijenjeno) ---
-          if(accountTypeButtons.length > 0) {
-              accountTypeButtons.forEach(button => {
-                  button.addEventListener('click', () => {
-                      accountTypeButtons.forEach(btn => btn.classList.remove('active'));
-                      button.classList.add('active');
-                       const accountType = button.textContent.includes('Osobni') ? 'personal' : 'business';
-                       console.log('Odabran tip računa:', accountType);
-                       // OVDJE IDE LOGIKA ZA PRIKAZ/SKRIVANJE POLJA OVISNO O TIPU
-                  });
-              });
-          }
+                // Efekti na interaktivnim elementima
+                document.querySelectorAll('a, button, input, textarea, select, .hamburger, .language-trigger, .language-item').forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        if(cursor && typeof gsap !== 'undefined') {
+                            gsap.to(cursor, { duration: 0.3, scale: 1.5, backgroundColor: 'rgba(128, 255, 0, 0.5)' }); // Zelena boja i povećanje
+                        }
+                    });
+                    el.addEventListener('mouseleave', () => {
+                        if(cursor && typeof gsap !== 'undefined') {
+                            gsap.to(cursor, { duration: 0.3, scale: 1, backgroundColor: 'rgba(106, 27, 154, 0.6)' }); // Vraćanje na početnu boju i veličinu
+                        }
+                    });
+                });
+            }
 
-         // --- AŽURIRANA Logika za Popup Validacije ---
-         // Funkcija za prikazivanje popup-a
-         function showValidationPopup() {
-             if (validationPopupOverlay) {
-                 console.log("Prikazujem validation popup...");
-                 validationPopupOverlay.style.display = 'flex';
-             } else {
-                 console.error("Validation popup overlay element nije pronađen za prikaz!");
-             }
-         }
+            // Trail effect logic
+            let mousePos = { x: -50, y: -50 }; // Početna pozicija izvan ekrana
+            let currentCursorPos = { x: -50, y: -50 };
+            const trailSpeed = 0.15; // Malo sporiji trail
+            const trailElementsData = []; // Sprema reference na trail elemente i njihove pozicije
 
-         // Funkcija za skrivanje popup-a
-         function hideValidationPopup() {
-             if (validationPopupOverlay) {
-                 validationPopupOverlay.style.display = 'none';
-             }
-         }
+            // Inicijalizacija trail elemenata ako ne postoje
+            if (trailElements.length === 0 && body) {
+                const numTrailPoints = 5;
+                const pointSizeStart = 12;
+                const pointOpacityStart = 0.3;
+                const baseDelay = 30;
+                const lightPurpleRGBA = 'rgba(206, 147, 216,'; // Boja trail točkica
 
-         // Funkcija za validaciju registracijske forme
-         function validateRegistrationForm() {
-             if (!registrationForm) {
-                 console.error("Forma nije pronađena za validaciju!");
-                 return false; // Ne možemo validirati ako nema forme
-             }
-             console.log("Pokrećem validaciju forme...");
+                for (let i = 0; i < numTrailPoints; i++) {
+                    const point = document.createElement('div');
+                    point.className = 'cursor-trail-point';
+                    point.style.cssText = `
+                        position: fixed;
+                        width: ${pointSizeStart - i * 1.5}px;
+                        height: ${pointSizeStart - i * 1.5}px;
+                        background-color: ${lightPurpleRGBA}${pointOpacityStart - i * 0.05});
+                        border-radius: 50%;
+                        pointer-events: none;
+                        left: -50px; top: -50px; /* Početna pozicija izvan ekrana */
+                        z-index: 9998;
+                        transition: transform ${baseDelay + i * 15}ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease;
+                        transform: translate(-50%, -50%);
+                        opacity: 1;
+                    `;
+                    body.appendChild(point);
+                    trailElementsData.push({ element: point, x: -50, y: -50 });
+                }
+            } else {
+                // Ako trail elementi već postoje, samo ih koristimo
+                trailElements.forEach(el => {
+                    trailElementsData.push({ element: el, x: -50, y: -50 });
+                });
+            }
 
-             let isValid = true;
-             let firstErrorElement = null; // Za fokusiranje na prvo polje s greškom
+            window.addEventListener('mousemove', (e) => {
+                mousePos.x = e.clientX;
+                mousePos.y = e.clientY;
+            });
 
-             // Pronađi sve elemente koji zahtijevaju validaciju
-             const inputsAndSelects = registrationForm.querySelectorAll('input[required], select[required]');
-             const checkboxes = registrationForm.querySelectorAll('input[type="checkbox"][required]');
+            const updateTrail = () => {
+                // Ažuriranje glavnog kursora
+                currentCursorPos.x += (mousePos.x - currentCursorPos.x) * trailSpeed;
+                currentCursorPos.y += (mousePos.y - currentCursorPos.y) * trailSpeed;
+                if (cursor) {
+                    cursor.style.left = `${currentCursorPos.x}px`;
+                    cursor.style.top = `${currentCursorPos.y}px`;
+                }
 
-             // Očisti prethodne stilove grešaka
-             registrationForm.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
-             registrationForm.querySelectorAll('.text-red-500').forEach(el => el.classList.remove('text-red-500'));
-             registrationForm.querySelectorAll('.form-label-register.text-red-500').forEach(el => el.classList.remove('text-red-500')); // Specifično za labele
+                // Ažuriranje trail točkica
+                trailElementsData.forEach((p, i) => {
+                    let targetX = i === 0 ? currentCursorPos.x : trailElementsData[i - 1].x;
+                    let targetY = i === 0 ? currentCursorPos.y : trailElementsData[i - 1].y;
+                    p.x = targetX;
+                    p.y = targetY;
+                    p.element.style.left = `${p.x}px`;
+                    p.element.style.top = `${p.y}px`;
+                });
+                requestAnimationFrame(updateTrail);
+            };
+            requestAnimationFrame(updateTrail); // Pokreni animaciju za trail
 
-             // Provjera input i select polja
-             inputsAndSelects.forEach(field => {
-                 let isFieldValid = true;
-                 const label = registrationForm.querySelector(`label[for="${field.id}"]`);
+            document.addEventListener('mouseleave', () => {
+                if(cursor) cursor.style.opacity = '0';
+                trailElementsData.forEach(p => p.element.style.opacity = '0');
+            });
+            document.addEventListener('mouseenter', () => {
+                if(cursor) cursor.style.opacity = '1';
+                trailElementsData.forEach(p => p.element.style.opacity = '1');
+            });
+            // --- Kraj Custom Cursor & Trail ---
 
-                 if (field.id.startsWith('dob-')) {
-                      // Preskačemo pojedinačnu provjeru DD/MM/YYYY ovdje, provjerit ćemo skupa kasnije
-                 } else if (!field.value.trim()) {
-                     isFieldValid = false;
-                     console.warn(`Polje ${field.id || field.name} je prazno.`);
-                 } else if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
-                     isFieldValid = false;
-                     console.warn(`Polje ${field.id || field.name} nema ispravan email format.`);
-                 }
-                 // Dodaj druge specifične provjere ako treba (npr. dužina, format...)
+            // --- PREBACIVANJE AKTIVNE KLASE IZMEĐU GUMBA OSOBNI/POSLOVNI RAČUN ---
+            if(accountTypeButtons.length > 0) {
+                accountTypeButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        accountTypeButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const accountType = button.textContent.includes('Osobni') ? 'personal' : 'business';
+                        console.log('Odabran tip računa:', accountType);
+                        // OVDJE IDE LOGIKA ZA PRIKAZ/SKRIVANJE POLJA OVISNO O TIPU
+                    });
+                });
+            }
 
-                 if (!isFieldValid) {
-                     isValid = false;
-                     field.classList.add('border-red-500');
-                     if (label) {
-                         label.classList.add('text-red-500');
-                     }
-                     // Postavi fokus na prvo polje s greškom
-                     if (!firstErrorElement) {
-                         firstErrorElement = field;
-                     }
-                     // Specifično za wrapper oko select ili phone
-                     const wrapper = field.closest('.select-wrapper, .phone-input-wrapper');
-                     if (wrapper) {
-                         wrapper.classList.add('border-red-500');
-                     }
-                 }
-             });
+            // --- Promjena zastavice i prefiksa za odabranu zemlju ---
+            if (countrySelect && countryFlag && phonePrefix && countryCodeSelector) {
+                countrySelect.addEventListener('change', () => {
+                    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+                    const flagUrl = selectedOption.getAttribute('data-flag');
+                    const prefix = selectedOption.getAttribute('data-prefix') || '+1'; // Fallback prefix
 
-             // Provjera datuma rođenja (skupna)
-             const dobDd = document.getElementById('dob-dd');
-             const dobMm = document.getElementById('dob-mm');
-             const dobYyyy = document.getElementById('dob-yyyy');
-             if (dobDd && dobMm && dobYyyy && dobDd.hasAttribute('required')) { // Provjeri postoji li i je li required
-                 const ddVal = dobDd.value.trim();
-                 const mmVal = dobMm.value.trim();
-                 const yyyyVal = dobYyyy.value.trim();
-                 if (!ddVal || !mmVal || !yyyyVal) {
-                     isValid = false;
-                     console.warn("Datum rođenja nije potpun.");
-                     dobDd.classList.add('border-red-500');
-                     dobMm.classList.add('border-red-500');
-                     dobYyyy.classList.add('border-red-500');
-                     const dobLabel = registrationForm.querySelector('label:contains("Datum rođenja")'); // Pokušaj naći labelu
-                     if (dobLabel) dobLabel.classList.add('text-red-500');
-                     if (!firstErrorElement) firstErrorElement = dobDd;
-                 }
-                 // Ovdje može ići detaljnija validacija datuma (npr. je li ispravan dan/mjesec/godina)
-             }
+                    if (flagUrl) {
+                        countryFlag.src = flagUrl;
+                        countryFlag.alt = selectedOption.text;
+                    }
+                    if (prefix) {
+                         // Ovo je samo primjer, ovdje bi se dohvatili točni prefiksi iz podataka
+                        phonePrefix.textContent = selectedOption.getAttribute('data-prefix') || "+?"; // Potrebno dodati atribute data-prefix na <option>
+                    }
+                });
 
-             // Provjera obaveznih checkboxova
-             checkboxes.forEach(checkbox => {
-                 if (!checkbox.checked) {
-                     isValid = false;
-                     console.warn(`Checkbox ${checkbox.id || checkbox.name} nije označen.`);
-                     const label = checkbox.closest('label'); // Pronađi labelu za stiliziranje
-                     if (label) label.classList.add('text-red-500');
-                     if (!firstErrorElement) firstErrorElement = checkbox;
-                 }
-             });
+                // Dodajte listener na selector zemlje za promjenu prefiksa
+                countryCodeSelector.addEventListener('click', () => {
+                    // Možda ovdje želite prikazati dropdown s prefiksima zemalja ako ga implementirate
+                    // Za sada, samo klikom označavamo da je fokus na tom dijelu
+                    console.log('Kliknuto na selector zemlje');
+                    // countrySelect.focus(); // Možda fokusirate select element
+                });
+            }
 
-             console.log("Validacija završena. Rezultat:", isValid);
+            // --- AŽURIRANA Logika za Popup Validacije ---
+            // Funkcija za prikazivanje popup-a
+            function showValidationPopup() {
+                if (validationPopupOverlay) {
+                    console.log("Prikazujem validation popup...");
+                    validationPopupOverlay.style.display = 'flex';
+                    // Centriramo popup ako je potrebno (obično se rješava CSS-om)
+                } else {
+                    console.error("Validation popup overlay element nije pronađen za prikaz!");
+                }
+            }
 
-             // Fokusiraj prvo polje s greškom ako forma nije validna
-             if (!isValid && firstErrorElement) {
-                 console.log("Fokusiram prvo polje s greškom:", firstErrorElement.id || firstErrorElement.name);
-                 firstErrorElement.focus();
-             }
+            // Funkcija za skrivanje popup-a
+            function hideValidationPopup() {
+                if (validationPopupOverlay) {
+                    validationPopupOverlay.style.display = 'none';
+                }
+            }
 
-             return isValid;
-         }
+            // Funkcija za validaciju registracijske forme
+            function validateRegistrationForm() {
+                if (!registrationForm) {
+                    console.error("Forma nije pronađena za validaciju!");
+                    return false; // Ne možemo validirati ako nema forme
+                }
+                console.log("Pokrećem validaciju forme...");
 
-         // Dodaj event listener na gumb "Dalje" SAMO AKO GUMB POSTOJI
-         if (daljeButton) {
-             console.log("Dodajem event listener na gumb 'Dalje'.");
-             daljeButton.addEventListener('click', (event) => {
-                 console.log("Gumb 'Dalje' kliknut!");
-                 event.preventDefault(); // Uvijek spriječi defaultno ponašanje
+                let isValid = true;
+                let firstErrorElement = null; // Za fokusiranje na prvo polje s greškom
 
-                 if (validateRegistrationForm()) {
-                     console.log('Forma je validna, preusmjeravam na userdata.html...');
-                     // Simulate sending data before redirecting (optional)
-                     // alert("Simulacija slanja podataka... Preusmjeravam.");
-                     window.location.href = 'userdata.html'; // Preusmjeri samo ako je validno
-                 } else {
-                     console.error('Forma nije validna. Prikazujem popup.');
-                     showValidationPopup(); // Pokaži popup ako forma nije validna
-                 }
-             });
-         } else {
-             console.error("Nije moguće dodati event listener jer gumb 'Dalje' nije pronađen.");
-         }
+                // Očisti prethodne stilove grešaka
+                registrationForm.querySelectorAll('.border-red-500, .text-red-500, .form-label-register.text-red-500').forEach(el => el.classList.remove('border-red-500', 'text-red-500'));
 
-         // Dodaj event listenere za kontrole popup-a
-         if (validationPopupClose) {
-             validationPopupClose.addEventListener('click', hideValidationPopup);
-         }
-         if (validationPopupOk) {
-             validationPopupOk.addEventListener('click', hideValidationPopup);
-         }
-         // Listener za klik na overlay je već u globalnom listeneru
+                // Provjera input i select polja
+                registrationForm.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+                    let isFieldValid = true;
+                    const label = registrationForm.querySelector(`label[for="${field.id}"]`);
 
-         // Opcionalno: Zatvaranje popup-a tipkom Escape
-         document.addEventListener('keydown', (event) => {
-             if (event.key === 'Escape' && validationPopupOverlay && validationPopupOverlay.style.display !== 'none') {
-                 hideValidationPopup();
-             }
-         });
-         // --- KRAJ: Logika za Popup Validacije ---
+                    // Dodatne provjere za specifična polja
+                    if (field.id.startsWith('dob-')) { // Datum rođenja - provjeravamo ga skupno
+                        return; // Preskačemo pojedinačnu provjeru
+                    }
 
-        console.log("Register page JS loaded successfully.");
-    }); // Kraj DOMContentLoaded
-</script>
-    <!-- Uklonite form-validation.js ako je njegova logika sada uključena ovdje -->
-    <!-- <script src="form-validation.js"></script> -->
+                    const value = field.value.trim();
+                    if (!value) {
+                        isFieldValid = false;
+                        console.warn(`Polje ${field.id || field.name} je prazno.`);
+                    } else if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                        isFieldValid = false;
+                        console.warn(`Polje ${field.id || field.name} nema ispravan email format.`);
+                    } else if (field.type === 'tel' && !/^\+?[0-9\s()-]+$/.test(value)) {
+                         isFieldValid = false;
+                         console.warn(`Polje ${field.id || field.name} ima nevažeći format telefonskog broja.`);
+                    } else if (field.pattern && !new RegExp(field.pattern).test(value)) {
+                        // Provjera za custom pattern (kao kod DD/MM/GGGG)
+                        isFieldValid = false;
+                        console.warn(`Polje ${field.id || field.name} ne odgovara uzorku: ${field.pattern}.`);
+                    }
+
+                    if (!isFieldValid) {
+                        isValid = false;
+                        field.classList.add('border-red-500');
+                        if (label) { label.classList.add('text-red-500'); }
+                        // Fokusiraj prvo polje s greškom
+                        if (!firstErrorElement) { firstErrorElement = field; }
+                        // Stil za wrapper oko select ili phone
+                        const wrapper = field.closest('.select-wrapper, .phone-input-wrapper');
+                        if (wrapper) { wrapper.classList.add('border-red-500'); }
+                    }
+                });
+
+                // Provjera datuma rođenja (skupna)
+                const dobDd = document.getElementById('dob-dd');
+                const dobMm = document.getElementById('dob-mm');
+                const dobYyyy = document.getElementById('dob-yyyy');
+                if (dobDd && dobMm && dobYyyy && (dobDd.hasAttribute('required') || dobMm.hasAttribute('required') || dobYyyy.hasAttribute('required'))) {
+                    const ddVal = dobDd.value.trim();
+                    const mmVal = dobMm.value.trim();
+                    const yyyyVal = dobYyyy.value.trim();
+                    if (!ddVal || !mmVal || !yyyyVal) {
+                        isValid = false;
+                        console.warn("Datum rođenja nije potpun.");
+                        dobDd.classList.add('border-red-500');
+                        dobMm.classList.add('border-red-500');
+                        dobYyyy.classList.add('border-red-500');
+                        // Pokušaj pronaći labelu za datum rođenja
+                        const dobLabel = Array.from(registrationForm.querySelectorAll('.form-label-register')).find(label => label.getAttribute('for')?.startsWith('dob-'));
+                        if (dobLabel) { dobLabel.classList.add('text-red-500'); }
+                        if (!firstErrorElement) { firstErrorElement = dobDd; }
+                    } else {
+                         // Dodatna validacija ispravnosti datuma (npr. 31.02.2023. nije validno)
+                         const day = parseInt(ddVal, 10);
+                         const month = parseInt(mmVal, 10);
+                         const year = parseInt(yyyyVal, 10);
+                         const dateObj = new Date(year, month - 1, day); // Mjeseci su 0-bazirani u Date objektu
+                         if (dateObj.getFullYear() !== year || dateObj.getMonth() !== month - 1 || dateObj.getDate() !== day) {
+                             isValid = false;
+                             console.warn("Uneseni datum rođenja je nevažeći.");
+                             dobDd.classList.add('border-red-500'); dobMm.classList.add('border-red-500'); dobYyyy.classList.add('border-red-500');
+                             const dobLabel = Array.from(registrationForm.querySelectorAll('.form-label-register')).find(label => label.getAttribute('for')?.startsWith('dob-'));
+                             if (dobLabel) { dobLabel.classList.add('text-red-500'); }
+                             if (!firstErrorElement) { firstErrorElement = dobDd; }
+                         }
+                    }
+                }
+
+                // Provjera obaveznih checkboxova
+                checkboxes.forEach(checkbox => {
+                    if (!checkbox.checked) {
+                        isValid = false;
+                        console.warn(`Checkbox ${checkbox.id || checkbox.name} nije označen.`);
+                        const label = checkbox.closest('label'); // Pronađi labelu za stiliziranje
+                        if (label) { label.classList.add('text-red-500'); } // Dodajemo klasu na labelu
+                        if (!firstErrorElement) { firstErrorElement = checkbox; }
+                    }
+                });
+
+                console.log("Validacija završena. Rezultat:", isValid);
+
+                // Fokusiraj prvo polje s greškom ako forma nije validna
+                if (!isValid && firstErrorElement) {
+                    console.log("Fokusiram prvo polje s greškom:", firstErrorElement.id || firstErrorElement.name);
+                    firstErrorElement.focus();
+                }
+
+                return isValid;
+            }
+
+            // Dodaj event listener na gumb "Dalje"
+            if (daljeButton) {
+                console.log("Dodajem event listener na gumb 'Dalje'.");
+                daljeButton.addEventListener('click', (event) => {
+                    console.log("Gumb 'Dalje' kliknut!");
+                    event.preventDefault(); // Spriječi defaultno ponašanje
+
+                    if (validateRegistrationForm()) {
+                        console.log('Forma je validna, simuliram preusmjeravanje...');
+                        // Ovdje možete dodati AJAX poziv za slanje podataka ako je potrebno prije preusmjeravanja
+                        // alert("Podaci uspješno validirani!");
+                        window.location.href = 'userdata.html'; // Preusmjeri na sljedeći korak
+                    } else {
+                        console.error('Forma nije validna. Prikazujem popup.');
+                        showValidationPopup(); // Pokaži popup ako forma nije validna
+                    }
+                });
+            } else {
+                console.error("Nije moguće dodati event listener jer gumb 'Dalje' nije pronađen.");
+            }
+
+            // Dodaj event listenere za kontrole popup-a
+            if (validationPopupClose) { validationPopupClose.addEventListener('click', hideValidationPopup); }
+            if (validationPopupOk) { validationPopupOk.addEventListener('click', hideValidationPopup); }
+            // Listener za klik na overlay je već u globalnom listeneru
+
+            // Opcionalno: Zatvaranje popup-a tipkom Escape
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && validationPopupOverlay && validationPopupOverlay.style.display !== 'none') {
+                    hideValidationPopup();
+                }
+            });
+            // --- KRAJ: Logika za Popup Validacije ---
+
+
+            console.log("Register page JS initialization complete.");
+        }); // Kraj DOMContentLoaded
+    </script>
 
 </body>
 </html>
