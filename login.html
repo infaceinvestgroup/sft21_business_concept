@@ -19,7 +19,8 @@
 
     <!-- Stilovi za Login Stranicu -->
     <style>
-        /* ===== POZADINSKA ANIMACIJA ===== */
+
+/* ===== POZADINSKA ANIMACIJA ===== */
 canvas#network-canvas {
     display: block;
     position: fixed;
@@ -27,6 +28,7 @@ canvas#network-canvas {
     left: 0;
     z-index: -1;
     pointer-events: none;
+    background-color: #0d0118; /* Tamna pozadina koju ste imali */
 }
 
 
@@ -378,15 +380,13 @@ canvas#network-canvas {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('network-canvas');
-    const pointer = document.querySelector('.custom-pointer');
-
-    if (!canvas || !pointer) {
-        return;
-    }
+    if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const particleOptions = {
+    const mouse = { x: null, y: null };
+
+    const options = {
         particleColor: "rgba(128, 255, 0, 0.85)",
         lineColor: "rgba(170, 0, 255, 0.8)",
         particleAmount: 120,
@@ -398,16 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
         particleSpeed: 0.25
     };
 
-    let pointerX = 0, pointerY = 0;
-    const pointerSpeed = 0.1;
-
-    let mouse = { x: 0, y: 0 };
-
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
     const resizeCanvas = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -415,14 +405,23 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
             this.z = Math.random() * 2 - 1;
-            this.radius = particleOptions.defaultRadius * (1 + this.z * 0.5);
-            this.vx = (Math.random() - 0.5) * particleOptions.particleSpeed;
-            this.vy = (Math.random() - 0.5) * particleOptions.particleSpeed;
+            this.radius = options.defaultRadius * (1 + this.z * 0.5);
+            this.vx = (Math.random() - 0.5) * options.particleSpeed;
+            this.vy = (Math.random() - 0.5) * options.particleSpeed;
         }
 
         draw() {
@@ -434,13 +433,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dy = this.y - mouse.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                if (dist < particleOptions.mouseInteractionRadius) {
-                    const effect = (1 - dist / particleOptions.mouseInteractionRadius);
-                    finalRadius += effect * particleOptions.mouseEffectStrength;
+                if (dist < options.mouseInteractionRadius) {
+                    const effect = (1 - dist / options.mouseInteractionRadius);
+                    finalRadius += effect * options.mouseEffectStrength;
                     opacity += effect * 0.5;
                 }
             }
-
+            
             ctx.beginPath();
             ctx.arc(this.x, this.y, finalRadius, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(128, 255, 0, ${opacity * 0.85})`;
@@ -460,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initParticles = () => {
         particles = [];
-        for (let i = 0; i < particleOptions.particleAmount; i++) {
+        for (let i = 0; i < options.particleAmount; i++) {
             particles.push(new Particle());
         }
     };
@@ -473,14 +472,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const p2 = particles[j];
                 const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 
-                if (dist < particleOptions.linkRadius) {
-                    let opacity = 1 - (dist / particleOptions.linkRadius);
+                if (dist < options.linkRadius) {
+                    let opacity = 1 - (dist / options.linkRadius);
                     opacity *= pulse;
 
                     if (mouse.x !== null) {
                        const distToMouse1 = Math.sqrt(Math.pow(p1.x - mouse.x, 2) + Math.pow(p1.y - mouse.y, 2));
                        const distToMouse2 = Math.sqrt(Math.pow(p2.x - mouse.x, 2) + Math.pow(p2.y - mouse.y, 2));
-                       if(distToMouse1 < particleOptions.mouseInteractionRadius || distToMouse2 < particleOptions.mouseInteractionRadius) {
+                       if(distToMouse1 < options.mouseInteractionRadius || distToMouse2 < options.mouseInteractionRadius) {
                            opacity = Math.min(1, opacity + 0.5);
                        }
                     }
@@ -489,35 +488,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.moveTo(p1.x, p1.y);
                     ctx.lineTo(p2.x, p2.y);
                     ctx.strokeStyle = `rgba(170, 0, 255, ${opacity * 0.5})`;
-                    ctx.lineWidth = particleOptions.lineWidth;
+                    ctx.lineWidth = options.lineWidth;
                     ctx.stroke();
                 }
             }
         }
     };
-
-    function mainLoop() {
+    
+    const animate = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach(p => p.update());
         drawLines();
         particles.forEach(p => p.draw());
-
-        pointerX += (mouse.x - pointerX) * pointerSpeed;
-        pointerY += (mouse.y - pointerY) * pointerSpeed;
-        pointer.style.left = pointerX + 'px';
-        pointer.style.top = pointerY + 'px';
-
-        requestAnimationFrame(mainLoop);
-    }
-
-    const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, .language-trigger, .language-item, label[for]');
-    interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => pointer.classList.add('hover'));
-        el.addEventListener('mouseleave', () => pointer.classList.remove('hover'));
-    });
+        requestAnimationFrame(animate);
+    };
 
     initParticles();
-    mainLoop();
+    animate();
 });
 </script>
 
