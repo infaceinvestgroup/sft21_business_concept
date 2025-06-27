@@ -607,19 +607,33 @@
 
         // --- PODACI O ZEMLJAMA (UKLJUČUJUĆI POZIVNE BROJEVE) ---
         const countriesData = [
-            { code: 'GB', name: 'Engleska', flagUrl: 'https://flagcdn.com/w20/gb.png', phonePrefix: '+44' },
             { code: 'HR', name: 'Hrvatska', flagUrl: 'https://flagcdn.com/w20/hr.png', phonePrefix: '+385' },
             { code: 'RS', name: 'Srbija', flagUrl: 'https://flagcdn.com/w20/rs.png', phonePrefix: '+381' },
             { code: 'SI', name: 'Slovenija', flagUrl: 'https://flagcdn.com/w20/si.png', phonePrefix: '+386' },
-            { code: 'RO', name: 'Rumunjska', flagUrl: 'https://flagcdn.com/w20/ro.png', phonePrefix: '+40' },
+            { code: 'BA', name: 'Bosna i Hercegovina', flagUrl: 'https://flagcdn.com/w20/ba.png', phonePrefix: '+387' },
+            { code: 'MK', name: 'Makedonija', flagUrl: 'https://flagcdn.com/w20/mk.png', phonePrefix: '+389' },
+            { code: 'ME', name: 'Crna Gora', flagUrl: 'https://flagcdn.com/w20/me.png', phonePrefix: '+382' },
+            { code: 'GB', name: 'Engleska', flagUrl: 'https://flagcdn.com/w20/gb.png', phonePrefix: '+44' },
+            { code: 'RO', name: 'Rumunija', flagUrl: 'https://flagcdn.com/w20/ro.png', phonePrefix: '+40' },
             { code: 'IT', name: 'Italija', flagUrl: 'https://flagcdn.com/w20/it.png', phonePrefix: '+39' },
+            { code: 'AT', name: 'Austrija', flagUrl: 'https://flagcdn.com/w20/at.png', phonePrefix: '+43' },
             { code: 'DE', name: 'Njemačka', flagUrl: 'https://flagcdn.com/w20/de.png', phonePrefix: '+49' },
             { code: 'HU', name: 'Mađarska', flagUrl: 'https://flagcdn.com/w20/hu.png', phonePrefix: '+36' },
+            { code: 'PL', name: 'Poljska', flagUrl: 'https://flagcdn.com/w20/pl.png', phonePrefix: '+48' },
+            { code: 'CZ', name: 'Češka', flagUrl: 'https://flagcdn.com/w20/cz.png', phonePrefix: '+420' },
+            { code: 'SK', name: 'Slovačka', flagUrl: 'https://flagcdn.com/w20/sk.png', phonePrefix: '+421' },
             { code: 'FR', name: 'Francuska', flagUrl: 'https://flagcdn.com/w20/fr.png', phonePrefix: '+33' },
+            { code: 'NL', name: 'Nizozemska', flagUrl: 'https://flagcdn.com/w20/nl.png', phonePrefix: '+31' },
+            { code: 'BE', name: 'Belgija', flagUrl: 'https://flagcdn.com/w20/be.png', phonePrefix: '+32' },            
             { code: 'ES', name: 'Španjolska', flagUrl: 'https://flagcdn.com/w20/es.png', phonePrefix: '+34' },
-            // Dodajte i Bosnu i Hercegovinu ako je potrebna
-            { code: 'BA', name: 'Bosna i Hercegovina', flagUrl: 'https://flagcdn.com/w20/ba.png', phonePrefix: '+387' }
-        ];
+            { code: 'PT', name: 'Portugal', flagUrl: 'https://flagcdn.com/w20/pt.png', phonePrefix: '+351' },
+            { code: 'BG', name: 'Bugarska', flagUrl: 'https://flagcdn.com/w20/bg.png', phonePrefix: '+359' },
+            { code: 'GR', name: 'Grčka', flagUrl: 'https://flagcdn.com/w20/gr.png', phonePrefix: '+30' },
+            { code: 'DK', name: 'Danska', flagUrl: 'https://flagcdn.com/w20/dk.png', phonePrefix: '+45' },
+            { code: 'FI', name: 'Finska', flagUrl: 'https://flagcdn.com/w20/fi.png', phonePrefix: '+358' },
+            { code: 'NO', name: 'Norveška', flagUrl: 'https://flagcdn.com/w20/no.png', phonePrefix: '+47' },
+            { code: 'SE', name: 'Švedska', flagUrl: 'https://flagcdn.com/w20/se.png', phonePrefix: '+46' },
+            ];
 
         // --- ZATVARANJE SVIH OVERLAY ELEMENATA ---
         const closeAllOverlays = (exceptElement = null) => {
