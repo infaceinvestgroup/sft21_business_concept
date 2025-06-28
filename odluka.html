@@ -1,3 +1,14 @@
+U redu, izvinjavam se na komplikacijama. Problem je tvrdoglaviji nego što se činilo. To što se video više ne vidi znači da je zadnja izmjena potpuno poremetila visinu okvira.
+
+Hvala na strpljenju. Idemo na rješenje koje je strukturalno čišće i koje mora raditi. Problem je u tome što se CSS svojstva za omjer stranica videa (kao `padding-bottom`) i za rub (`border`) međusobno "svađaju".
+
+Napravit ćemo malu promjenu u HTML strukturi tako što ćemo video "umotati" u jedan dodatni `<div>` element. To će nam omogućiti da odvojimo stil za rub od stila za veličinu videa, čime ćemo riješiti problem.
+
+Ne trebate ništa sami raditi, samo **još jednom zamijenite cijeli kod** vaše `odluka.html` datoteke s kodom ispod. U njemu sam već napravio sve potrebne izmjene i u HTML-u i u CSS-u.
+
+Ovo je konačna verzija koja bi trebala ispravno prikazivati video s vidljivim kontrolama.
+
+```html
 <!DOCTYPE html>
 <html lang="hr">
 <head>
@@ -129,6 +140,8 @@
         .content-btn .btn-main-text { display: block; }
         .content-btn .btn-sub-text { display: block; font-size: 0.7rem; opacity: 0.8; margin-top: 0.1rem; }
 
+        /* === POČETAK PROMJENA U CSS-u === */
+        
         /* STILOVI ZA VIDEO PLAYER OVERLAY */
         .video-player-overlay {
             display: none; /* Inicijalno skriven */
@@ -141,20 +154,28 @@
             z-index: 1000; /* Iznad svega ostalog */
             justify-content: center;
             align-items: center;
-            padding: 20px; /* Malo prostora od rubova ekrana */
+            padding: 20px;
+            box-sizing: border-box;
         }
-        .video-player-container {
+        
+        /* NOVI WRAPPER koji nosi border i sjenu */
+        .video-player-wrapper {
             position: relative;
             width: 90%;
-            max-width: 1000px; /* Maksimalna širina playera */
+            max-width: 1000px;
+            border: 2px solid var(--fluorescent-green);
+            box-shadow: 0 0 30px rgba(128, 255, 0, 0.5);
+            background-color: #000;
+        }
+
+        /* Kontejner koji drži omjer stranica (aspect ratio) */
+        .video-player-container {
+            position: relative;
+            width: 100%;
             height: 0;
             padding-bottom: 56.25%; /* Za 16:9 aspect ratio */
-            background-color: #000;
-            box-shadow: 0 0 30px rgba(var(--fluorescent-green-rgb, 128,255,0), 0.5);
-            border: 2px solid var(--fluorescent-green);
-            /* === KONAČNI ISPRAVAK OVDJE === */
-            box-sizing: border-box; 
         }
+        
         .video-player-container iframe {
             position: absolute;
             top: 0;
@@ -163,10 +184,11 @@
             height: 100%;
             border: 0;
         }
+        
         .video-player-close-button {
             position: absolute;
             top: -45px;
-            right: -5px;
+            right: 0;
             font-size: 3rem;
             color: var(--fluorescent-green);
             background: none;
@@ -176,13 +198,16 @@
             transition: color 0.3s ease, transform 0.2s ease;
             z-index: 1001;
         }
+        
         .video-player-close-button:hover {
             color: white;
             transform: scale(1.1);
         }
+        
         .video-player-overlay.active {
             display: flex;
         }
+        /* === KRAJ PROMJENA U CSS-u === */
     </style>
 </head>
 
@@ -295,17 +320,18 @@
     </main>
 
     <div id="videoPlayerOverlay" class="video-player-overlay">
-        <div class="video-player-container">
-            <iframe id="youtubePlayer" 
-                    src="" 
-                    title="SFT21 Prezentacija" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen>
-            </iframe>
+        <div class="video-player-wrapper">
+            <div class="video-player-container">
+                <iframe id="youtubePlayer" 
+                        src="" 
+                        title="SFT21 Prezentacija" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+            <button id="closeVideoPlayerButton" class="video-player-close-button" title="Zatvori video">×</button>
         </div>
-        <button id="closeVideoPlayerButton" class="video-player-close-button" title="Zatvori video">×</button>
     </div>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -401,7 +427,6 @@
             const closeVideoPlayerButton = document.getElementById('closeVideoPlayerButton');
             const youtubePlayer = document.getElementById('youtubePlayer');
 
-            // Ovdje je sada ispravno umetnut Vaš link
             const youtubeEmbedUrl = "https://www.youtube.com/embed/xDZNaDX58jg?si=kH8MOv4NJbgzHasT"; 
 
             if (openVideoPlayerButton && videoPlayerOverlay && closeVideoPlayerButton && youtubePlayer) {
@@ -411,32 +436,25 @@
                         alert("Greška: YouTube link nije ispravno postavljen.");
                         return;
                     }
-                    // Postavljamo src sa autoplay parametrom kada se popup otvori
                     youtubePlayer.src = youtubeEmbedUrl + "?autoplay=1&rel=0";
                     videoPlayerOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // Spriječi skrolanje pozadine
+                    document.body.style.overflow = 'hidden';
                 });
 
-                // Funkcija za zatvaranje videa
                 const closeVideo = () => {
                     videoPlayerOverlay.classList.remove('active');
-                    document.body.style.overflow = ''; // Vrati skrolanje pozadine
-                    // Uklanjamo src kako bi se zaustavila reprodukcija videa
+                    document.body.style.overflow = '';
                     youtubePlayer.src = "";
                     
-                    // Skrolaj na gumbe nakon zatvaranja videa
                     const targetElement = document.getElementById('odlukaGumbi');
                     if (targetElement) {
                         targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 };
 
-                // Event listener za gumb za zatvaranje
                 closeVideoPlayerButton.addEventListener('click', closeVideo);
 
-                // Event listener za klik na pozadinu (overlay)
                 videoPlayerOverlay.addEventListener('click', (event) => {
-                    // Zatvori samo ako je kliknuta pozadina, a ne sam player
                     if (event.target === videoPlayerOverlay) { 
                         closeVideo();
                     }
@@ -448,3 +466,4 @@
     </script>
 </body>
 </html>
+```
