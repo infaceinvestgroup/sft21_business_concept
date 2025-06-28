@@ -1558,7 +1558,6 @@ if (starterInfoCloseLink) {
             const maxAmountDo10k = 10000;
             const contactForm = document.querySelector('#contact-form-popup form');
             const contactNameInput = document.getElementById('contact-name-popup');
-           
             const contactEmailInput = document.getElementById('contact-email-popup');
             const contactPhoneInput = document.getElementById('contact-phone-popup');
             const aiChatIcon = document.getElementById('ai-chat-float-icon');
@@ -1571,68 +1570,6 @@ if (starterInfoCloseLink) {
             const userCounterHideBtn = document.getElementById('user-counter-hide-btn');
             const userCounterCloseBtn = document.getElementById('user-counter-close-btn');
             const userCounterShowBtn = document.getElementById('user-counter-show-btn');
-
-            // --- ISPRAVLJEN KOD ZA UPRAVLJANJE EMAIL FORMOM ---
-
-if (starterPackageEmailForm) { 
-    
-    starterPackageEmailForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Sprječava osvježavanje stranice
-
-        const emailInput = document.getElementById('starter-package-email-input');
-        const email = emailInput.value;
-        
-        function isValidEmail(email) {
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return regex.test(email);
-        }
-
-        // U svakom slučaju sakrijemo originalni prozor da se prikaže samo poruka
-        if (starterPackageInfoPopup) {
-            starterPackageInfoPopup.style.display = 'none';
-        }
-
-        if (isValidEmail(email)) {
-            // --- SLUČAJ ISPRAVNOG EMAILA ---
-            const successTitle = 'Informacija';
-            const successMessage = `Vaša email adresa (${email}) je zabilježena. Kontaktirati ćemo Vas pravovremeno.`;
-            
-            if (validationPopup) {
-                validationPopup.innerHTML = `<button class="popup-close">×</button><h4>${successTitle}</h4><p>${successMessage}</p>`;
-                validationPopup.style.display = 'block';
-            }
-            emailInput.value = ''; // Očisti polje nakon uspjeha
-            
-        } else {
-            // --- SLUČAJ POGREŠNOG EMAILA ---
-            const errorTitle = 'Greška';
-            const errorMessage = 'Molimo unesite ispravnu email adresu.';
-
-            if (validationPopup) {
-                validationPopup.innerHTML = `<button class="popup-close">×</button><h4>${errorTitle}</h4><p>${errorMessage}</p>`;
-                validationPopup.style.display = 'block';
-            }
-        }
-        
-        // Listener za X gumb unutar poruke (za ručno zatvaranje)
-        if (validationPopup) {
-            const closeBtn = validationPopup.querySelector('.popup-close');
-            if(closeBtn) {
-                // Kloniramo gumb da izbjegnemo duple evente
-                const newCloseBtn = closeBtn.cloneNode(true);
-                closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
-                newCloseBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    closeAllPopups(); // Pozivamo globalnu funkciju za zatvaranje
-                });
-            }
-        }
-
-        // UVIJEK postavi timer koji će zatvoriti SVE nakon 4 sekunde.
-        // Ovo je ključan ispravak koji rješava problem zatamnjene pozadine.
-        setTimeout(closeAllPopups, 4000);
-    });
-}
             const chooseInvestorTypePopup = document.getElementById('choose-investor-type-popup');
             const investmentDetailsPopup = document.getElementById('investment-details-popup');
             const triggerChooseInvestorTypeBtns = document.querySelectorAll('.trigger-choose-investor-type-popup');
@@ -1963,42 +1900,45 @@ if (starterPackageEmailForm) {
              } else {
                  console.warn("Elementi za Starter Package popup nisu pronađeni.");
              }
-
              if (starterPackageEmailForm && starterPackageEmailInput && validationPopup) {
                  starterPackageEmailForm.addEventListener('submit', (e) => {
                      e.preventDefault();
                      const email = starterPackageEmailInput.value.trim().toLowerCase();
                      let messagePopupContent = '';
+                     let isError = false;
+                     let returnToPopup = 'starter-package-info-popup';
+
+                     // Sakrij originalni popup, prikaži samo poruku
+                     if (starterPackageInfoPopup) starterPackageInfoPopup.style.display = 'none';
 
                      if (email === '' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                         isError = true;
                          messagePopupContent = `<button class="popup-close" data-action="return-to-starter-info">×</button><h4>Greška</h4><p>Molimo unesite ispravnu email adresu.</p>`;
-                         if (validationPopup) {
-                             validationPopup.innerHTML = messagePopupContent;
-                             showPopup(validationPopup, true, 'starter-package-info-popup');
-                         }
                      } else if (submittedEmails.has(email)) {
-                         messagePopupContent = `<button class="popup-close" data-action="return-to-starter-info">×</button><h4>Informacija</h4><p>Vaša email adresa (${email}) je zabilježena. Kontaktirati ćemo Vas pravovremeno.</p>`;
-                         if (validationPopup) {
-                             validationPopup.innerHTML = messagePopupContent;
-                             showPopup(validationPopup, true, 'starter-package-info-popup');
-                         }
+                         isError = true;
+                         messagePopupContent = `<button class="popup-close" data-action="return-to-starter-info">×</button><h4>Informacija</h4><p>Vaša email adresa (${email}) je već zabilježena. Kontaktirat ćemo Vas pravovremeno.</p>`;
                      } else {
+                         // Slučaj uspjeha
                          submittedEmails.add(email);
                          console.log("Email za Starter Package obavijest:", email);
-                         closeAllPopups();
                          messagePopupContent = `<button class="popup-close" aria-label="Close popup">×</button><h4>Hvala!</h4><p>Vaša email adresa (${email}) je uspješno poslana. Obavijestit ćemo Vas.</p>`;
-                         if (validationPopup) {
-                             validationPopup.innerHTML = messagePopupContent;
-                             showPopup(validationPopup);
-                         }
                          starterPackageEmailInput.value = '';
-                          setTimeout(closeAllPopups, 3000);
+                         returnToPopup = null; 
                      }
+                     
+                     if (validationPopup) {
+                        validationPopup.innerHTML = messagePopupContent;
+                        // Koristimo postojeću funkciju za prikaz, koja već upravlja pozadinom
+                        showPopup(validationPopup, isError, returnToPopup);
+                     }
+
+                     // Postavi timer koji zatvara SVE popupe nakon 4 sekunde
+                     setTimeout(closeAllPopups, 4000);
                  });
              } else {
                  console.warn("Forma ili input za Starter Package email nisu pronađeni.");
              }
-
+            
             // --- CHOOSE INVESTOR TYPE & INVESTMENT DETAILS POPUP LOGIC ---
             if (chooseInvestorTypePopup && investmentDetailsPopup && validationPopup && investmentDetailsForm) {
                 
@@ -2380,73 +2320,6 @@ if (starterPackageEmailForm) {
             // investmentDetailsPopup otvori.
     </script>
 
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const checkboxes = document.querySelectorAll('input[name="ip_package_details"]');
-    const ip7Checkbox = document.getElementById("ip7-checkbox-details");
-    const ip7Input = document.getElementById("ip7-custom-amount-details");
-    const totalDisplay = document.getElementById("total-investment-amount-details");
-
-    function calculateCheckboxTotal() {
-        let total = 0;
-        checkboxes.forEach(cb => {
-            if (cb.checked) total += parseInt(cb.value);
-        });
-        return total;
-    }
-
-    function updateTotalDisplay(amount) {
-        totalDisplay.textContent = amount || 0;
-    }
-
-    function updateTotal() {
-        const checkboxTotal = calculateCheckboxTotal();
-        const ip7Checked = ip7Checkbox.checked;
-        const ip7Amount = parseInt(ip7Input.value) || 0;
-
-        if (checkboxTotal >= 5000) {
-            checkboxes.forEach(cb => cb.checked = false);
-            ip7Checkbox.checked = true;
-            ip7Input.disabled = false;
-            ip7Input.value = checkboxTotal;
-            updateTotalDisplay(checkboxTotal);
-        } else if (ip7Checked) {
-            checkboxes.forEach(cb => cb.checked = false);
-            ip7Input.disabled = false;
-            updateTotalDisplay(ip7Amount);
-        } else {
-            ip7Input.disabled = true;
-            ip7Input.value = "";
-            updateTotalDisplay(checkboxTotal);
-        }
-    }
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener("change", updateTotal);
-    });
-
-    ip7Checkbox.addEventListener("change", () => {
-        if (ip7Checkbox.checked) {
-            checkboxes.forEach(cb => cb.checked = false);
-            ip7Input.disabled = false;
-            ip7Input.value = ip7Input.value || 5000;
-            updateTotalDisplay(parseInt(ip7Input.value));
-        } else {
-            ip7Input.disabled = true;
-            ip7Input.value = "";
-            updateTotal();
-        }
-    });
-
-    ip7Input.addEventListener("input", () => {
-        if (ip7Checkbox.checked) {
-            let val = parseInt(ip7Input.value);
-            updateTotalDisplay(!isNaN(val) ? val : 0);
-        }
-    });
-});
-</script>
   
 <script>
     document.addEventListener('DOMContentLoaded', function() {
