@@ -1637,53 +1637,49 @@ if (starterInfoCloseLink) {
             };
 
             const showPopup = (popupContentElement, isErrorPopup = false, returnToPopupId = null) => {
-                 closeAllPopups(); // Važno je da se prvo sve zatvori
-                 if (popupContentElement && popupOverlay && body) {
-                     popupOverlay.style.display = 'flex';
-                     popupContentElement.style.display = 'block';
-                     body.classList.add('overflow-hidden');
-                     setTimeout(() => {
-                     setTimeout(() => {
-                     popupContentElement.scrollTop = 0;
-                     const emailInput = popupContentElement.querySelector('#starter-package-email-input');
-                     if (emailInput) {
-                     emailInput.blur(); // Makni fokus s inputa ako ga je preglednik postavio
-                     }
-                     popupContentElement.focus(); // Postavi fokus na kontejner popupa
-                     }, 50); // Povećavamo odgodu na 50ms                     
-                     // popupContentElement.querySelectorAll('button.popup-close, button[data-action^="return-to-"]').forEach(clickable => {
-                         const newClickable = clickable.cloneNode(true);
-                         clickable.parentNode.replaceChild(newClickable, clickable);
-                         const action = newClickable.getAttribute('data-action');
+                closeAllPopups(); 
+                if (popupContentElement && popupOverlay && body) {
+                    popupOverlay.style.display = 'flex';
+                    popupContentElement.style.display = 'block';
+                    body.classList.add('overflow-hidden');
 
-                        if (action) {
+                    setTimeout(() => {
+                        popupContentElement.scrollTop = 0;
+                        const emailInput = popupContentElement.querySelector('input[type="email"]');
+                        if (emailInput) emailInput.blur();
+                        popupContentElement.focus();
+                    }, 50);
+
+                    // Ispravna logika za dodavanje event listenera
+                    popupContentElement.querySelectorAll('button.popup-close, button[data-action]').forEach(clickable => {
+                        const newClickable = clickable.cloneNode(true);
+                        clickable.parentNode.replaceChild(newClickable, clickable);
+
+                        if (newClickable.classList.contains('popup-close')) {
+                            // Listener za SVE 'X' gumbe
+                            newClickable.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                closeAllPopups();
+                            }, { once: true });
+                        } else if (newClickable.hasAttribute('data-action')) {
+                            // Listener za gumbe s povratnom akcijom
                              newClickable.addEventListener('click', (e) => {
                                  e.preventDefault(); e.stopPropagation();
-                                 if (validationPopup) validationPopup.style.display = 'none';
-
                                  let targetPopupForReturn = null;
-                                 if (returnToPopupId) { // Eksplicitni povratak (npr. nakon greške)
+                                 const action = newClickable.getAttribute('data-action');
+                                 
+                                 if (returnToPopupId) {
                                     targetPopupForReturn = document.getElementById(returnToPopupId);
                                  } else if (action === 'return-to-starter-info') {
                                     targetPopupForReturn = starterPackageInfoPopup;
                                  } else if (action === 'return-to-contact') {
                                     targetPopupForReturn = contactFormPopup;
-                                 } else if (action === 'return-to-choose-investor-type') { 
-                                    targetPopupForReturn = chooseInvestorTypePopup;
-                                 } else if (action === 'return-to-investment-details') { 
-                                    targetPopupForReturn = investmentDetailsPopup;
+                                 } else if (action === 'return-to-investment-details') {
+                                     targetPopupForReturn = investmentDetailsPopup;
                                  }
-                                 else if (action === 'return-to-ip7-input' && ip7AmountInputContainer && ip7AmountInput) {
-                                     if(popupOverlay) popupOverlay.style.display = 'flex'; 
-                                     ip7AmountInputContainer.style.display = 'block';
-                                     ip7AmountInput.focus();
-                                     const parentPopup = ip7AmountInputContainer.closest('.popup-content');
-                                     if (parentPopup) parentPopup.style.display = 'block';
-                                     else if (document.getElementById('individual-package')?.closest('.popup-content')) {
-                                        document.getElementById('individual-package').closest('.popup-content').style.display = 'block';
-                                     }
-                                     return; 
-                                 }
+                                 
+                                 if(validationPopup) validationPopup.style.display = 'none';
 
                                  if (targetPopupForReturn) {
                                      showPopup(targetPopupForReturn);
@@ -1691,18 +1687,14 @@ if (starterInfoCloseLink) {
                                      closeAllPopups();
                                  }
                              }, { once: true });
-                        } else if (newClickable.classList.contains('popup-close')) { 
-                             newClickable.addEventListener('click', (e) => {
-                                e.preventDefault(); e.stopPropagation();
-                                closeAllPopups();
-                             }, { once: true });
                         }
-                     });
-                 } else {
-                     console.warn("Nije moguće prikazati popup. Element nije pronađen:", popupContentElement);
-                 }
-            };
+                    });
 
+                } else {
+                    console.warn("Nije moguće prikazati popup. Element nije pronađen:", popupContentElement);
+                }
+            };
+            
              const hideWidget = () => {
                 if (userCounterWidget && userCounterShowBtn) {
                     userCounterWidget.classList.add('hidden');
