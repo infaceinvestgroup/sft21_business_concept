@@ -1571,57 +1571,66 @@ if (starterInfoCloseLink) {
             const userCounterHideBtn = document.getElementById('user-counter-hide-btn');
             const userCounterCloseBtn = document.getElementById('user-counter-close-btn');
             const userCounterShowBtn = document.getElementById('user-counter-show-btn');
-// --- NOVI KOD ZA UPRAVLJANJE EMAIL FORMOM ---
 
-if (starterPackageEmailForm) { // Koristimo varijablu koju ste već definirali na vrhu skripte
+            // --- ISPRAVLJEN KOD ZA UPRAVLJANJE EMAIL FORMOM ---
+
+if (starterPackageEmailForm) { 
     
     starterPackageEmailForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Sprječava da se stranica osvježi nakon slanja
+        event.preventDefault(); // Sprječava osvježavanje stranice
 
-        // Dohvaćamo elemente koje smo već definirali na vrhu skripte
         const emailInput = document.getElementById('starter-package-email-input');
         const email = emailInput.value;
         
-        // Funkcija za provjeru ispravnosti email adrese
         function isValidEmail(email) {
             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return regex.test(email);
         }
 
+        // U svakom slučaju sakrijemo originalni prozor da se prikaže samo poruka
+        if (starterPackageInfoPopup) {
+            starterPackageInfoPopup.style.display = 'none';
+        }
+
         if (isValidEmail(email)) {
-            // --- SLUČAJ USPJEHA ---
+            // --- SLUČAJ ISPRAVNOG EMAILA ---
             const successTitle = 'Informacija';
             const successMessage = `Vaša email adresa (${email}) je zabilježena. Kontaktirati ćemo Vas pravovremeno.`;
             
-            // Postavljamo naslov i poruku u popup
-            validationPopup.querySelector('h4').textContent = successTitle;
-            validationPopup.querySelector('p').textContent = successMessage;
-
-            // Prikazujemo popup
-            validationPopup.style.display = 'block';
-
-        setTimeout(closeAllPopups, 4000);
+            if (validationPopup) {
+                validationPopup.innerHTML = `<button class="popup-close">×</button><h4>${successTitle}</h4><p>${successMessage}</p>`;
+                validationPopup.style.display = 'block';
+            }
+            emailInput.value = ''; // Očisti polje nakon uspjeha
+            
         } else {
-            // --- SLUČAJ GREŠKE ---
+            // --- SLUČAJ POGREŠNOG EMAILA ---
             const errorTitle = 'Greška';
             const errorMessage = 'Molimo unesite ispravnu email adresu.';
 
-            // Postavljamo naslov i poruku za grešku
-            validationPopup.querySelector('h4').textContent = errorTitle;
-            validationPopup.querySelector('p').textContent = errorMessage;
-
-            // Prikazujemo popup
-            validationPopup.style.display = 'block';
-
-            // Postavljamo timer da ga sakrije nakon 4 sekunde
-            setTimeout(function() {
-                validationPopup.style.display = 'none';
-                // Mali trik: nakon skrivanja, odmah vraćamo naslov na "Informacija" za idući put
-                setTimeout(() => { 
-                    validationPopup.querySelector('h4').textContent = 'Informacija'; 
-                }, 400); // 400ms je vrijeme da se popup animacija završi
-            }, 4000); 
+            if (validationPopup) {
+                validationPopup.innerHTML = `<button class="popup-close">×</button><h4>${errorTitle}</h4><p>${errorMessage}</p>`;
+                validationPopup.style.display = 'block';
+            }
         }
+        
+        // Listener za X gumb unutar poruke (za ručno zatvaranje)
+        if (validationPopup) {
+            const closeBtn = validationPopup.querySelector('.popup-close');
+            if(closeBtn) {
+                // Kloniramo gumb da izbjegnemo duple evente
+                const newCloseBtn = closeBtn.cloneNode(true);
+                closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+                newCloseBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeAllPopups(); // Pozivamo globalnu funkciju za zatvaranje
+                });
+            }
+        }
+
+        // UVIJEK postavi timer koji će zatvoriti SVE nakon 4 sekunde.
+        // Ovo je ključan ispravak koji rješava problem zatamnjene pozadine.
+        setTimeout(closeAllPopups, 4000);
     });
 }
             const chooseInvestorTypePopup = document.getElementById('choose-investor-type-popup');
