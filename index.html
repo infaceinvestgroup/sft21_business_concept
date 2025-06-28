@@ -304,13 +304,13 @@ canvas#network-canvas {
             <button type="submit" id="starter-package-submit-email" class="btn-primary">Pošalji email adresu</button>
         </form>       
     </div>
-            <!-- === DODANI LINK ZA ZATVARANJE POPUPA === -->
-        <a href="#" 
-           onclick="document.getElementById('starter-package-info-popup').style.display='none'; return false;" 
-           style="color: rgb(53, 240, 53); display: block; text-align: center; margin-top: 15px; text-decoration: none;">
-           Zatvori popup
-        </a>
-        <!-- ========================================= -->
+<!-- === ISPRAVLJENI LINK ZA ZATVARANJE POPUPA === -->
+<a href="#" 
+   id="starter-info-close-link"
+   style="color: rgb(53, 240, 53); display: block; text-align: center; margin-top: 15px; text-decoration: none;">
+   Zatvori popup
+</a>
+<!-- ============================================= -->
 
 </div>
         <!-- START: Choose Investor Type Popup -->
@@ -510,7 +510,7 @@ canvas#network-canvas {
     </nav>
 
     <main>
-               <!-- Hero Section -->
+              <!-- Hero Section -->
         <section id="pocetna" class="relative min-h-screen flex items-center justify-center pt-0">
             <div class="container mx-auto px-6 py-24 relative z-10">
                 <div class="flex flex-col md:flex-row items-center">
@@ -538,6 +538,7 @@ canvas#network-canvas {
                     <a href="#o-nama" class="inline-block p-2 text-white opacity-75 hover:opacity-100 transition-opacity duration-300 cursor-pointer"> <i class="fas fa-chevron-down text-2xl"></i> </a>
                 </div>
         </section>
+
         <!-- About Section -->
         <section id="o-nama" class="py-16 relative overflow-hidden">
              <div class="container mx-auto px-6 relative z-10">
@@ -939,13 +940,13 @@ canvas#network-canvas {
             </div>
         </section>
     
-        <section id="investicija" class="py-10 relative overflow-hidden">
+                <section id="investicija" class="py-10 relative overflow-hidden">
             <!-- === DODAN WRAPPER ZA OGRANIČAVANJE ŠIRINE === -->
             <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-16 fade-in">
                     <h2 class="text-3xl md:text-5xl font-bold mb-4">INVESTICIJSKI PAKETI</h2>
                     <div class="w-24 h-1 bg-purple-500 mx-auto mb-8"></div>
-                    <p class="text-xl text-gray-300 max-w-3xl mx-auto font-semibold">Investirajte u projekt sa neograničenim potencijalom</p>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto font-semibold"> Investirajte u projekt sa neograničenim potencijalom </p>
                 </div>
 
                 <section id="jedinstvena-prilika" class="pt-16 pb-8 relative overflow-hidden" style="padding-top: 0;">
@@ -1074,7 +1075,8 @@ canvas#network-canvas {
                     <p>*Napomena: Navedene pogodnosti su na dobrovoljnoj bazi, tako da Vi kao investitor, ukoliko ne želite, ne morate koristiti iste, možete biti i do kraja ostati pasivni investitori, bez ikakvih obaveza prema kompaniji... uz mogućnost da aktivirate nadogradnju svog statusa, naknadno kada god poželite.</p>
                 </div>
             </div>
-        </section>    
+        </section>
+    
         <section id="zasto-investirati" class="py-16 relative overflow-hidden">
             <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-16 fade-in">
@@ -1275,8 +1277,8 @@ canvas#network-canvas {
                         <p>Ukupna kumulativna dobit: vaš iznos x7, kroz neodređeni vremenski period</p>
                         <p><span class="value"><strong>NADOGRADNJA</strong></span></p>
                         <p><span class="label">Limit zarade:</span> <span class="value"><strong>2100 SFC</strong></span></p>
-                        <p><span class="label">Broj SFbodova:</span> <span class="value"></strong>Iznos uplate x 2</strong> </span></p>
-                        <p><span class="value"></strong>21 SFkod</strong></span></p>
+                        <p><span class="label">Broj SFbodova:</span> <span class="value"><strong>Iznos uplate x 2</strong> </span></p>
+                        <p><span class="value"><strong>21 SFkod</strong></span></p>
                     </div>
                 </div>
             </div>
@@ -1536,6 +1538,13 @@ canvas#network-canvas {
             const validationPopup = document.getElementById('validation-popup');
             const contactFormPopup = document.getElementById('contact-form-popup');
             const starterPackageInfoPopup = document.getElementById('starter-package-info-popup');
+           const starterInfoCloseLink = document.getElementById('starter-info-close-link');
+if (starterInfoCloseLink) {
+    starterInfoCloseLink.addEventListener('click', (event) => {
+        event.preventDefault(); // Sprječava skok stranice na vrh
+        closeAllPopups();
+    });
+}
             const starterPackageSelectBtns = document.querySelectorAll('.starter-package-select-btn');
             const starterPackageEmailForm = document.getElementById('starter-package-email-form');
             const starterPackageEmailInput = document.getElementById('starter-package-email-input');
@@ -1591,11 +1600,7 @@ if (starterPackageEmailForm) { // Koristimo varijablu koju ste već definirali n
             // Prikazujemo popup
             validationPopup.style.display = 'block';
 
-            // Postavljamo timer da ga sakrije nakon 4 sekunde
-            setTimeout(function() {
-                validationPopup.style.display = 'none';
-            }, 4000); 
-
+        setTimeout(closeAllPopups, 4000);
         } else {
             // --- SLUČAJ GREŠKE ---
             const errorTitle = 'Greška';
