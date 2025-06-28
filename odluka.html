@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Odluka - SFT21 - InFace Invest Group</title>
 
-    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Link to your external CSS file -->
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -157,18 +153,18 @@
             box-shadow: 0 0 30px rgba(var(--fluorescent-green-rgb, 128,255,0), 0.5); /* Sjaj oko playera */
             border: 2px solid var(--fluorescent-green);
         }
-        .video-player-container video {
+        .video-player-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Da se video prikaže cijeli unutar kontejnera */
+            border: 0;
         }
         .video-player-close-button {
             position: absolute;
-            top: -45px; /* Iznad video playera */
-            right: -5px; /* Malo desno od playera */
+            top: -45px;
+            right: -5px;
             font-size: 3rem;
             color: var(--fluorescent-green);
             background: none;
@@ -176,13 +172,12 @@
             cursor: pointer;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
             transition: color 0.3s ease, transform 0.2s ease;
-            z-index: 1001; /* Iznad videa */
+            z-index: 1001;
         }
         .video-player-close-button:hover {
             color: white;
             transform: scale(1.1);
         }
-        /* Pomoćna klasa za skrivanje/prikazivanje overlay-a */
         .video-player-overlay.active {
             display: flex;
         }
@@ -220,17 +215,13 @@
 
       <div class="content-box-wrapper">
         <div class="content-box">
-            <!-- === IZMJENA OVDJE === -->
-            <!-- Stara naredba je sakrivala sadržaj. Nova naredba vraća korisnika na prethodnu stranicu. -->
-<button class="content-box-close" onclick="window.location.href='index.html';" title="Vrati se na početnu stranicu">×</button>
-            <!-- === KRAJ IZMJENE === -->
+            <button class="content-box-close" onclick="window.location.href='index.html';" title="Vrati se na početnu stranicu">×</button>
 
             <p class="subtitle">
                 InFace Invest Group<br>
                 SFT21 BUSINESS CONCEPT<br>
             </p>
             <h2>Poštovanje</h2>
-            <!-- Sadržaj paragrafa iz odluke.html -->
             <p>Prije svega iskreno i od srca veliki pozdrav svima.</p>
             <p>Evo nakon gotovo tri pune godine od privremenog prekida poslovanja ponovo se vraćamo sa nadom da ćemo nastaviti tamo gdje smo, ne našom krivnjom, bili prisiljeni stati.</p>
             <p>Vrlo je važno podsjetiti se, da smo 2018. godine registrirali kompaniju InFace Invest Group LTD, sa kojom smo 2019. godine pokrenuli poslovni koncept časno, pošteno i transparentno sa najboljim namjerama stvaranja jedinstvene online zajednice kroz franšizni model poslovanja, u kojem je bilo zamišljeno da se razvoj kompanije i cjelokupne zajednice, što uključuje;</p>
@@ -301,13 +292,14 @@
     </div>
     </main>
 
-    <!-- HTML za Video Player Overlay -->
     <div id="videoPlayerOverlay" class="video-player-overlay">
         <div class="video-player-container">
-            <video id="sft21Video" width="100%" height="100%" controls controlsList="nodownload noremoteplayback" disablePictureInPicture>
-                <source src="videos/sft21_prezentacija.mp4" type="video/mp4">
-                Vaš preglednik ne podržava video tag.
-            </video>
+            <iframe id="youtubePlayer" 
+                    src="" 
+                    title="SFT21 Prezentacija" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+            </iframe>
         </div>
         <button id="closeVideoPlayerButton" class="video-player-close-button" title="Zatvori video">×</button>
     </div>
@@ -401,35 +393,50 @@
                 }
             }
 
-            // --- Logika za Video Player ---
+            // === Logika za YouTube Video Player ===
             const openVideoPlayerButton = document.getElementById('openVideoPlayerButton');
             const videoPlayerOverlay = document.getElementById('videoPlayerOverlay');
             const closeVideoPlayerButton = document.getElementById('closeVideoPlayerButton');
-            const videoElement = document.getElementById('sft21Video');
+            const youtubePlayer = document.getElementById('youtubePlayer');
 
-            if (openVideoPlayerButton && videoPlayerOverlay && closeVideoPlayerButton && videoElement) {
+            // Ovdje je sada ispravno umetnut Vaš link
+            const youtubeEmbedUrl = "https://www.youtube.com/embed/xDZNaDX58jg?si=kH8MOv4NJbgzHasT"; 
+
+            if (openVideoPlayerButton && videoPlayerOverlay && closeVideoPlayerButton && youtubePlayer) {
+                
                 openVideoPlayerButton.addEventListener('click', () => {
+                    if (youtubeEmbedUrl === "" || youtubeEmbedUrl.includes("VAŠ_YOUTUBE_EMBED_LINK")) {
+                        alert("Greška: YouTube link nije ispravno postavljen.");
+                        return;
+                    }
+                    // Postavljamo src sa autoplay parametrom kada se popup otvori
+                    youtubePlayer.src = youtubeEmbedUrl + "?autoplay=1&rel=0";
                     videoPlayerOverlay.classList.add('active');
                     document.body.style.overflow = 'hidden'; // Spriječi skrolanje pozadine
-                    videoElement.currentTime = 0; // Vrati video na početak
-                    videoElement.play().catch(error => console.error("Greška pri pokretanju videa:", error));
                 });
 
-                closeVideoPlayerButton.addEventListener('click', () => {
+                // Funkcija za zatvaranje videa
+                const closeVideo = () => {
                     videoPlayerOverlay.classList.remove('active');
                     document.body.style.overflow = ''; // Vrati skrolanje pozadine
-                    videoElement.pause();
+                    // Uklanjamo src kako bi se zaustavila reprodukcija videa
+                    youtubePlayer.src = "";
+                    
                     // Skrolaj na gumbe nakon zatvaranja videa
                     const targetElement = document.getElementById('odlukaGumbi');
                     if (targetElement) {
                         targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
-                });
+                };
 
-                // Opcionalno: Zatvori video player klikom na overlay pozadinu
+                // Event listener za gumb za zatvaranje
+                closeVideoPlayerButton.addEventListener('click', closeVideo);
+
+                // Event listener za klik na pozadinu (overlay)
                 videoPlayerOverlay.addEventListener('click', (event) => {
-                    if (event.target === videoPlayerOverlay) { // Ako je kliknut overlay, a ne video player
-                        closeVideoPlayerButton.click(); // Simuliraj klik na X gumb
+                    // Zatvori samo ako je kliknuta pozadina, a ne sam player
+                    if (event.target === videoPlayerOverlay) { 
+                        closeVideo();
                     }
                 });
             }
