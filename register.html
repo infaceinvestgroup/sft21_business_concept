@@ -5,15 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registracija - SFT21 InFace Invest Group</title>
 
-    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Link to your external CSS file (Opcionalno, većina stilova je inline) -->
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
-
     <style>
         /* --- Osnovne Varijable i Stilovi --- */
         :root {
@@ -289,30 +283,21 @@
          }
 </style>
 <body class="bg-gray-900">
-    <!-- Platno za animaciju pozadine -->
     <canvas id="network-canvas"></canvas>
 
-    <!-- Custom Cursor -->
     <div class="custom-cursor"></div>
-    <!-- Trail elementi se dodaju JS-om -->
-
-    <!-- Navigation (Pojednostavljena) -->
     <nav class="fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
                 
-                <!-- Lijeva Strana: Logo -->
                 <div class="flex items-center">
                     <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo" class="h-auto w-12 mr-4">
-                    <a href="index.html" title="Idi na početnu stranicu" class="flex flex-col logo-nav"> <!-- UKLONJENA klasa 'items-center' -->
-                         <span class="small-text">InFace Invest Group</span>
+                    <a href="index.html" title="Idi na početnu stranicu" class="flex flex-col logo-nav"> <span class="small-text">InFace Invest Group</span>
                          <div class="text-white font-bold"> <span class="text-logo-orange">SFT</span>21 </div>
                     </a>
                 </div>
 
-                <!-- Desna Strana: Globus i Gumbi -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <!-- Language Selector - Desktop -->
                     <div class="language-selector relative">
                         <button id="desktop-lang-trigger" class="language-trigger text-white hover:text-fluorescent-green transition-colors duration-300 text-xl">
                             <i class="fas fa-globe"></i>
@@ -330,21 +315,17 @@
                             <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
                         </div>
                     </div>
-                    <!-- Izmijenjeni Gumbi -->
                     <a href="login.html" class="btn-primary register-login-btn text-xs">Prijava</a>
                     <a href="register.html" class="btn-outline register-register-btn text-xs">Registracija</a>
                 </div>
 
-                <!-- Hamburger za Mobilni Prikaz -->
                 <div class="md:hidden">
                     <div class="hamburger"> <span class="bar"></span> <span class="bar"></span> <span class="bar"></span> </div>
                 </div>
             </div>
         </div>
 
-        <!-- Mobilni Meni (Pojednostavljen) -->
         <div class="nav-menu md:hidden">
-             <!-- Mobilni Izbornik Jezika -->
              <div class="mobile-language-selector mt-4 mb-4 border-t border-b border-gray-700 py-2 px-6">
                  <a href="#" id="mobile-lang-trigger" class="block text-center transition-colors duration-300 sft21-nav-link mobile-language-trigger text-gray-300 hover:text-fluorescent-green">
                      <i class="fas fa-globe mr-2"></i> Odaberi jezik <i class="fas fa-chevron-down ml-1 text-xs"></i>
@@ -362,7 +343,6 @@
                     <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
                 </div>
              </div>
-             <!-- Izmijenjeni Gumbi za Mobilni Meni -->
              <div class="flex flex-col space-y-3 px-6 mt-auto pb-4">
                 <a href="login.html" class="btn-primary register-login-btn text-center text-xs">Prijava</a>
                 <a href="register.html" class="btn-outline register-register-btn text-center text-xs">Registracija</a>
@@ -370,25 +350,40 @@
         </div>
     </nav>
 
-    <!-- Glavni Sadržaj Stranice -->
     <main class="registration-section">
         <div class="container mx-auto px-6">
 
-            <!-- Naslov Sekcije -->
             <div class="text-center mb-12 md:mb-16 fade-in">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4">Registracija</h1>
                 <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Pridružite se SFT21 zajednici!<p>
+                <strong>Pridružite se SFT21 zajednici!</strong><p>
                     <p>Vaše mjesto za edukaciju, inspiraciju i nove poslovne prilike.</p>
                     <p>Upoznajte nove ljude, dijelite ideje i rastite zajedno s nama.</p>
                 </div>
 
-            <!-- Glavni Layout: Slika + Forma -->
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
 
-                <!-- Lijeva Kolona: Slika i Pogodnosti -->
                 <div class="w-full lg:w-5/12 fade-in" style="animation-delay: 0.2s;">
-                    <div class="image-placeholder mb-8"></div>
+                    <div class="glass-card p-6 mb-8">
+                        <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>PREPORUKA</strong></h4><br>
+                        <div class="space-y-3">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" id="recommender-no" name="recommender_choice" value="none" class="form-radio-register" checked>
+                                <span class="ml-2 text-sm text-gray-300">Nemam preporučitelja/icu</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" id="recommender-yes" name="recommender_choice" value="has_recommender" class="form-radio-register">
+                                <span class="ml-2 text-sm text-gray-300">Moj/a preporučitelj/ica</span>
+                            </label>
+                        </div>
+                        
+                        <div id="recommender-input-container" class="mt-4 hidden">
+                            <input type="text" id="recommender-details" name="recommender_details" class="form-input-register w-full" placeholder="Podaci o preporučitelju">
+                            <p class="text-xs text-gray-400 mt-2">
+                                Upišite korisničko ime, ili email adresu, ili broj telefona preporučitelja
+                            </p>
+                        </div>
+                    </div>
                     <div class="glass-card p-6">
                         <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>Dobro došli u SFteam!</strong> </h4><br>
                         <p class="text-gray-300 mb-4"><strong>Besplatno se registriraj i koristi usluge naše platforme:</strong></p>
@@ -407,42 +402,15 @@
                         </p>
                     </div>
 
-                    <!-- START: Polje za Preporuku -->
-<div class="glass-card p-6 mt-8">
-    <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>PREPORUKA</strong></h4><br>
-    <div class="space-y-3">
-        <label class="flex items-center cursor-pointer">
-            <input type="radio" id="recommender-no" name="recommender_choice" value="none" class="form-radio-register" checked>
-            <span class="ml-2 text-sm text-gray-300">Nemam preporučitelja/icu</span>
-        </label>
-        <label class="flex items-center cursor-pointer">
-            <input type="radio" id="recommender-yes" name="recommender_choice" value="has_recommender" class="form-radio-register">
-            <span class="ml-2 text-sm text-gray-300">Moj/a preporučitelj/ica</span>
-        </label>
-    </div>
-    
-    <!-- Polje za unos koje se dinamički prikazuje -->
-    <div id="recommender-input-container" class="mt-4 hidden">
-        <input type="text" id="recommender-details" name="recommender_details" class="form-input-register w-full" placeholder="Podaci o preporučitelju">
-        <p class="text-xs text-gray-400 mt-2">
-            Upišite korisničko ime, ili email adresu, ili broj telefona preporučitelja
-        </p>
-    </div>
-</div>
-</div>
+                    <div class="image-placeholder mt-8"></div>
+                </div>
 
-                 <!-- Desna Kolona: Forma -->
                  <div class="w-full lg:w-7/12 fade-in" style="animation-delay: 0.4s;">
-                    <div class="registration-form-container"> <!-- Početak kontejnera forme -->
-
-                        <!-- Gumbi za odabir tipa računa -->
-                        <div class="flex justify-center gap-4 mb-6">
-                            <!-- HTML IZMJENA: Uklonjena klasa 'active' s prvog gumba -->
+                    <div class="registration-form-container"> <div class="flex justify-center gap-4 mb-6">
                             <button type="button" class="btn-account-type">Osobni račun</button>
                             <button type="button" class="btn-account-type">Poslovni račun</button>
                         </div>
 
-                        <!-- Gumbi za društvene mreže -->
                         <div class="space-y-3 mb-8">
                             <a href="#" class="social-login-button">
                                 <i class="fab fa-facebook-f text-blue-600 mr-3 text-xl"></i>
@@ -458,33 +426,25 @@
                             </a>
                         </div>
 
-                        <!-- Naslov "Moji podaci" -->
                         <h4 class="text-lg font-semibold mb-5 text-gray-300 border-t border-gray-700 pt-6 text-center">... ili nastavite popunjavanjem podataka</h4>
 
-                        <!-- Forma -->
                         <form id="registration-main-form" action="#" method="POST" class="space-y-4">
 
-                             <!-- Zemlja - NOVI PRILAGOĐENI SELECTOR -->
                              <div class="form-group">
                                  <label for="country" class="form-label-register">Zemlja*</label>
                                  <div class="custom-select-wrapper">
-                                     <!-- Ovo je skriveni input koji će sadržavati vrijednost za slanje forme -->
                                      <input type="hidden" id="country" name="country" value="HR" required>
                                      
-                                     <!-- Ovo je vidljivi dio na koji korisnik klika -->
                                      <div id="country-select-trigger" class="custom-select-trigger">
                                          <img src="https://flagcdn.com/w20/hr.png" alt="Zastava" class="flag-in-select">
                                          <span class="country-name">Hrvatska</span>
                                      </div>
                                      
-                                     <!-- Ovo je padajuća lista koja se dinamički popunjava -->
                                      <div id="country-select-options" class="custom-select-options">
-                                         <!-- Opcije će biti dodane putem JavaScript-a -->
-                                     </div>
+                                         </div>
                                  </div>
                              </div>
 
-                             <!-- Oslovaljavanje -->
                              <div class="form-group">
                                  <label class="form-label-register">Oslovljavanje*</label>
                                  <div class="flex items-center space-x-6 mt-1">
@@ -499,20 +459,17 @@
                                  </div>
                              </div>
 
-                             <!-- Ime -->
                              <div class="form-group">
                                  <label for="first-name" class="form-label-register">Ime*</label>
                                  <input type="text" id="first-name" name="first_name" required class="form-input-register" placeholder="Unesite vaše ime">
                              </div>
 
-                             <!-- Prezime -->
                              <div class="form-group">
                                  <label for="last-name" class="form-label-register">Prezime*</label>
                                  <input type="text" id="last-name" name="last_name" required class="form-input-register" placeholder="Unesite vaše prezime">
                              </div>
 
-                             <!-- Datum Rođenja -->
-                              <div class="form-group">
+                             <div class="form-group">
                                   <label class="form-label-register">Datum rođenja*</label>
                                   <div class="flex space-x-2">
                                       <input type="text" id="dob-dd" name="dob_dd" required class="form-input-register w-1/3 text-center" placeholder="DD" maxlength="2">
@@ -521,8 +478,7 @@
                                   </div>
                               </div>
 
-                              <!-- Mobilni telefon -->
-                             <div class="form-group">
+                              <div class="form-group">
                                  <label for="mobile-phone" class="form-label-register">Mobilni telefon*</label>
                                   <div class="flex items-center phone-input-wrapper">
                                      <div class="country-code-select">
@@ -533,13 +489,11 @@
                                  </div>
                              </div>
 
-                             <!-- E-mail -->
                              <div class="form-group">
                                  <label for="reg-email" class="form-label-register">E-mail*</label>
                                  <input type="email" id="reg-email" name="email" required class="form-input-register" placeholder="Vaša e-mail adresa">
                              </div>
 
-                              <!-- Checkboxovi -->
                               <div class="space-y-3 pt-4">
                                  <label class="flex items-start cursor-pointer">
                                      <input type="checkbox" name="terms_oup" required class="form-checkbox-register mt-1">
@@ -555,26 +509,20 @@
                                  </label>
                              </div>
 
-                              <!-- Suglasnost Tekst -->
                               <div class="mt-6 text-xs text-gray-400 leading-relaxed">
                               Ovu suglasnost za obradu nevedenih podataka imam pravo u bilo kojem trenutku opozvati za daljnje korištenje, u pisanom obliku slanjem OPOZIVA OSOBNIH PODATAKA putem emaila na adresu <strong>support@infaceinvestgroup.hr</strong>. Do opoziva izvršena obrada podataka temeljem ove suglasnosti ostaje pravovaljana.</div>
 
-                              <!-- Gumbi Dalje/Prekinuti -->
                               <div class="pt-6 space-y-3">
                                 <button type="button" id="dalje-button" class="btn-primary w-full py-3" style="background-color: #80ff00 !important; color: #0e076a !important; border-radius: 50px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 12px 24px; border: none;">Dalje</button>                            </div>
 
-                              <!-- Obvezna polja -->
                               <p class="text-xs text-gray-400 mt-4">*Obvezna polja</p>
 
                         </form>
 
-                    </div> <!-- Kraj kontejnera forme -->
-                </div> <!-- Kraj desne kolone -->
-            </div>
+                    </div> </div> </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="py-16 bg-gray-900 border-t border-gray-800 mt-16">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -620,11 +568,9 @@
         </div>
     </footer>
 
-    <!-- Učitavanje Skripti -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
     
-    <!-- POSTOJEĆA SKRIPTA ZA STRANICU -->
     <script>
     // Helper funkcija za dobivanje apsolutne pozicije
         // Helper funkcija za dobivanje apsolutne pozicije
@@ -883,7 +829,6 @@
     }); 
     </script>
     
-    <!-- DODANA SKRIPTA ZA ANIMACIJU POZADINE -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const canvas = document.getElementById('network-canvas');
