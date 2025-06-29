@@ -402,11 +402,34 @@
                     </div>
                 <div class="glass-card p-6 mt-8">
                     <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important; margin-top: 2rem !important;"><strong>Verifikacija identiteta - KYC</strong></h4><br>
-                    <p class="text-gray-300 mb-4 text-justify">Prije nego li započnete sa procesom registracije želimo Vam napomenuti da ćete u procesu registracije trebati potvrditi svoj identitet, unosom osobnog dokumenta i vlastite fotografije. Ukoliko ne želite potvrditi svoj identitet molimo da prekinete proces registracije.</p>
-                      <p class="text-gray-300 mb-4 text-justify">KYC STANDARD PREDSTAVLJA PROCES U KOJEM SU KLIJENTI OBAVEZNI POTVRDITI SVOJ IDENTITET U SVRHU NASTAVKA LEGALNOG KORIŠTENJA STRANICA NAŠEG PORTALA, KAKO BI SE PRVENSTVENO SPRIJEČILO LAŽNO ILI VIŠESTRUKO REGISTRIRANJE, KRAĐA IDENTITETA, FINANCIJSKE PREVARE, PRANJE NOVCA, FINANCIRANJE TERORIZMA I SL. 
+                    <p class="text-gray-300 mb-4 text-justify"Prije nego li započnete sa procesom registracije želimo Vam napomenuti da ćete u procesu registracije trebati potvrditi svoj identitet, unosom osobnog dokumenta i vlastite fotografije. Ukoliko ne želite potvrditi svoj identitet molimo da prekinete proces registracije.</p>
+                     <p class="text-gray-300 mb-4 text-justify">KYC STANDARD PREDSTAVLJA PROCES U KOJEM SU KLIJENTI OBAVEZNI POTVRDITI SVOJ IDENTITET U SVRHU NASTAVKA LEGALNOG KORIŠTENJA STRANICA NAŠEG PORTALA, KAKO BI SE PRVENSTVENO SPRIJEČILO LAŽNO ILI VIŠESTRUKO REGISTRIRANJE, KRAĐA IDENTITETA, FINANCIJSKE PREVARE, PRANJE NOVCA, FINANCIRANJE TERORIZMA I SL. 
                         </p>
                     </div>
-                </div>
+
+                    <!-- START: Polje za Preporuku -->
+<div class="glass-card p-6 mt-8">
+    <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>PREPORUKA</strong></h4><br>
+    <div class="space-y-3">
+        <label class="flex items-center cursor-pointer">
+            <input type="radio" id="recommender-no" name="recommender_choice" value="none" class="form-radio-register" checked>
+            <span class="ml-2 text-sm text-gray-300">Nemam preporučitelja/icu</span>
+        </label>
+        <label class="flex items-center cursor-pointer">
+            <input type="radio" id="recommender-yes" name="recommender_choice" value="has_recommender" class="form-radio-register">
+            <span class="ml-2 text-sm text-gray-300">Moj/a preporučitelj/ica</span>
+        </label>
+    </div>
+    
+    <!-- Polje za unos koje se dinamički prikazuje -->
+    <div id="recommender-input-container" class="mt-4 hidden">
+        <input type="text" id="recommender-details" name="recommender_details" class="form-input-register w-full" placeholder="Podaci o preporučitelju">
+        <p class="text-xs text-gray-400 mt-2">
+            Upišite korisničko ime, ili email adresu, ili broj telefona preporučitelja
+        </p>
+    </div>
+</div>
+</div>
 
                  <!-- Desna Kolona: Forma -->
                  <div class="w-full lg:w-7/12 fade-in" style="animation-delay: 0.4s;">
@@ -604,6 +627,7 @@
     <!-- POSTOJEĆA SKRIPTA ZA STRANICU -->
     <script>
     // Helper funkcija za dobivanje apsolutne pozicije
+        // Helper funkcija za dobivanje apsolutne pozicije
     function getAbsoluteOffsetTop(element) { let top = 0; let el = element; while (el) { top += el.offsetTop; el = el.offsetParent; } return top; }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -631,6 +655,29 @@
         const hiddenCountryInput = document.getElementById('country');
         const phoneFlagImg = document.getElementById('phone-flag');
         const phonePrefixSpan = document.getElementById('phone-prefix');
+
+        // ===========================================
+        // <<< POČETAK KODA ZA PREPORUČITELJA >>>
+        // ===========================================
+        const recommenderChoiceRadios = document.querySelectorAll('input[name="recommender_choice"]');
+        const recommenderInputContainer = document.getElementById('recommender-input-container');
+
+        if (recommenderChoiceRadios.length > 0 && recommenderInputContainer) {
+            recommenderChoiceRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    // Provjeravamo je li odabran radio gumb s vrijednošću 'has_recommender'
+                    if (document.querySelector('input[name="recommender_choice"]:checked').value === 'has_recommender') {
+                        recommenderInputContainer.classList.remove('hidden');
+                    } else {
+                        recommenderInputContainer.classList.add('hidden');
+                    }
+                });
+            });
+        }
+        // ===========================================
+        // <<< KRAJ KODA ZA PREPORUČITELJA >>>
+        // ===========================================
+
 
         // --- PODACI O ZEMLJAMA (UKLJUČUJUĆI POZIVNE BROJEVE) ---
         const countriesData = [
