@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registracija - SFT21 InFace Invest Group</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Osnovne Varijable i Stilovi --- */
+        :root {
+            --primary-color: #6a1b9a; /* Purple */
+            --secondary-color: #ab47bc; /* Lighter Purple */
+            --accent-color: #c55bd7;
+            --success-color: #7b1fa2;
+            --danger-color: #d81b60;
+            --warning-color: #ce93d8;
+            --light-color: #f3e5f5;
+            --dark-color: #0e076a;
+            --gray-color: #5728ac;
+            --text-color: #e5e7eb;
+            --fluorescent-green: #80ff00; /* Fluorescentno zelena */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0d0118;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--fluorescent-green); /* Glavni naslovi zeleni */
+        }
+        /* --- Navigacija --- */
+        nav.fixed { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background-color: rgba(13, 1, 24, 0.8); border-bottom: 1px solid var(--fluorescent-green); box-shadow: 0 2px 10px rgba(128, 255, 0, 0.2); } /* Zeleni border/shadow */
+        .logo-nav { font-size: 1.75rem; line-height: 1; display: flex; flex-direction: column; align-items: center; }
+        .logo-nav .small-text { font-size: 0.75rem; color: #d1d5db; font-weight: normal; margin-bottom: -0.2em; }
+        .text-logo-orange { color: var(--fluorescent-green); } /* Logo SFT */
+
+        /* Gumbi u Headeru za Register Stranicu */
+        nav a.btn-primary.register-login-btn { background-color: var(--fluorescent-green); color: #0e076a; padding: 6px 16px; line-height: 1.4; border-radius: 50px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; border: 1px solid transparent; font-size: 0.75rem; } /* text-xs */
+        nav a.btn-primary.register-login-btn:hover { background-color: color-mix(in srgb, var(--fluorescent-green) 80%, black 20%); transform: translateY(-2px); }
+        nav a.btn-outline.register-register-btn { background-color: transparent; color: var(--fluorescent-green); border: 1px solid var(--fluorescent-green); padding: 6px 16px; line-height: 1.4; border-radius: 50px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; font-size: 0.75rem; } /* text-xs */
+        nav a.btn-outline.register-register-btn:hover { background-color: rgba(128, 255, 0, 0.1); transform: translateY(-2px); }
+
+        /* Izbornik Jezika */
+        .language-dropdown { display: none; position: absolute; background-color: #1f2937; border: 1px solid var(--fluorescent-green); border-radius: 0.375rem; margin-top: 0.5rem; padding: 0.25rem 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); right: 0; z-index: 60; min-width: 85px; width: auto; }
+        .language-dropdown.active { display: block; }
+        .language-item { display: flex; align-items: center; padding: 0.6rem 1rem; font-size: 0.875rem; color: #d1d5db; white-space: nowrap; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+        .language-item:hover { background-color: var(--primary-color); color: white; }
+        .language-item .flag-image, .language-item .flag-icon { width: 20px; height: 15px; object-fit: cover; margin-right: 0.75rem; flex-shrink: 0; }
+        .language-item span:not(.flag-icon) { font-weight: 500; }
+        .language-dropdown-mobile { display: none; position: static; margin-top: 0.5rem; width: 100%; padding: 0.5rem 0; background-color: rgba(0,0,0,0.3); border-top: 1px solid rgba(128, 255, 0, 0.1); }
+        .language-dropdown-mobile.active { display: block; }
+        .language-dropdown-mobile .language-item { justify-content: center; padding: 0.75rem 1.5rem; }
+        .language-dropdown-mobile .language-item:hover { background-color: var(--primary-color); }
+
+        /* Mobilni Meni */
+        .nav-menu { display: none; }
+        @media (max-width: 768px) {
+            .nav-menu { position: fixed; top: 80px; left: -100%; width: 100%; height: calc(100vh - 80px); background-color: #0d0118; flex-direction: column; transition: all 0.5s ease; padding: 20px 0; z-index: 100; border-right: 1px solid var(--fluorescent-green); display: flex; }
+            .nav-menu.active { left: 0; }
+            .hamburger { display: block; cursor: pointer; }
+            .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px 0; background-color: white; transition: all 0.3s ease; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+            .nav-menu .mobile-language-selector { padding-left: 1.5rem; padding-right: 1.5rem;}
+            .nav-menu .flex-col.space-y-3 { padding-left: 1.5rem; padding-right: 1.5rem;} /* Ispravljen padding za gumbe */
+        }
+        .hamburger { display: none; } @media (max-width: 768px) { .hamburger { display: block; } }
+
+        /* --- Registracijska Stranica --- */
+        .registration-section { padding-top: 10rem; padding-bottom: 4rem; } /* Smanjen gornji padding */
+        .image-placeholder { background-color: rgba(106, 27, 154, 0.1); border: 1px dashed var(--fluorescent-green); border-radius: 15px; display: flex; align-items: center; justify-content: center; min-height: 300px; color: rgba(255, 255, 255, 0.3); font-style: italic; background-image: url('https://images.pexels.com/photos/3184431/pexels-photo-3184431.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; }
+        .benefits-list li { display: flex; align-items: flex-start; margin-bottom: 0.8rem; color: #e5e7eb; line-height: 1.6; }
+        .benefits-list i { color: var(--fluorescent-green); margin-right: 0.8rem; margin-top: 0.25rem; flex-shrink: 0; }
+        .glass-card { background: rgba(106, 27, 154, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--fluorescent-green); border-radius: 15px; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); padding: 1.5rem; } /* Dodan padding za glass-card */
+
+        /* Forma Kontejner */
+        .registration-form-container { background-color: rgba(106, 27, 154, 0.05); border: 1px solid var(--fluorescent-green); /* ZELENI OKVIR */ border-radius: 15px; padding: 2rem 2.5rem; color: var(--text-color); }
+        
+        /* NOVI STILOVI ZA GUMBE TIPA RAČUNA */
+        .btn-account-type {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--fluorescent-green);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            /* Zadano stanje je sada zeleno */
+            background-color: var(--fluorescent-green);
+            color: #0e076a;
+        }
+        .btn-account-type.active {
+            /* Aktivno (kliknuto) stanje je sada prozirno */
+            background-color: transparent;
+            color: var(--fluorescent-green);
+        }
+        .btn-account-type:not(.active):hover {
+            /* Hover na neaktivnom (zelenom) gumbu */
+            background-color: color-mix(in srgb, var(--fluorescent-green) 85%, black 15%);
+        }
+        .btn-account-type.active:hover {
+            /* Hover na aktivnom (prozirnom) gumbu */
+            background-color: rgba(128, 255, 0, 0.1);
+        }
+        
+        .social-login-button { display: flex; align-items: center; justify-content: center; padding: 0.75rem 1rem; border: 1px solid var(--fluorescent-green); border-radius: 8px; color: #e5e7eb; background-color: rgba(128, 255, 0, 0.05); transition: background-color 0.3s, border-color 0.3s; text-decoration: none; font-weight: 500; }
+        .social-login-button:hover { background-color: rgba(128, 255, 0, 0.15); border-color: var(--fluorescent-green); color: white; }
+        .social-login-button i, .social-login-button svg { width: 20px; height: 20px; }
+        .social-login-button i.fa-apple { color: #ccc;} .social-login-button:hover i.fa-apple { color: #fff; }
+        .form-label-register { display: block; margin-bottom: 0.3rem; font-size: 0.875rem; color: #cbd5e1; font-weight: 500; }
+        .form-input-register { width: 100%; padding: 0.75rem 1rem; background-color: rgba(106, 27, 154, 0.1); border: 1px solid var(--fluorescent-green); border-radius: 8px; color: white; transition: border-color 0.3s, box-shadow 0.3s; }
+        .form-input-register:focus { outline: none; border-color: var(--fluorescent-green); box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2); }
+        .form-input-register::placeholder { color: rgba(255, 255, 255, 0.4); }
+        #dob-dd, #dob-mm, #dob-yyyy { text-align: center; }
+        
+        /* NOVI STILOVI ZA CUSTOM COUNTRY SELECTOR */
+        .custom-select-wrapper { position: relative; }
+        .custom-select-trigger {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(106, 27, 154, 0.1);
+            border: 1px solid var(--fluorescent-green);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .custom-select-trigger:hover, .custom-select-trigger.active {
+             border-color: var(--fluorescent-green); box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2);
+        }
+        .custom-select-trigger .flag-in-select { width: 20px; height: auto; margin-right: 0.75rem; }
+        .custom-select-trigger .country-name { flex-grow: 1; }
+        .custom-select-trigger::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--fluorescent-green); transition: transform 0.2s ease; }
+        .custom-select-trigger.active::after { transform: rotate(180deg); }
+        .custom-select-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #1f2937;
+            border: 1px solid var(--fluorescent-green);
+            border-radius: 0 0 8px 8px;
+            margin-top: -1px; /* Da se preklopi s borderom */
+            z-index: 70;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .custom-select-options.active { display: block; }
+        .custom-select-options .option {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .custom-select-options .option:hover { background-color: var(--primary-color); }
+        .custom-select-options .option img { width: 20px; height: 15px; object-fit: cover; margin-right: 0.75rem; }
+        /* Kraj novih stilova */
+        
+        .form-radio-register { appearance: none; -webkit-appearance: none; -moz-appearance: none; width: 1rem; height: 1rem; border: 1px solid var(--fluorescent-green); border-radius: 50%; cursor: pointer; position: relative; transition: border-color 0.2s; margin-top: 0.1rem; }
+        .form-radio-register:checked { border-color: var(--fluorescent-green); }
+        .form-radio-register:checked::after { content: ''; display: block; width: 0.5rem; height: 0.5rem; background-color: var(--fluorescent-green); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .form-radio-register:focus { box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2); }
+        .phone-input-wrapper { display: flex; align-items: center; border: 1px solid var(--fluorescent-green); border-radius: 8px; background-color: rgba(106, 27, 154, 0.1); overflow: hidden; }
+        .country-code-select { display: flex; align-items: center; padding: 0.75rem; background-color: rgba(106, 27, 154, 0.2); cursor: default; /* Nije više klikabilno */ border-right: 1px solid var(--fluorescent-green); color: white; }
+        .country-code-select img { width: 20px; height: auto; margin-right: 0.5rem; }
+        .country-code-select span { font-weight: 500; margin-right: 0.3rem;}
+        .form-input-register-phone { flex-grow: 1; border: none; background: none; padding: 0.75rem 1rem; color: white; }
+        .form-input-register-phone:focus { outline: none; box-shadow: none; }
+        .form-checkbox-register { appearance: none; -webkit-appearance: none; -moz-appearance: none; width: 1rem; height: 1rem; border: 1px solid var(--fluorescent-green); border-radius: 3px; cursor: pointer; position: relative; transition: border-color 0.2s, background-color 0.2s; flex-shrink: 0; }
+        .form-checkbox-register:checked { background-color: var(--fluorescent-green); border-color: var(--fluorescent-green); }
+        .form-checkbox-register:checked::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 0.7rem; color: #0e076a; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .form-checkbox-register:focus { box-shadow: 0 0 0 2px rgba(128, 255, 0, 0.2); }
+        .btn-cancel { background: none; border: 1px solid #6b7280; color: #9ca3af; border-radius: 50px; font-weight: 500; transition: background-color 0.3s, color 0.3s; padding: 0.6rem 1.5rem; font-size: 0.9rem; }
+        .btn-cancel:hover { background-color: #4b5563; color: white; }
+
+        /* Custom Cursor */
+        .custom-cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: rgba(106, 27, 154, 0.6); pointer-events: none; z-index: 9999; mix-blend-mode: difference; left: 0; top: 0; transform: translate(-50%, -50%); transition: transform 0.1s linear, background-color 0.2s ease, scale 0.2s ease; }
+        .cursor-trail-point { position: fixed; width: 12px; height: 12px; background-color: rgba(206, 147, 216, 0.3); border-radius: 50%; pointer-events: none; left: -50px; top: -50px; z-index: 9998; transition: transform 60ms cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s ease; transform: translate(-50%, -50%); opacity: 1; }
+       
+        /* Promjena fonta u Century Gothic */
+        body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
+            font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important;
+        }
+        
+        /* Zeleni naslovi za specifične sekcije */
+        .glass-card h4, 
+        div:contains("Dobro došli u SFteam!"),
+        div:contains("Verifikacija identiteta - KYC") {
+            color: #80ff00 !important;
+        }
+        
+        /* Razmak između sekcija */
+        div:contains("Verifikacija identiteta - KYC") {
+            margin-top: 2rem !important;
+        }
+        
+        /* Zeleni gumb Dalje */
+        button:contains("Dalje"),
+        .btn-primary,
+        [type="submit"] {
+            background-color: #80ff00 !important;
+            color: #0e076a !important;
+        }
+        
+        /* Centrirani tekst */
+        div:contains("... ili nastavite popunjavanjem podataka") {
+            text-align: center !important;
+        }
+
+        /* DODANI STILOVI ZA ANIMACIJU POZADINE */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Postavlja platno iza svog sadržaja */
+        }
+
+    </style>
+</head>
+<style>
+    body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
+        font-family: 'Arial Narrow', Arial, sans-serif !important;
+    }
+        /* Vraćanje zelene boje za globus u headeru */
+        .fa-globe, 
+    .language-trigger i,
+    i.fas.fa-globe {
+        color: #80ff00 !important;
+    }
+    
+    /* Ako je globus unutar buttona ili linka */
+    button i.fas.fa-globe,
+    a i.fas.fa-globe {
+        color: #80ff00 !important;
+    }
+            /* Stanje greške za input/select polja */
+        .form-input-register.border-red-500,
+        .custom-select-trigger.border-red-500, /* DODANO za novi selektor */
+        .phone-input-wrapper.border-red-500 {
+            border-color: #ef4444 !important; /* Tailwind red-500 */
+        }
+        .form-input-register.border-red-500:focus,
+        .custom-select-trigger.border-red-500.active, /* DODANO */
+        .form-input-register-phone:focus + .phone-input-wrapper.border-red-500 {
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3) !important; /* Crveni focus ring */
+        }
+
+        /* Stanje greške za labele (povezane s inputima ili checkboxima) */
+        label.text-red-500 {
+            color: #ef4444 !important; /* Tailwind red-500 */
+        }
+
+        /* Stil za gumb "U redu" u popupu za validaciju */
+        #validation-popup-ok {
+             background-color: var(--fluorescent-green) !important;
+             color: #0e076a !important;
+             border: none;
+             border-radius: 50px;
+             font-weight: 600;
+             padding: 8px 24px; /* Malo manji padding */
+             transition: background-color 0.3s;
+        }
+        #validation-popup-ok:hover {
+             background-color: color-mix(in srgb, var(--fluorescent-green) 85%, black 15%) !important;
+        }
+
+        /* Osiguraj da je popup overlay iznad ostalih elemenata */
+         #validation-popup-overlay {
+            z-index: 9999; /* Visoki z-index */
+         }
+</style>
+<body class="bg-gray-900">
+    <canvas id="network-canvas"></canvas>
+
+    <div class="custom-cursor"></div>
+    <nav class="fixed top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                
+                <div class="flex items-center">
+                    <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo" class="h-auto w-12 mr-4">
+                    <a href="index.html" title="Idi na početnu stranicu" class="flex flex-col logo-nav"> <span class="small-text">InFace Invest Group</span>
+                         <div class="text-white font-bold"> <span class="text-logo-orange">SFT</span>21 </div>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="language-selector relative">
+                        <button id="desktop-lang-trigger" class="language-trigger text-white hover:text-fluorescent-green transition-colors duration-300 text-xl">
+                            <i class="fas fa-globe"></i>
+                        </button>
+                        <div id="desktop-lang-dropdown" class="language-dropdown">
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
+                        </div>
+                    </div>
+                    <a href="login.html" class="btn-primary register-login-btn text-xs">Prijava</a>
+                    <a href="register.html" class="btn-outline register-register-btn text-xs">Registracija</a>
+                </div>
+
+                <div class="md:hidden">
+                    <div class="hamburger"> <span class="bar"></span> <span class="bar"></span> <span class="bar"></span> </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-menu md:hidden">
+             <div class="mobile-language-selector mt-4 mb-4 border-t border-b border-gray-700 py-2 px-6">
+                 <a href="#" id="mobile-lang-trigger" class="block text-center transition-colors duration-300 sft21-nav-link mobile-language-trigger text-gray-300 hover:text-fluorescent-green">
+                     <i class="fas fa-globe mr-2"></i> Odaberi jezik <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                 </a>
+                 <div id="mobile-lang-dropdown" class="language-dropdown-mobile">
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
+                    <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
+                </div>
+             </div>
+             <div class="flex flex-col space-y-3 px-6 mt-auto pb-4">
+                <a href="login.html" class="btn-primary register-login-btn text-center text-xs">Prijava</a>
+                <a href="register.html" class="btn-outline register-register-btn text-center text-xs">Registracija</a>
+             </div>
+        </div>
+    </nav>
+
+    <main class="registration-section">
+        <div class="container mx-auto px-6">
+
+            <div class="text-center mb-12 md:mb-16 fade-in">
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">Registracija</h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                <strong>Pridružite se SFT21 zajednici!</strong><p>
+                    <p>Vaše mjesto za edukaciju, inspiraciju i nove poslovne prilike.</p>
+                    <p>Upoznajte nove ljude, dijelite ideje i rastite zajedno s nama.</p>
+                </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+
+                <div class="w-full lg:w-5/12 fade-in" style="animation-delay: 0.2s;">
+                    <div class="glass-card p-6 mb-8">
+                        <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>PREPORUKA</strong></h4><br>
+                        <div class="space-y-3">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" id="recommender-no" name="recommender_choice" value="none" class="form-radio-register" checked>
+                                <span class="ml-2 text-sm text-gray-300">Nemam preporučitelja/icu</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" id="recommender-yes" name="recommender_choice" value="has_recommender" class="form-radio-register">
+                                <span class="ml-2 text-sm text-gray-300">Moj/a preporučitelj/ica</span>
+                            </label>
+                        </div>
+                        
+                        <div id="recommender-input-container" class="mt-4 hidden">
+                            <input type="text" id="recommender-details" name="recommender_details" class="form-input-register w-full" placeholder="Podaci o preporučitelju">
+                            <p class="text-xs text-gray-400 mt-2">
+                                Upišite korisničko ime, ili email adresu, ili broj telefona preporučitelja
+                            </p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important;"><strong>Dobro došli u SFteam!</strong> </h4><br>
+                        <p class="text-gray-300 mb-4"><strong>Besplatno se registriraj i koristi usluge naše platforme:</strong></p>
+                        <ul class="benefits-list">
+                            <li><i class="fas fa-check-circle"></i>SFnet - poslovno-društvena mreža</li>
+                            <li><i class="fas fa-check-circle"></i>SFshop - online trgovina</li>
+                            <li><i class="fas fa-check-circle"></i>SFured – jedinstveni multifunkcionalni poslovni prostor</li>
+                            <li><i class="fas fa-check-circle"></i>SFkod – besplatni kod za sudjelovanje u nagradnim igrama</li>
+                            <li><i class="fas fa-check-circle"></i>Mogućnost zarade na više načina</li>
+                        </ul>
+                    </div>
+                <div class="glass-card p-6 mt-8">
+                    <h4 style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif !important; color: #80ff00 !important; margin-top: 2rem !important;"><strong>Verifikacija identiteta - KYC</strong></h4><br>
+                    <p class="text-gray-300 mb-4 text-justify"Prije nego li započnete sa procesom registracije želimo Vam napomenuti da ćete u procesu registracije trebati potvrditi svoj identitet, unosom osobnog dokumenta i vlastite fotografije. Ukoliko ne želite potvrditi svoj identitet molimo da prekinete proces registracije.</p>
+                     <p class="text-gray-300 mb-4 text-justify">KYC STANDARD PREDSTAVLJA PROCES U KOJEM SU KLIJENTI OBAVEZNI POTVRDITI SVOJ IDENTITET U SVRHU NASTAVKA LEGALNOG KORIŠTENJA STRANICA NAŠEG PORTALA, KAKO BI SE PRVENSTVENO SPRIJEČILO LAŽNO ILI VIŠESTRUKO REGISTRIRANJE, KRAĐA IDENTITETA, FINANCIJSKE PREVARE, PRANJE NOVCA, FINANCIRANJE TERORIZMA I SL. 
+                        </p>
+                    </div>
+
+                    <div class="image-placeholder mt-8"></div>
+                </div>
+
+                 <div class="w-full lg:w-7/12 fade-in" style="animation-delay: 0.4s;">
+                    <div class="registration-form-container"> <div class="flex justify-center gap-4 mb-6">
+                            <button type="button" class="btn-account-type">Osobni račun</button>
+                            <button type="button" class="btn-account-type">Poslovni račun</button>
+                        </div>
+
+                        <div class="space-y-3 mb-8">
+                            <a href="#" class="social-login-button">
+                                <i class="fab fa-facebook-f text-blue-600 mr-3 text-xl"></i>
+                                <span>Dalje s Facebook</span>
+                            </a>
+                            <a href="#" class="social-login-button">
+                                <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M48 24C48 22.0217 47.2205 20.1217 45.8579 18.7591C44.4953 17.3966 42.5954 16.617 40.617 16.617H24V24H36.417C35.6859 26.6839 33.8541 28.8841 31.3379 30.0195C28.8217 31.1549 25.8652 31.0984 23.383 29.877C20.9008 28.6556 19.1466 26.3738 18.558 23.676C17.9694 20.9782 18.6164 18.144 20.309 16.039L20.334 16.017L14.891 11.904C10.6914 15.7152 8.6045 21.2864 9.66988 26.853C10.7353 32.4196 14.7726 37.0789 20.14 39.047C25.5074 41.0151 31.4688 39.9796 36.001 36.337C40.5332 32.6944 43.1462 27.322 43.1462 21.709H43.17V21.709V18.709C43.17 17.806 43.017 16.916 42.728 16.084L42.707 16.03L40.617 16.617H40.617Z" fill="#4285F4"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4.891 16.039L4.86601 16.063L10.309 20.176C10.309 20.176 10.309 20.176 10.309 20.176C8.61642 22.281 7.96941 25.1152 8.55801 27.813C9.14661 30.5108 10.9008 32.7926 13.383 34.014C15.8652 35.2354 18.8217 35.2919 21.3379 34.1565C23.8541 33.0211 25.6859 30.8209 26.417 28.137H24V21H4.891V16.039Z" fill="#34A853"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.309 4.316L4.891 0.0409999C-0.143953 4.46181 -0.58501 10.9273 2.039 16.039H4.891V16.039L10.309 11.904C9.29903 10.2565 8.99575 8.31933 9.45833 6.47157C9.9209 4.62381 11.1111 3.03775 12.7846 2.03669C14.458 1.03564 16.4818 0.699072 18.4742 1.09967C20.4666 1.50027 22.2864 2.60773 23.628 4.216L29.149 0.0889999C25.9156 -1.27373 22.1584 -1.53293 18.614 -0.846931C15.0696 -0.160931 11.9246 1.44674 9.73199 4.57907L10.309 4.316Z" fill="#FBBC05"/><path fill-rule="evenodd" clip-rule="evenodd" d="M43.17 0H23.628L18.082 4.101C19.9179 2.70817 22.2576 1.95569 24.666 2.0001C31.9815 2.0001 38.0016 7.83503 38.463 15.088L40.617 14.5H43.17V0Z" fill="#EA4335"/></svg>
+                                <span>Dalje s Google</span>
+                            </a>
+                            <a href="#" class="social-login-button">
+                                <i class="fab fa-apple text-black mr-3 text-xl"></i>
+                                <span>Dalje s Apple</span>
+                            </a>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mb-5 text-gray-300 border-t border-gray-700 pt-6 text-center">... ili nastavite popunjavanjem podataka</h4>
+
+                        <form id="registration-main-form" action="#" method="POST" class="space-y-4">
+
+                             <div class="form-group">
+                                 <label for="country" class="form-label-register">Zemlja*</label>
+                                 <div class="custom-select-wrapper">
+                                     <input type="hidden" id="country" name="country" value="HR" required>
+                                     
+                                     <div id="country-select-trigger" class="custom-select-trigger">
+                                         <img src="https://flagcdn.com/w20/hr.png" alt="Zastava" class="flag-in-select">
+                                         <span class="country-name">Hrvatska</span>
+                                     </div>
+                                     
+                                     <div id="country-select-options" class="custom-select-options">
+                                         </div>
+                                 </div>
+                             </div>
+
+                             <div class="form-group">
+                                 <label class="form-label-register">Oslovljavanje*</label>
+                                 <div class="flex items-center space-x-6 mt-1">
+                                     <label class="flex items-center cursor-pointer">
+                                         <input type="radio" name="salutation" value="gosp" class="form-radio-register" checked>
+                                         <span class="ml-2 text-sm text-gray-300">GOSP.</span>
+                                     </label>
+                                     <label class="flex items-center cursor-pointer">
+                                         <input type="radio" name="salutation" value="gda" class="form-radio-register">
+                                         <span class="ml-2 text-sm text-gray-300">GĐA.</span>
+                                     </label>
+                                 </div>
+                             </div>
+
+                             <div class="form-group">
+                                 <label for="first-name" class="form-label-register">Ime*</label>
+                                 <input type="text" id="first-name" name="first_name" required class="form-input-register" placeholder="Unesite vaše ime">
+                             </div>
+
+                             <div class="form-group">
+                                 <label for="last-name" class="form-label-register">Prezime*</label>
+                                 <input type="text" id="last-name" name="last_name" required class="form-input-register" placeholder="Unesite vaše prezime">
+                             </div>
+
+                             <div class="form-group">
+                                  <label class="form-label-register">Datum rođenja*</label>
+                                  <div class="flex space-x-2">
+                                      <input type="text" id="dob-dd" name="dob_dd" required class="form-input-register w-1/3 text-center" placeholder="DD" maxlength="2">
+                                      <input type="text" id="dob-mm" name="dob_mm" required class="form-input-register w-1/3 text-center" placeholder="MM" maxlength="2">
+                                      <input type="text" id="dob-yyyy" name="dob_yyyy" required class="form-input-register w-1/3 text-center" placeholder="GGGG" maxlength="4">
+                                  </div>
+                              </div>
+
+                              <div class="form-group">
+                                 <label for="mobile-phone" class="form-label-register">Mobilni telefon*</label>
+                                  <div class="flex items-center phone-input-wrapper">
+                                     <div class="country-code-select">
+                                         <img src="https://flagcdn.com/w20/hr.png" alt="Zastava" id="phone-flag">
+                                         <span id="phone-prefix">+385</span>
+                                     </div>
+                                     <input type="tel" id="mobile-phone" name="mobile_phone" required class="form-input-register-phone" placeholder="Vaš broj mobitela">
+                                 </div>
+                             </div>
+
+                             <div class="form-group">
+                                 <label for="reg-email" class="form-label-register">E-mail*</label>
+                                 <input type="email" id="reg-email" name="email" required class="form-input-register" placeholder="Vaša e-mail adresa">
+                             </div>
+
+                              <div class="space-y-3 pt-4">
+                                 <label class="flex items-start cursor-pointer">
+                                     <input type="checkbox" name="terms_oup" required class="form-checkbox-register mt-1">
+                                     <span class="ml-2 text-sm text-gray-300">Pročitao/la sam i prihvaćam <a href="#" class="text-fluorescent-green underline hover:text-green-400">Opće uvjete poslovanja</a>.*</span>
+                                 </label>
+                                 <label class="flex items-start cursor-pointer">
+                                     <input type="checkbox" name="terms_privacy" required class="form-checkbox-register mt-1">
+                                      <span class="ml-2 text-sm text-gray-300">Pročitao/la sam i prihvaćam <a href="#" class="text-fluorescent-green underline hover:text-green-400">Izjavu o zaštiti podataka</a> i <a href="#" class="text-fluorescent-green underline hover:text-green-400">Suglasnost za prosljeđivanje i korištenje podataka</a>.*</span>
+                                 </label>
+                                 <label class="flex items-start cursor-pointer">
+                                     <input type="checkbox" name="terms_newsletter" class="form-checkbox-register mt-1">
+                                     <span class="ml-2 text-sm text-gray-300">Da, želim primati obavijesti o najnovijim informacijama i posebnim ponudama, kao i o vaučerima, nagradnim igrama i akcijama putem emaila i telefona. Mogu se odjaviti u bilo kojem trenutku.</span>
+                                 </label>
+                             </div>
+
+                              <div class="mt-6 text-xs text-gray-400 leading-relaxed">
+                              Ovu suglasnost za obradu nevedenih podataka imam pravo u bilo kojem trenutku opozvati za daljnje korištenje, u pisanom obliku slanjem OPOZIVA OSOBNIH PODATAKA putem emaila na adresu <strong>support@infaceinvestgroup.hr</strong>. Do opoziva izvršena obrada podataka temeljem ove suglasnosti ostaje pravovaljana.</div>
+
+                              <div class="pt-6 space-y-3">
+                                <button type="button" id="dalje-button" class="btn-primary w-full py-3" style="background-color: #80ff00 !important; color: #0e076a !important; border-radius: 50px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 12px 24px; border: none;">Dalje</button>                            </div>
+
+                              <p class="text-xs text-gray-400 mt-4">*Obvezna polja</p>
+
+                        </form>
+
+                    </div> </div> </div>
+        </div>
+    </main>
+
+    <footer class="py-16 bg-gray-900 border-t border-gray-800 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-1">
+                    <h3 class="text-2xl font-bold mb-6 text-white">InFace Invest Group</h3>
+                    <p class="text-gray-400 mb-8">Na jakim lokalnim i regionalnim temeljima stvaramo globalnu online zajednica koja povezuje ljude na jedan novi, humaniji i prije svega pošteniji način.</p>
+                    <div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-facebook-f text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-twitter text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-instagram text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-linkedin-in text-xl"></i></a></div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">Brzi linkovi</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#pocetna" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Početna</a></li>
+                        <li><a href="index.html#poslovni-koncept" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Poslovni koncept</a></li>
+                        <li><a href="index.html#startni-paketi" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Startni paketi</a></li>
+                        <li><a href="index.html#investicija" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Investicijski paketi</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Registracija</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Prijava</a></li>
+                        <li><a href="index.html#kontakt" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">Kontakt</h4>
+                    <ul class="space-y-3">
+                        <li class="text-gray-400">InFace Invest Group d.o.o.</li>
+                        <li class="text-gray-400">Rovinj, Hrvatska</li>
+                        <li><a href="mailto:info@sft21.com" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">info@sft21.com</a></li>
+                        <li class="text-gray-400">+385 XX XXX XXXX</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-white">Pravne informacije</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Uvjeti korištenja</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Politika privatnosti</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">GDPR</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Pravila poslovanja</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">© 2025 InFace Invest Group d.o.o. Sva prava pridržana.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/ScrollTrigger.min.js"></script>
+    
+    <script>
+    // Helper funkcija za dobivanje apsolutne pozicije
+        // Helper funkcija za dobivanje apsolutne pozicije
+    function getAbsoluteOffsetTop(element) { let top = 0; let el = element; while (el) { top += el.offsetTop; el = el.offsetParent; } return top; }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM spreman - register.html v3 - Custom Country Select");
+        const body = document.body;
+
+        // --- ELEMENTI ---
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const desktopLangTrigger = document.getElementById('desktop-lang-trigger');
+        const desktopLangDropdown = document.getElementById('desktop-lang-dropdown');
+        const mobileLangTrigger = document.getElementById('mobile-lang-trigger');
+        const mobileLangDropdown = document.getElementById('mobile-lang-dropdown');
+        const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas');
+        const accountTypeButtons = document.querySelectorAll('.btn-account-type');
+        const validationPopupOverlay = document.getElementById('validation-popup-overlay');
+        const validationPopupClose = document.getElementById('validation-popup-close');
+        const validationPopupOk = document.getElementById('validation-popup-ok');
+        const daljeButton = document.getElementById('dalje-button');
+        const registrationForm = document.getElementById('registration-main-form');
+
+        // --- NOVI ELEMENTI ZA COUNTRY SELECTOR ---
+        const countrySelectTrigger = document.getElementById('country-select-trigger');
+        const countrySelectOptions = document.getElementById('country-select-options');
+        const hiddenCountryInput = document.getElementById('country');
+        const phoneFlagImg = document.getElementById('phone-flag');
+        const phonePrefixSpan = document.getElementById('phone-prefix');
+
+        // ===========================================
+        // <<< POČETAK KODA ZA PREPORUČITELJA >>>
+        // ===========================================
+        const recommenderChoiceRadios = document.querySelectorAll('input[name="recommender_choice"]');
+        const recommenderInputContainer = document.getElementById('recommender-input-container');
+
+        if (recommenderChoiceRadios.length > 0 && recommenderInputContainer) {
+            recommenderChoiceRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    // Provjeravamo je li odabran radio gumb s vrijednošću 'has_recommender'
+                    if (document.querySelector('input[name="recommender_choice"]:checked').value === 'has_recommender') {
+                        recommenderInputContainer.classList.remove('hidden');
+                    } else {
+                        recommenderInputContainer.classList.add('hidden');
+                    }
+                });
+            });
+        }
+        // ===========================================
+        // <<< KRAJ KODA ZA PREPORUČITELJA >>>
+        // ===========================================
+
+
+        // --- PODACI O ZEMLJAMA (UKLJUČUJUĆI POZIVNE BROJEVE) ---
+        const countriesData = [
+            { code: 'HR', name: 'Hrvatska', flagUrl: 'https://flagcdn.com/w20/hr.png', phonePrefix: '+385' },
+            { code: 'RS', name: 'Srbija', flagUrl: 'https://flagcdn.com/w20/rs.png', phonePrefix: '+381' },
+            { code: 'SI', name: 'Slovenija', flagUrl: 'https://flagcdn.com/w20/si.png', phonePrefix: '+386' },
+            { code: 'BA', name: 'Bosna i Hercegovina', flagUrl: 'https://flagcdn.com/w20/ba.png', phonePrefix: '+387' },
+            { code: 'MK', name: 'Sjeverna Makedonija', flagUrl: 'https://flagcdn.com/w20/mk.png', phonePrefix: '+389' },
+            { code: 'ME', name: 'Crna Gora', flagUrl: 'https://flagcdn.com/w20/me.png', phonePrefix: '+382' },
+            { code: 'GB', name: 'Engleska', flagUrl: 'https://flagcdn.com/w20/gb.png', phonePrefix: '+44' },
+            { code: 'RO', name: 'Rumunjska', flagUrl: 'https://flagcdn.com/w20/ro.png', phonePrefix: '+40' },
+            { code: 'IT', name: 'Italija', flagUrl: 'https://flagcdn.com/w20/it.png', phonePrefix: '+39' },
+            { code: 'AT', name: 'Austrija', flagUrl: 'https://flagcdn.com/w20/at.png', phonePrefix: '+43' },
+            { code: 'DE', name: 'Njemačka', flagUrl: 'https://flagcdn.com/w20/de.png', phonePrefix: '+49' },
+            { code: 'HU', name: 'Mađarska', flagUrl: 'https://flagcdn.com/w20/hu.png', phonePrefix: '+36' },
+            { code: 'PL', name: 'Poljska', flagUrl: 'https://flagcdn.com/w20/pl.png', phonePrefix: '+48' },
+            { code: 'CZ', name: 'Češka', flagUrl: 'https://flagcdn.com/w20/cz.png', phonePrefix: '+420' },
+            { code: 'SK', name: 'Slovačka', flagUrl: 'https://flagcdn.com/w20/sk.png', phonePrefix: '+421' },
+            { code: 'FR', name: 'Francuska', flagUrl: 'https://flagcdn.com/w20/fr.png', phonePrefix: '+33' },
+            { code: 'NL', name: 'Nizozemska', flagUrl: 'https://flagcdn.com/w20/nl.png', phonePrefix: '+31' },
+            { code: 'BE', name: 'Belgija', flagUrl: 'https://flagcdn.com/w20/be.png', phonePrefix: '+32' },            
+            { code: 'ES', name: 'Španjolska', flagUrl: 'https://flagcdn.com/w20/es.png', phonePrefix: '+34' },
+            { code: 'PT', name: 'Portugal', flagUrl: 'https://flagcdn.com/w20/pt.png', phonePrefix: '+351' },
+            { code: 'BG', name: 'Bugarska', flagUrl: 'https://flagcdn.com/w20/bg.png', phonePrefix: '+359' },
+            { code: 'GR', name: 'Grčka', flagUrl: 'https://flagcdn.com/w20/gr.png', phonePrefix: '+30' },
+            { code: 'DK', name: 'Danska', flagUrl: 'https://flagcdn.com/w20/dk.png', phonePrefix: '+45' },
+            { code: 'FI', name: 'Finska', flagUrl: 'https://flagcdn.com/w20/fi.png', phonePrefix: '+358' },
+            { code: 'NO', name: 'Norveška', flagUrl: 'https://flagcdn.com/w20/no.png', phonePrefix: '+47' },
+            { code: 'SE', name: 'Švedska', flagUrl: 'https://flagcdn.com/w20/se.png', phonePrefix: '+46' },
+        ];
+
+        // --- ZATVARANJE SVIH OVERLAY ELEMENATA ---
+        const closeAllOverlays = (exceptElement = null) => {
+            if (desktopLangDropdown && desktopLangDropdown !== exceptElement && desktopLangDropdown.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); }
+            if (mobileLangDropdown && mobileLangDropdown !== exceptElement && mobileLangDropdown.classList.contains('active')) {
+                mobileLangDropdown.classList.remove('active');
+                if (mobileLangIcon && mobileLangIcon.classList.contains('fa-chevron-up')) { mobileLangIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); }
+            }
+             // DODANO: Zatvaranje country dropdown-a
+            if (countrySelectOptions && countrySelectOptions !== exceptElement && countrySelectOptions.classList.contains('active')) {
+                countrySelectOptions.classList.remove('active');
+                countrySelectTrigger.classList.remove('active');
+            }
+            if (validationPopupOverlay && validationPopupOverlay !== exceptElement && validationPopupOverlay.style.display !== 'none') { hideValidationPopup(); }
+        };
+
+        // --- IZBORNIK JEZIKA (nepromijenjeno) ---
+        if (desktopLangTrigger) { desktopLangTrigger.addEventListener('click', (event) => { event.stopPropagation(); closeAllOverlays(desktopLangDropdown); desktopLangDropdown.classList.toggle('active'); }); }
+        if (mobileLangTrigger) { mobileLangTrigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); closeAllOverlays(mobileLangDropdown); const isActive = mobileLangDropdown.classList.toggle('active'); if(mobileLangIcon) { mobileLangIcon.classList.toggle('fa-chevron-up', isActive); mobileLangIcon.classList.toggle('fa-chevron-down', !isActive); } }); }
+
+        // --- HAMBURGER (nepromijenjeno) ---
+         if (hamburger && navMenu) { hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navMenu.classList.toggle('active'); body.classList.toggle('no-scroll'); closeAllOverlays(); }); }
+
+        // --- LOGIKA ZA PRILAGOĐENI COUNTRY SELECTOR ---
+        if (countrySelectTrigger && countrySelectOptions && hiddenCountryInput) {
+            // 1. Popunjavanje opcija
+            countrySelectOptions.innerHTML = ''; // Očisti postojeće opcije
+            countriesData.forEach(country => {
+                const optionEl = document.createElement('div');
+                optionEl.classList.add('option');
+                optionEl.dataset.code = country.code; // Postavi data-code za lakšu identifikaciju
+                optionEl.innerHTML = `
+                    <img src="${country.flagUrl}" alt="${country.name} zastava">
+                    <span>${country.name}</span>
+                `;
+                optionEl.addEventListener('click', () => {
+                    // Pronađi podatke o odabranoj zemlji
+                    const selectedCountry = countriesData.find(c => c.code === country.code);
+                    if (selectedCountry) {
+                        // Ažuriraj vidljivi trigger
+                        countrySelectTrigger.querySelector('.flag-in-select').src = selectedCountry.flagUrl;
+                        countrySelectTrigger.querySelector('.country-name').textContent = selectedCountry.name;
+                        
+                        // Ažuriraj polje za mobilni telefon
+                        phoneFlagImg.src = selectedCountry.flagUrl;
+                        phonePrefixSpan.textContent = selectedCountry.phonePrefix;
+                        
+                        // Ažuriraj skriveni input za formu
+                        hiddenCountryInput.value = selectedCountry.code;
+                        
+                        // Zatvori dropdown
+                        closeAllOverlays();
+                    }
+                });
+                countrySelectOptions.appendChild(optionEl);
+            });
+
+            // 2. Otvaranje/zatvaranje dropdown-a
+            countrySelectTrigger.addEventListener('click', (event) => {
+                event.stopPropagation();
+                closeAllOverlays(countrySelectOptions); // Zatvori sve ostale
+                countrySelectTrigger.classList.toggle('active');
+                countrySelectOptions.classList.toggle('active');
+            });
+        }
+        
+         // --- GLOBAL CLICK LISTENER ZA ZATVARANJE (Ažuriran) ---
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!target.closest('.language-selector') && !target.closest('.mobile-language-selector') && !target.closest('.custom-select-wrapper')) {
+                closeAllOverlays();
+            }
+             if (validationPopupOverlay && validationPopupOverlay.style.display !== 'none' && event.target === validationPopupOverlay) {
+                 hideValidationPopup();
+             }
+        });
+
+        // --- GSAP Animacije (nepromijenjeno) ---
+         if (typeof gsap !== 'undefined') { /* ... ostaje isto ... */ }
+
+         // --- Custom Cursor (nepromijenjeno) ---
+         if (document.querySelector('.custom-cursor')) { /* ... ostaje isto ... */ }
+
+        // --- Prebacivanje aktivne klase između gumba Osobni/Poslovni račun (Logika ostaje ista) ---
+        if(accountTypeButtons.length > 0) {
+            accountTypeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    accountTypeButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const accountType = button.textContent.includes('Osobni') ? 'personal' : 'business';
+                    console.log('Odabran tip računa:', accountType);
+                });
+            });
+        }
+
+         // --- AŽURIRANA Logika za Popup Validacije ---
+         function showValidationPopup() { if (validationPopupOverlay) { validationPopupOverlay.style.display = 'flex'; } }
+         function hideValidationPopup() { if (validationPopupOverlay) { validationPopupOverlay.style.display = 'none'; } }
+         function validateRegistrationForm() {
+             if (!registrationForm) return false;
+             let isValid = true;
+             let firstErrorElement = null;
+             
+             // Očisti prethodne stilove grešaka
+             registrationForm.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
+             registrationForm.querySelectorAll('.text-red-500').forEach(el => el.classList.remove('text-red-500'));
+
+             // Validacija svih inputa i skrivenog inputa za zemlju
+             registrationForm.querySelectorAll('input[required]').forEach(field => {
+                 const label = registrationForm.querySelector(`label[for="${field.id}"]`);
+                 let wrapper = null;
+                 if (!field.value.trim()) {
+                     isValid = false;
+                     if (!firstErrorElement) firstErrorElement = field;
+                     
+                     // Posebna logika za country selector
+                     if (field.id === 'country') {
+                         wrapper = countrySelectTrigger;
+                     } else {
+                         field.classList.add('border-red-500');
+                         wrapper = field.closest('.phone-input-wrapper');
+                     }
+
+                     if (wrapper) wrapper.classList.add('border-red-500');
+                     if (label) label.classList.add('text-red-500');
+                 }
+             });
+
+             // Ostale validacije (email, datum rođenja, checkboxovi) ostaju iste...
+             const checkboxes = registrationForm.querySelectorAll('input[type="checkbox"][required]');
+             checkboxes.forEach(checkbox => {
+                 if (!checkbox.checked) {
+                     isValid = false;
+                     if (!firstErrorElement) firstErrorElement = checkbox;
+                     const label = checkbox.closest('label');
+                     if (label) label.classList.add('text-red-500');
+                 }
+             });
+
+             if (!isValid && firstErrorElement) {
+                 // Za custom select, ne možemo fokusirati hidden input, pa fokusiramo trigger
+                 if (firstErrorElement.id === 'country') {
+                     countrySelectTrigger.focus(); // Iako div nema native focus, ovo može pomoći screen readerima
+                 } else {
+                     firstErrorElement.focus();
+                 }
+             }
+             return isValid;
+         }
+
+         if (daljeButton) {
+             daljeButton.addEventListener('click', (event) => {
+                 event.preventDefault(); 
+                 if (validateRegistrationForm()) {
+                     window.location.href = 'userdata.html';
+                 } else {
+                     showValidationPopup();
+                 }
+             });
+         }
+         
+         if (validationPopupClose) validationPopupClose.addEventListener('click', hideValidationPopup);
+         if (validationPopupOk) validationPopupOk.addEventListener('click', hideValidationPopup);
+         
+         document.addEventListener('keydown', (event) => {
+             if (event.key === 'Escape') {
+                 closeAllOverlays();
+                 hideValidationPopup();
+             }
+         });
+
+        console.log("Register page JS loaded successfully.");
+    }); 
+    </script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('network-canvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        const options = {
+            particleColor: "rgba(128, 255, 0, 0.85)",
+            lineColor: "rgba(170, 0, 255, 0.8)",
+            particleAmount: 120,
+            defaultRadius: 1.3,
+            linkRadius: 150,
+            particleSpeed: 0.25,
+            lineWidth: 0.4,
+            mouseInteractionRadius: 150,
+            mouseEffectStrength: 2,
+        };
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+             mouse.x = null;
+             mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.z = Math.random() * 2 - 1;
+                this.radius = options.defaultRadius * (1 + this.z * 0.5);
+                this.vx = (Math.random() - 0.5) * options.particleSpeed;
+                this.vy = (Math.random() - 0.5) * options.particleSpeed;
+            }
+
+            draw() {
+                let finalRadius = this.radius;
+                let opacity = 1;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < options.mouseInteractionRadius) {
+                        const effect = (1 - dist / options.mouseInteractionRadius);
+                        finalRadius += effect * options.mouseEffectStrength;
+                        opacity += effect * 0.5;
+                    }
+                }
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, finalRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(128, 255, 0, ${opacity * 0.85})`;
+                ctx.fill();
+            }
+
+            update() {
+                this.x += this.vx * (1 + this.z * 0.5);
+                this.y += this.vy * (1 + this.z * 0.5);
+                if (this.x > canvas.width + 5) this.x = -5;
+                else if (this.x < -5) this.x = canvas.width + 5;
+                if (this.y > canvas.height + 5) this.y = -5;
+                else if (this.y < -5) this.y = canvas.height + 5;
+            }
+        }
+
+        const initParticles = () => {
+            particles = [];
+            for (let i = 0; i < options.particleAmount; i++) {
+                particles.push(new Particle());
+            }
+        };
+
+        const drawLines = () => {
+            let pulse = Math.sin(Date.now() * 0.001) * 0.2 + 0.8;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+                    const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+                    if (dist < options.linkRadius) {
+                        let opacity = 1 - (dist / options.linkRadius);
+                        opacity *= pulse;
+                        if (mouse.x !== null) {
+                           const distToMouse1 = Math.sqrt(Math.pow(p1.x - mouse.x, 2) + Math.pow(p1.y - mouse.y, 2));
+                           const distToMouse2 = Math.sqrt(Math.pow(p2.x - mouse.x, 2) + Math.pow(p2.y - mouse.y, 2));
+                           if(distToMouse1 < options.mouseInteractionRadius || distToMouse2 < options.mouseInteractionRadius) {
+                               opacity = Math.min(1, opacity + 0.5);
+                           }
+                        }
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(170, 0, 255, ${opacity * 0.5})`;
+                        ctx.lineWidth = options.lineWidth;
+                        ctx.stroke();
+                    }
+                }
+            }
+        };
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => p.update());
+            drawLines();
+            particles.forEach(p => p.draw());
+            requestAnimationFrame(animate);
+        };
+
+        initParticles();
+        animate();
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prijava - SFT21 InFace Invest Group</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link na vanjsku CSS datoteku -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Stilovi za Login Stranicu -->
+    <style>
+        /* Osnovni stilovi (mogu biti u style.css) */
+        :root {
+            --primary-color: #6a1b9a; /* Purple */
+            --secondary-color: #ab47bc; /* Lighter Purple */
+            --accent-color: #c55bd7; /* Even Lighter Purple */
+            --text-color: #e5e7eb;
+            --fluorescent-orange: #d9ff00;
+            --success-green: #4ade80;
+            --fluorescent-green: #80ff00;
+            --dark-color: #0e076a;
+            --error-red: #ff4d4d; /* Boja za greške */
+        }
+        body {
+            font-family: 'Arial Narrow', Arial, sans-serif;
+            background-color: #0d0118;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        /* ... (Ovdje možete kopirati i ostale osnovne stilove iz style.css ako želite da sve bude u jednom fajlu, npr. za .logo-nav, nav.fixed, .nav-link, .hamburger, .btn-primary, .btn-outline, itd.) ... */
+
+         /* == STILOVI ZA IZBORNIK JEZIKA (PONOVLJENO RADI SIGURNOSTI) == */
+         .language-dropdown { display: none; position: absolute; background-color: #1f2937; border: 1px solid var(--fluorescent-green); border-radius: 0.375rem; margin-top: 0.5rem; padding: 0.25rem 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); right: 0; z-index: 60; min-width: 80px; }
+        .language-dropdown.active { display: block; }
+        .language-item { display: flex; align-items: center; padding: 0.5rem 0.75rem; font-size: 0.875rem; color: #d1d5db; white-space: nowrap; cursor: pointer; }
+        .language-item:hover { background-color: var(--primary-color); color: white; }
+        .language-item .flag-image, .language-item .flag-icon { width: 20px; height: auto; margin-right: 0.5rem; flex-shrink: 0; }
+        .language-item span:not(.flag-icon) { font-weight: 500; }
+        .language-dropdown-mobile { display: none; background-color: #111827; border-radius: 0.375rem; margin-top: 0.5rem; padding: 0.25rem 0; width: 100%; }
+        .language-dropdown-mobile.active { display: block; }
+        .language-dropdown-mobile .language-item { justify-content: center; padding: 0.5rem 1rem; }
+        .language-dropdown-mobile .language-item:hover { background-color: var(--primary-color); }
+        /* Padajući meni za platforme (ako postoji u headeru) */
+        .sft21-nav-item.dropdown .dropdown-menu:not(.language-dropdown):not(.language-dropdown-mobile) { position: absolute; display: none; /* ... ostali stilovi ... */ }
+        .sft21-nav-item.dropdown:hover .dropdown-menu:not(.language-dropdown):not(.language-dropdown-mobile) { display: block; }
+        .nav-menu .dropdown-menu:not(.language-dropdown-mobile) { display: none; }
+
+        /* Stilovi specifični za login stranicu */
+        body.login-page {
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main.login-main {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px; /* Veći odmak od headera */
+            padding-bottom: 3rem;
+            padding-left: 1rem; /* Padding za manje ekrane */
+            padding-right: 1rem; /* Padding za manje ekrane */
+        }
+        .login-card {
+            position: relative;
+            background-color: rgba(13, 1, 24, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-color);
+            border: 1px solid var(--fluorescent-green);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 28rem;
+            width: 100%;
+            padding: 2rem 2.5rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .login-title {
+            color: var(--fluorescent-green);
+        }
+        .login-subtitle {
+            color: var(--fluorescent-green);
+        }
+        .form-input-login {
+            border: 1px solid var(--fluorescent-green);
+            background-color: rgba(13, 1, 24, 0.6);
+            color: white;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+        }
+        .form-input-login::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .form-input-login:focus {
+            outline: none;
+            border-color: var(--fluorescent-orange);
+            background-color: rgba(13, 1, 24, 0.8);
+            box-shadow: 0 0 0 3px rgba(128, 255, 0, 0.3);
+        }
+        .form-input-login.invalid {
+            border-color: var(--error-red) !important;
+            box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.4) !important;
+        }
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            min-height: 1.25rem; /* Osigurava prostor i sprječava skakanje layouta */
+            line-height: 1.2;
+        }
+
+        .login-label {
+            color: var(--text-color);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        .login-submit-button {
+            background-color: var(--fluorescent-green);
+            color: #0e076a;
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+             cursor: pointer;
+             font-size: 0.875rem;
+        }
+        .login-submit-button:hover {
+            background-color: color-mix(in srgb, var(--fluorescent-green) 85%, black 15%);
+            transform: translateY(-2px);
+        }
+        .form-checkbox-login {
+            color: var(--fluorescent-green);
+            border-color: var(--fluorescent-green);
+            background-color: transparent;
+            height: 1rem; width: 1rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+             cursor: pointer;
+        }
+        .form-checkbox-login:checked {
+             background-color: var(--fluorescent-green);
+             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%230d0118' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+             background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+        }
+        .form-checkbox-login:focus {
+            outline: none;
+             box-shadow: 0 0 0 3px rgba(128, 255, 0, 0.3);
+        }
+         .checkbox-label-login {
+            display: block; font-size: 0.875rem; color: var(--text-color); cursor: pointer; line-height: 1rem;
+        }
+        .login-link { color: var(--fluorescent-green); font-weight: 500; font-size: 0.875rem; }
+        .login-link:hover { color: var(--fluorescent-orange); text-decoration: underline; }
+        .register-prompt-text { font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.5rem; }
+        .register-link { font-weight: 700; color: var(--fluorescent-green); text-transform: uppercase; font-size: 0.875rem; display: inline-block; }
+        .register-link:hover { color: var(--fluorescent-orange); text-decoration: underline; }
+         .checkbox-container { display: flex; align-items: center; }
+         form > div:not(.checkbox-container):not(.text-sm) { margin-bottom: 1rem; } /* Smanjen razmak */
+         .flex.justify-between + div { margin-top: 1.5rem; }
+         hr { margin-top: 1.5rem; margin-bottom: 1.5rem; border-color: rgba(128, 255, 0, 0.2); border-top-width: 1px; border-style: dashed; }
+         .login-close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--fluorescent-green); line-height: 1; text-decoration: none; opacity: 0.7; transition: opacity 0.2s ease, color 0.2s ease; }
+         .login-close-btn:hover { color: var(--fluorescent-orange); opacity: 1; }
+
+         /* Stilovi za Navigaciju (preuzeto iz style.css za potrebe ove stranice) */
+         .logo-nav { font-size: 1.75rem; line-height: 1; display: flex; flex-direction: column; align-items: center; }
+         .logo-nav .small-text { font-size: 0.75rem; color: #d1d5db; font-weight: normal; margin-bottom: -0.2em; }
+         .text-logo-orange { color: var(--fluorescent-green); }
+         nav.fixed { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background-color: rgba(13, 1, 24, 0.8); border-bottom: 1px solid var(--fluorescent-green); box-shadow: 0 2px 10px rgba(128, 255, 0, 0.3); }
+         /* Smanjenje gumba u nav */
+         nav a.btn-primary, nav button.btn-primary, nav a.btn-outline, nav button.btn-outline { padding: 6px 16px !important; font-size: 0.75rem !important; line-height: 1.4 !important; }
+         /* Hamburger i mobilni meni */
+         .hamburger { display: none; cursor: pointer; } .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px 0; background-color: white; transition: all 0.3s ease; }
+         .nav-menu { display: none; }
+         @media (max-width: 768px) { .nav-menu { position: fixed; top: 80px; left: -100%; width: 100%; height: calc(100vh - 80px); background-color: #0d0118; flex-direction: column; transition: all 0.5s ease; padding: 20px; z-index: 100; border-right: 1px solid var(--fluorescent-green); display: flex; } .nav-menu.active { left: 0; } .nav-menu a { color: white; display: block; padding: 0.75rem 1.5rem; text-align: center; transition: background-color 0.3s ease; } .nav-menu a:hover { color: var(--fluorescent-green); background-color: rgba(128, 255, 0, 0.1); } .hamburger { display: block; } .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); } .hamburger.active .bar:nth-child(2) { opacity: 0; } .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); } }
+
+        /* DODANI STILOVI ZA ANIMACIJU POZADINE */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Postavlja platno iza svog sadržaja */
+        }
+    </style>
+</head>
+
+<body class="login-page">
+    
+    <!-- Platno za animaciju pozadine -->
+    <canvas id="network-canvas"></canvas>
+
+    <nav class="fixed top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-6 py-4">
+            <!-- GLAVNI RED HEADERA: LOGO LIJEVO, GUMBI/HAMBURGER DESNO -->
+            <div class="flex justify-between items-center">
+                <!-- Lijeva strana: Logo (Slika + Tekst) -->
+                <div class="flex items-center">
+                    <img src="img/IFIG-logo.png" alt="InFace Invest Group logo" id="site-logo" class="h-auto w-12 mr-4">
+                    <a href="index.html" class="flex flex-col logo-nav">
+                         <span class="small-text">InFace Invest Group</span>
+                         <div class="text-white font-bold"> <span class="text-logo-orange">SFT</span>21 </div>
+                    </a>
+                </div>
+
+                <!-- Desna strana: Desktop Navigacija i Gumbi -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Odabir jezika - Desktop -->
+                    <div class="language-selector relative">
+                        <button id="desktop-lang-trigger" class="language-trigger text-white hover:text-fluorescent-green transition-colors duration-300 text-xl">
+                            <i class="fas fa-globe"></i>
+                        </button>
+                        <div id="desktop-lang-dropdown" class="language-dropdown">
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
+                        </div>
+                    </div>
+                     <!-- Gumb Prijava (onemogućen na login stranici) -->
+                     <button class="btn-outline text-xs opacity-50 cursor-not-allowed" disabled>Prijava</button>
+                     <!-- Gumb Registracija -->
+                     <a href="register.html" class="btn-primary text-xs">Registracija</a>
+                </div>
+
+                <!-- Desna strana: Mobilni Hamburger (vidljiv samo na md i manjim ekranima) -->
+                <div class="md:hidden">
+                    <div class="hamburger"> <span class="bar"></span> <span class="bar"></span> <span class="bar"></span> </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobilni Navigacijski Meni (Skriven na desktopu, prikazan na mobilnom) -->
+        <div class="nav-menu md:hidden">
+             <!-- Mobilni Odabir jezika -->
+             <div class="flex flex-col space-y-3 mt-5 px-6">
+                 <div class="sft21-nav-item dropdown mobile-language-selector mb-3 border-t border-b border-gray-700 py-2">
+                     <a href="#" id="mobile-lang-trigger" class="block text-center transition-colors duration-300 sft21-nav-link mobile-language-trigger text-gray-300 hover:text-fluorescent-green">
+                         <i class="fas fa-globe mr-2"></i> Odaberi jezik <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                     </a>
+                     <div id="mobile-lang-dropdown" class="language-dropdown-mobile">
+                         <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/gb.png" alt="Engleski" class="flag-image"> <span>ENG</span> </a>
+                         <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hr.png" alt="Hrvatski" class="flag-image"> <span>HRV</span> </a>
+                           <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/rs.png" alt="Srpski" class="flag-image"> <span>SRB</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/si.png" alt="Slovenski" class="flag-image"> <span>SLO</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/ro.png" alt="Rumunjski" class="flag-image"> <span>ROU</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/it.png" alt="Talijanski" class="flag-image"> <span>ITA</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/de.png" alt="Njemački" class="flag-image"> <span>DEU</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/hu.png" alt="Mađarski" class="flag-image"> <span>HUN</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/fr.png" alt="Francuski" class="flag-image"> <span>FRA</span> </a>
+                            <a href="#" class="language-item"> <img src="https://flagcdn.com/w20/es.png" alt="Španjolski" class="flag-image"> <span>ESP</span> </a>
+                    </div>
+                 </div>
+                <!-- Gumbi u mobilnom meniju -->
+                <button class="btn-outline text-center text-xs opacity-50 cursor-not-allowed" disabled>Prijava</button>
+                <a href="register.html" class="btn-primary text-center text-xs">Registracija</a>
+            </div>
+        </nav>
+
+   
+    <main class="login-main">
+        <div class="login-card">
+            <a href="index.html" title="Povratak na početnu" class="login-close-btn">×</a>
+
+            <div class="mb-8">
+                <h2 class="text-center text-3xl font-bold login-title">Prijava</h2>
+                <p class="mt-2 text-center text-sm login-subtitle">
+                    Dobrodošli u SFTeam!
+                </p>
+            </div>
+
+            <form id="login-form" method="POST" novalidate>
+                <div>
+                    <label for="username" class="login-label">Korisničko ime ili email</label>
+                    <input id="username" name="username" type="text" autocomplete="username" required
+                           class="form-input-login"
+                           placeholder="Unesite korisničko ime ili email">
+                    <div id="username-error" class="error-message"></div>
+                </div>
+                
+                <div class="text-right text-sm -mt-2 mb-2"> 
+                    <a href="#" class="login-link">
+                        Zaboravili ste korisničko ime/email?
+                    </a>
+                </div>
+
+                <div>
+                    <label for="password" class="login-label">Lozinka</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                           class="form-input-login"
+                           placeholder="Unesite lozinku">
+                    <div id="password-error" class="error-message"></div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="checkbox-container">
+                        <input id="remember-me" name="remember-me" type="checkbox"
+                               class="form-checkbox-login">
+                        <label for="remember-me" class="checkbox-label-login">
+                            Zapamti me
+                        </label>
+                    </div>
+
+                    <div class="text-sm">
+                        <a href="#" class="login-link">
+                            Zaboravili ste lozinku?
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button type="submit" class="login-submit-button">
+                        Prijavi se
+                    </button>
+                </div>
+            </form>
+
+            <hr>
+
+            <div class="text-center">
+                <p class="register-prompt-text">Nemate korisnički račun?</p>
+                <a href="register.html" class="register-link">
+                    REGISTRIRAJ SE
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-16 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                 <div class="md:col-span-1"> <h3 class="text-2xl font-bold mb-6 text-white">InFace Invest Group</h3> <p class="text-gray-400 mb-8">Na jakim lokalnim i regionalnim temeljima stvaramo globalnu online zajednica koja povezuje ljude na jedan novi, humaniji i prije svega pošteniji način.</p> <div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-facebook-f text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-twitter text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-instagram text-xl"></i></a><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-linkedin-in text-xl"></i></a></div> </div>
+                 <div> <h4 class="text-lg font-bold mb-6 text-white">Brzi linkovi</h4> <ul class="space-y-3"> <li><a href="index.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Početna</a></li> <li><a href="index.html#poslovni-koncept" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Poslovni koncept</a></li> <li><a href="index.html#startni-paketi" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Startni paketi</a></li> <li><a href="index.html#investicija" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Investicijski paketi</a></li> <li><a href="register.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Registracija</a></li> <li><a href="index.html#kontakt" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Kontakt</a></li> </ul> </div>
+                 <div> <h4 class="text-lg font-bold mb-6 text-white">Kontakt</h4> <ul class="space-y-3"> <li class="text-gray-400">InFace Invest Group d.o.o.</li> <li class="text-gray-400">Rovinj, Hrvatska</li> <li><a href="mailto:info@sft21.com" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">info@sft21.com</a></li> <li class="text-gray-400">+385 XX XXX XXXX</li> </ul> </div>
+                 <div> <h4 class="text-lg font-bold mb-6 text-white">Pravne informacije</h4> <ul class="space-y-3"> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Uvjeti korištenja</a></li> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Politika privatnosti</a></li> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">GDPR</a></li> <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300">Pravila poslovanja</a></li> </ul> </div>
+             </div>
+             <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                 <p class="text-gray-400">© 2025 InFace Invest Group d.o.o. Sva prava pridržana.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const desktopLangTrigger = document.getElementById('desktop-lang-trigger');
+            const desktopLangDropdown = document.getElementById('desktop-lang-dropdown');
+            const mobileLangTrigger = document.getElementById('mobile-lang-trigger');
+            const mobileLangDropdown = document.getElementById('mobile-lang-dropdown');
+            const mobileLangIcon = mobileLangTrigger?.querySelector('i.fas.fa-chevron-down');
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            const closeAllLanguageDropdowns = () => { if (desktopLangDropdown?.classList.contains('active')) { desktopLangDropdown.classList.remove('active'); } if (mobileLangDropdown?.classList.contains('active')) { mobileLangDropdown.classList.remove('active'); if (mobileLangIcon) { mobileLangIcon.classList.remove('fa-chevron-up'); mobileLangIcon.classList.add('fa-chevron-down'); } } };
+            const toggleLanguageDropdown = (dropdownElement, otherDropdownElement, triggerIcon) => { if (!dropdownElement) return; const isActive = dropdownElement.classList.contains('active'); if (otherDropdownElement?.classList.contains('active')) { otherDropdownElement.classList.remove('active'); const otherIcon = document.getElementById('mobile-lang-trigger')?.querySelector('i.fas'); if (otherDropdownElement.id === 'mobile-lang-dropdown' && otherIcon?.classList.contains('fa-chevron-up')){ otherIcon.classList.replace('fa-chevron-up', 'fa-chevron-down'); } } dropdownElement.classList.toggle('active', !isActive); if (triggerIcon && dropdownElement.id === 'mobile-lang-dropdown') { triggerIcon.classList.toggle('fa-chevron-down', !isActive); triggerIcon.classList.toggle('fa-chevron-up', isActive); } };
+
+            if (desktopLangTrigger && desktopLangDropdown) { desktopLangTrigger.addEventListener('click', (event) => { event.stopPropagation(); toggleLanguageDropdown(desktopLangDropdown, mobileLangDropdown); }); desktopLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', (event) => { event.stopPropagation(); closeAllLanguageDropdowns(); }); }); desktopLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); }); }
+            if (mobileLangTrigger && mobileLangDropdown) { mobileLangTrigger.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); toggleLanguageDropdown(mobileLangDropdown, desktopLangDropdown, mobileLangIcon); }); mobileLangDropdown.querySelectorAll('.language-item').forEach(item => { item.addEventListener('click', (event) => { event.stopPropagation(); closeAllLanguageDropdowns(); }); }); mobileLangDropdown.addEventListener('click', (event) => { event.stopPropagation(); }); }
+            if (hamburger && navMenu && body) { hamburger.addEventListener('click', () => { const isActive = hamburger.classList.toggle('active'); navMenu.classList.toggle('active', isActive); body.classList.toggle('overflow-hidden', isActive); closeAllLanguageDropdowns(); }); document.querySelectorAll('.nav-menu a').forEach(link => { link.addEventListener('click', (event) => { if (!link.closest('.mobile-language-selector')) { if (hamburger.classList.contains('active')) { hamburger.classList.remove('active'); navMenu.classList.remove('active'); body.classList.remove('overflow-hidden'); } } }); }); }
+            document.addEventListener('click', (event) => { const isClickInsideLangDesktop = desktopLangDropdown?.contains(event.target); const isClickInsideLangMobile = mobileLangDropdown?.contains(event.target); const isClickOnLangDesktopTrigger = desktopLangTrigger?.contains(event.target); const isClickOnLangMobileTrigger = mobileLangTrigger?.contains(event.target); if (!isClickInsideLangDesktop && !isClickInsideLangMobile && !isClickOnLangDesktopTrigger && !isClickOnLangMobileTrigger) { closeAllLanguageDropdowns(); } });
+            document.addEventListener('keydown', (event) => { if (event.key === 'Escape') { if (hamburger?.classList.contains('active')) { hamburger.classList.remove('active'); navMenu.classList.remove('active'); body?.classList.remove('overflow-hidden'); } closeAllLanguageDropdowns(); } });
+
+            // =================================================================
+            // === LOGIKA ZA VALIDACIJU FORME ==================================
+            // =================================================================
+            const loginForm = document.getElementById('login-form');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameError = document.getElementById('username-error');
+            const passwordError = document.getElementById('password-error');
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    let isUsernameValid = validateUsername();
+                    let isPasswordValid = validatePassword();
+
+                    if (isUsernameValid && isPasswordValid) {
+                        console.log('Forma je ispravna. Preusmjeravam...');
+                        window.location.href = 'sfured.html';
+                    } else {
+                        console.log('Forma sadrži greške.');
+                    }
+                });
+            }
+
+            function validateUsername() {
+                const username = usernameInput.value.trim();
+                const usernameRegex = /^[a-zA-Z0-9]+$/;
+                
+                usernameError.textContent = '';
+                usernameInput.classList.remove('invalid');
+
+                if (username.length < 4 || username.length > 21) {
+                    usernameError.textContent = 'Korisničko ime mora imati između 4 i 21 znaka.';
+                    usernameInput.classList.add('invalid');
+                    return false;
+                }
+                
+                if (!usernameRegex.test(username)) {
+                    usernameError.textContent = 'Dozvoljena su samo slova i brojevi.';
+                    usernameInput.classList.add('invalid');
+                    return false;
+                }
+
+                return true;
+            }
+
+            // === AŽURIRANA FUNKCIJA ZA VALIDACIJU LOZINKE ===
+            function validatePassword() {
+                const password = passwordInput.value;
+                const allAllowedCharsRegex = /^[a-zA-Z0-9!"#$%&/_+~=?]+$/;
+
+                // Regex za provjeru prisutnosti svake vrste znaka
+                const hasLowercase = /[a-z]/;
+                const hasUppercase = /[A-Z]/;
+                const hasNumber = /\d/;
+                const hasSpecialChar = /[!"#$%&/_+~=?]/;
+
+                passwordError.textContent = '';
+                passwordInput.classList.remove('invalid');
+
+                // 1. Provjera duljine
+                if (password.length < 7 || password.length > 21) {
+                    passwordError.textContent = 'Lozinka mora imati između 7 i 21 znaka.';
+                    passwordInput.classList.add('invalid');
+                    return false;
+                }
+
+                // 2. Provjera da li postoje nedozvoljeni znakovi
+                if (!allAllowedCharsRegex.test(password)) {
+                    passwordError.textContent = 'Lozinka sadrži nedozvoljene znakove.';
+                    passwordInput.classList.add('invalid');
+                    return false;
+                }
+
+                // 3. Provjera da li su sve potrebne vrste znakova prisutne
+                const missing = [];
+                if (!hasLowercase.test(password)) missing.push('malo slovo');
+                if (!hasUppercase.test(password)) missing.push('VELIKO slovo');
+                if (!hasNumber.test(password)) missing.push('broj');
+                if (!hasSpecialChar.test(password)) missing.push('poseban znak');
+                
+                if (missing.length > 0) {
+                    passwordError.textContent = `Lozinka mora sadržavati barem: ${missing.join(', ')}.`;
+                    passwordInput.classList.add('invalid');
+                    return false;
+                }
+                
+                // Ako su sve provjere prošle, lozinka je ispravna
+                return true;
+            }
+            
+            console.log("Login JS inicijaliziran.");
+        });
+    </script>
+    
+    <!-- SKRIPTA ZA ANIMACIJU POZADINE -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('network-canvas');
+        if (!canvas) return; // Zaštita ako canvas ne postoji
+
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        // --- FINALNI PARAMETRI ZA "WOW" EFEKT ---
+        const options = {
+            particleColor: "rgba(128, 255, 0, 0.85)", // #80ff00 s prozirnošću
+            lineColor: "rgba(170, 0, 255, 0.8)",     // #aa00ff s prozirnošću
+            particleAmount: 120,                     // Optimalan broj za pokrivenost
+            defaultRadius: 1.3,                      // Manji, suptilniji čvorovi
+            rotationSpeed: 0.0003,                   // Malo sporija rotacija radi fokusa na interakciju
+            linkRadius: 150,                         // Radijus za povezivanje
+            perspective: 1000,                       // Jača 3D perspektiva
+            cameraZ: 300,
+            particleSpeed: 0.25,
+            lineWidth: 0.4,
+            // Parametri za interakciju s mišem
+            mouseInteractionRadius: 150, // Domet utjecaja miša
+            mouseEffectStrength: 2,      // Koliko će se čvorovi povećati
+        };
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Praćenje pozicije miša za interakciju s česticama
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+             mouse.x = null;
+             mouse.y = null;
+        });
+
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.z = Math.random() * 2 - 1; // Z-os za parallax efekt
+                this.radius = options.defaultRadius * (1 + this.z * 0.5);
+                this.vx = (Math.random() - 0.5) * options.particleSpeed;
+                this.vy = (Math.random() - 0.5) * options.particleSpeed;
+            }
+
+            draw() {
+                let finalRadius = this.radius;
+                let opacity = 1;
+
+                // Provjera blizine miša
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < options.mouseInteractionRadius) {
+                        const effect = (1 - dist / options.mouseInteractionRadius);
+                        finalRadius += effect * options.mouseEffectStrength;
+                        opacity += effect * 0.5;
+                    }
+                }
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, finalRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(128, 255, 0, ${opacity * 0.85})`;
+                ctx.fill();
+            }
+
+            // Nova logika kretanja - "wraparound"
+            update() {
+                this.x += this.vx * (1 + this.z * 0.5); // Parallax efekt brzine
+                this.y += this.vy * (1 + this.z * 0.5);
+
+                if (this.x > canvas.width + 5) this.x = -5;
+                else if (this.x < -5) this.x = canvas.width + 5;
+                if (this.y > canvas.height + 5) this.y = -5;
+                else if (this.y < -5) this.y = canvas.height + 5;
+            }
+        }
+
+        const initParticles = () => {
+            particles = [];
+            for (let i = 0; i < options.particleAmount; i++) {
+                particles.push(new Particle());
+            }
+        };
+
+        const drawLines = () => {
+            let pulse = Math.sin(Date.now() * 0.001) * 0.2 + 0.8; // Faktor pulsiranja (0.6 do 1.0)
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+                    
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < options.linkRadius) {
+                        let opacity = 1 - (dist / options.linkRadius);
+                        opacity *= pulse; // Primijeni pulsiranje
+
+                        // Linije su jače ako je miš blizu
+                        if (mouse.x !== null) {
+                           const distToMouse1 = Math.sqrt(Math.pow(p1.x - mouse.x, 2) + Math.pow(p1.y - mouse.y, 2));
+                           const distToMouse2 = Math.sqrt(Math.pow(p2.x - mouse.x, 2) + Math.pow(p2.y - mouse.y, 2));
+                           if(distToMouse1 < options.mouseInteractionRadius || distToMouse2 < options.mouseInteractionRadius) {
+                               opacity = Math.min(1, opacity + 0.5);
+                           }
+                        }
+
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(170, 0, 255, ${opacity * 0.5})`;
+                        ctx.lineWidth = options.lineWidth;
+                        ctx.stroke();
+                    }
+                }
+            }
+        };
+
+        // Glavna petlja animacije
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.update();
+            });
+            
+            drawLines();
+            
+            particles.forEach(p => {
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        };
+
+        initParticles();
+        animate();
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korisnički podaci - SFT21 InFace Invest Group</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link na vanjsku CSS datoteku -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Dodajemo Arial Narrow font i specifične stilove za ovu stranicu -->
+    <style>
+        @font-face {
+            font-family: 'Arial Narrow';
+            src: local('Arial Narrow');
+        }
+
+        body, h1, h2, h3, h4, h5, h6, p, span, div, button, input, select, textarea {
+            font-family: 'Arial Narrow', Arial, sans-serif !important;
+        }
+
+        /* Podesite padding na vrhu/dnu body i onemogućite vertikalno skrolanje */
+        body {
+            padding-top: 1rem; /* Smanjen razmak od vrha */
+            padding-bottom: 0; /* Uklonjen razmak na dnu */
+            overflow-y: hidden; /* Onemogući vertikalno skrolanje */
+            background-color: #0d0118; /* Osiguraj tamnu pozadinu iz CSS varijable */
+            color: var(--text-color); /* Osiguraj boju teksta */
+            overflow-x: hidden; /* Spriječi horizontalni skrol */
+        }
+
+        /* DODANI STILOVI ZA ANIMACIJU POZADINE */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Postavlja platno iza svog sadržaja */
+        }
+
+        /* Stilovi za korisničko ime i lozinku */
+        .input-container {
+            position: relative;
+            margin-bottom: 2rem; /* Razmak ispod input kontejnera */
+        }
+
+        .input-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--fluorescent-green); /* Fluorescent Green */
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(106, 27, 154, 0.1); /* Izmijenjeno da koristi rgba ljubičastu */
+            border: 1px solid var(--fluorescent-green); /* Fluorescent Green border */
+            border-radius: 8px;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--fluorescent-green);
+            box-shadow: 0 0 0 3px rgba(128, 255, 0, 0.3); /* Green glow */
+            background-color: rgba(106, 27, 154, 0.2); /* Malo tamnija ljubičasta na focus */
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-requirements {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 1.5rem;
+            gap: 0.5rem;
+            padding: 0 1rem;
+        }
+
+        .requirement {
+            color: var(--fluorescent-green); /* Fluorescent Green */
+            font-size: 1rem;
+            padding: 0.25rem 0;
+            text-align: left;
+        }
+
+        .save-button {
+            background-color: var(--fluorescent-green); /* Fluorescent Green */
+            color: #0e076a; /* Dark Blue */
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: none;
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+            position: absolute;
+            right: 0;
+            bottom: -60px;
+        }
+
+        .save-button:hover {
+            background-color: #66cc00; /* Darker Green */
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(128, 255, 0, 0.4); /* Green shadow */
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--fluorescent-green); /* Fluorescent Green */
+            font-size: 1.2rem;
+        }
+
+        /* Animacija za pojavljivanje elemenata */
+        .fade-in-section { /* Nova klasa za specifičnu animaciju sekcije */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease; /* Malo sporija i glađa */
+        }
+
+        .fade-in-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Popup stilovi (preuzeti iz style.css) */
+        .popup { /* Koristi postojeći .popup iz style.css */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #0d0118; /* Tamna pozadina */
+            border: 1px solid var(--fluorescent-green); /* Zeleni border */
+            border-radius: 20px; /* Veći radius */
+            padding: 2rem; /* Veći padding */
+            z-index: 1000;
+            box-shadow: 0 8px 32px 0 rgba(128, 255, 0, 0.37); /* Zeleni glow */
+            max-width: 400px;
+            width: 90%;
+            display: none; /* Hidden by default */
+        }
+
+        .popup-content {
+            text-align: center; /* Horizontalno centriranje inline/text */
+            color: var(--text-color); /* Boja teksta */
+            display: flex; /* Omogući flexbox */
+            flex-direction: column; /* Elementi se slažu vertikalno */
+            justify-content: center; /* Centriraj elemente vertikalno u kontejneru */
+            align-items: center; /* Centriraj elemente horizontalno u kontejneru */
+            /* Dodatna svojstva po potrebi, npr. gap: 1rem; */
+        }
+
+        .popup-title {
+            color: var(--fluorescent-green) !important; /* Zeleni naslov (nadjačava ostale) */
+            font-size: 1.5rem;
+            margin-bottom: 1rem; /* Razmak ispod naslova */
+            /* text-align: center; je redundantno zbog align-items: center na roditelju */
+        }
+
+        .popup-message {
+            margin-bottom: 1.5rem; /* Razmak ispod poruke */
+            font-size: 1.1rem;
+            line-height: 1.5; /* Bolji prored */
+             /* text-align: center; je redundantno zbog align-items: center na roditelju */
+        }
+
+        .popup-button { /* Koristi postojeći .btn-primary stil za gumbe */
+            /* Naslijeđuje stilove iz .btn-primary u style.css */
+            /* Osiguraj da boja teksta bude tamna */
+            color: #0e076a !important;
+            background-color: var(--fluorescent-green) !important;
+            padding: 10px 20px; /* Malo manji padding od default .btn-primary */
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem; /* Razmak iznad gumba */
+        }
+
+        .popup-button:hover {
+            background-color: #66cc00 !important; /* Tamnija zelena na hover */
+             /* transform: translateY(-2px); */ /* Opcija: dodati transform */
+            box-shadow: 0 5px 15px rgba(128, 255, 0, 0.4); /* Zeleni sjaj */
+        }
+
+
+        .popup-overlay { /* Koristi postojeći .popup-overlay iz style.css */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 999;
+            display: none; /* Hidden by default */
+        }
+
+        /* --- STIL ZA NAPOMENU KORISNIČKOG IMENA  --- */
+        /* Koristi se općeniti .warning-note stil iz style.css */
+        .warning-note { /* Stil definiran u style.css */
+             color: var(white); 
+             font-size: 1.2rem; /* Originalna veličina */
+             font-style: italic;
+             margin-top: 1.5rem;
+             text-align: center;
+             /* display is handled by JS */
+        }
+        /* --- KRAJ STILA --- */
+
+
+        /* Dodatni stilovi za responsive dizajn */
+        @media (max-width: 768px) {
+
+            body {
+                 padding-top: 1rem; /* Manji padding na mobitelu */
+                 padding-bottom: 0; /* Uklonjen razmak na dnu i na mobitelu */
+            }
+
+            .input-title {
+                font-size: 1.8rem;
+            }
+
+            .requirement {
+                font-size: 0.9rem;
+            }
+
+            .save-button {
+                position: static;
+                width: 100%;
+                margin-top: 2rem; /* Povećan razmak iznad gumba */
+                margin-bottom: 0; /* Uklonjen razmak ispod */
+            }
+
+            .input-container {
+                 margin-bottom: 1rem; /* Manji razmak ispod inputa */
+            }
+
+            .glass-card {
+                 padding: 1.5rem !important; /* Manji padding na karticama */
+            }
+             .glass-card + .glass-card {
+                 margin-top: 1.5rem !important; /* Manji razmak između kartica */
+            }
+
+            .popup {
+                 padding: 1.5rem; /* Manji padding na popupu */
+            }
+            .popup-message {
+                 font-size: 1rem;
+            }
+            /* Prilagodba napomene na mobitelu (ostavljena default veličina iz .warning-note) */
+
+        }
+        @media (min-width: 769px) {
+            .save-button {
+                 /* Osiguraj da je absolute pozicioniran na desktopu */
+                 position: absolute;
+                 bottom: -60px;
+                 right: 0;
+                 width: auto;
+                 margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- Platno za animaciju pozadine -->
+    <canvas id="network-canvas"></canvas>
+
+    <!-- Custom Cursor -->
+    <!-- Ovo je kontrolirano vanjskim script.js fajlom -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-trail"></div>
+
+
+    <!-- Popup Overlay -->
+    <div id="popup-overlay" class="popup-overlay"></div>
+
+    <!-- Error Popup -->
+    <div id="error-popup" class="popup">
+        <div class="popup-content">
+            <h3 class="popup-title">Greška</h3>
+            <p id="error-message" class="popup-message">Poruka greške</p>
+            <button id="error-close" class="popup-button">U redu</button> <!-- Uklonjen mt-4 jer je sad u .popup-button stilu -->
+        </div>
+    </div>
+
+    <!-- ====== GLAVNI SADRŽAJ ====== -->
+    <!-- Uklonjena klasa py-20 jer padding kontrolira body -->
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+            <!-- Korisničko ime sekcija -->
+            <div id="username-section" class="glass-card p-8 fade-in-section active"> <!-- UKLONJENA KLASA mb-8 -->
+                <h2 class="input-title">Izaberi korisničko ime</h2>
+
+                <div class="input-container">
+                    <input type="text" id="username-input" class="input-field" placeholder="Upiši korisničko ime" autocomplete="off" maxlength="21">
+                    <button id="username-save" class="save-button">SPREMI</button>
+                </div>
+
+                <div class="input-requirements">
+                    <div class="requirement">Korisničko ime mora imati najmanje 4 i najviše 21 znak</div>
+                    <div class="requirement">- malo slovo: a - z</div>
+                    <div class="requirement">- veliko slovo: A - Z</div>
+                    <div class="requirement">- broj: 0 - 9</div>
+                </div>
+
+                <div class="warning-note text-3g text-white" id="username-warning" style="display: none;">
+                    *NAPOMENA: Izabrano korisničko ime klikom na "SPREMI" više se ne može promijeniti!!!
+                </div>
+            </div>
+
+            <!-- Lozinka sekcija (inicijalno skrivena) -->
+            <div id="password-section" class="glass-card p-8 fade-in-section" style="display: none;"> <!-- Promijenjena klasa za animaciju -->
+                <h2 class="input-title">Izaberi lozinku</h2>
+
+                <div class="input-container">
+                    <input type="password" id="password-input" class="input-field" placeholder="Upiši lozinku" autocomplete="off" maxlength="21">
+                    <span class="toggle-password">
+                        <i class="far fa-eye"></i>
+                    </span>
+                    <button id="password-save" class="save-button">SPREMI</button>
+                </div>
+
+                <div class="input-requirements">
+                    <div class="requirement">Lozinka mora imati najmanje 7 i najviše 21 znak</div>
+                    <div class="requirement">- malo slovo: a - z</div>
+                    <div class="requirement">- veliko slovo: A - Z</div>
+                    <div class="requirement">- broj: 0 - 9</div>
+                    <div class="requirement">- poseban znak:! " # $ % & / _ + ~ = ?</div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- ====== KRAJ GLAVNOG SADRŽAJA ====== -->
+
+
+    <!-- Učitaj vanjski JavaScript fajl -->
+    <script src="js/script.js"></script>
+
+    <!-- Ugrađeni JavaScript specifičan za ovu stranicu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulacija baze podataka s postojećim korisničkim imenima
+            const existingUsernames = [
+                'admin', 'administrator', 'user', 'test', 'demo', 'moderator', 'support',
+                'korisnik', 'gost', 'sfteam', 'sfadmin', 'sfuser', 'sft21', 'inface'
+            ];
+
+            // Elementi
+            const usernameInput = document.getElementById('username-input');
+            const usernameSave = document.getElementById('username-save');
+            const usernameSection = document.getElementById('username-section');
+            const passwordSection = document.getElementById('password-section');
+            const passwordInput = document.getElementById('password-input');
+            const passwordSave = document.getElementById('password-save');
+            const togglePassword = document.querySelector('.toggle-password');
+            const errorPopup = document.getElementById('error-popup');
+            const errorMessage = document.getElementById('error-message');
+            const errorClose = document.getElementById('error-close');
+            const popupOverlay = document.getElementById('popup-overlay');
+
+            // Funkcija za prikazivanje popup-a s greškom
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorPopup.style.display = 'block';
+                popupOverlay.style.display = 'block';
+            }
+
+            // Zatvaranje popup-a
+            if (errorClose && errorPopup && popupOverlay) {
+                 errorClose.addEventListener('click', function() {
+                     errorPopup.style.display = 'none';
+                     popupOverlay.style.display = 'none';
+                 });
+                 popupOverlay.addEventListener('click', function() {
+                      // Omogući zatvaranje overlay klikom izvan popup-a
+                     if (errorPopup.style.display === 'block') { // Provjeri je li errorPopup otvoren
+                         errorPopup.style.display = 'none';
+                         popupOverlay.style.display = 'none';
+                     }
+                 });
+            } else {
+                console.error("Popup elementi nisu pronađeni.");
+            }
+
+
+            // Provjera je li znak dozvoljen (malo slovo, veliko slovo ili broj) za username
+            // Ova funkcija više nije direktno korištena u input listeneru, zamijenjena je replaceom
+            // function isValidUsernameChar(char) { return /^[a-zA-Z0-9]$/.test(char); }
+
+
+                        // Funkcije za validaciju lozinke
+                        function hasLowerCase(str) { return /[a-z]/.test(str); }
+            function hasUpperCase(str) { return /[A-Z]/.test(str); }
+            function hasNumber(str) { return /[0-9]/.test(str); }
+            function hasSpecialChar(str) { return /[!\"#$%&\/_+~=?]/.test(str); }
+            // function startsWithNoSpace(str) { return str.length === 0 || !str.startsWith(' '); } // <-- OVO VIŠE NE TREBAMO
+            function containsNoSpaces(str) { return !/\s/.test(str); } // <<<=== NOVA FUNKCIJA (Provjerava da NEMA razmaka)
+
+            function isPasswordValid(password) {
+                console.log(`Validiram lozinku: "${password}"`); // Log za provjeru
+                const valid = containsNoSpaces(password) && // <<<=== PROMIJENJENA PROVJERA
+                       password.length >= 7 &&
+                       password.length <= 21 &&
+                       hasLowerCase(password) &&
+                       hasUpperCase(password) &&
+                       hasNumber(password) &&
+                       hasSpecialChar(password);
+                console.log(`Rezultat validacije: ${valid}`);
+                return valid;
+            }
+
+            // Prikaži gumb SPREMI samo ako korisničko ime ima najmanje 4 znaka i prolazi osnovnu validaciju
+            if (usernameInput && usernameSave && document.getElementById('username-warning')) {
+                 usernameInput.addEventListener('input', function() {
+                     let value = this.value; // Koristi let jer će se vrijednost možda mijenjati
+
+                     // Ukloni sve osim slova i brojeva
+                     const cleanedValue = value.replace(/[^a-zA-Z0-9]/g, '');
+                     if (value !== cleanedValue) {
+                          this.value = cleanedValue; // Ažuriraj polje s očišćenom vrijednošću
+                          showError('Nedozvoljen znak u nazivu korisničkog imena (dozvoljena su samo slova i brojevi).');
+                     }
+                     value = this.value;
+
+
+                     // Provjera za maksimalan broj znakova
+                     if (value.length > 21) {
+                         this.value = value.slice(0, 21);
+                         showError('Napisali ste maksimalno dozvoljen broj znakova – 21');
+                     }
+                     value = this.value;
+
+
+                     // Prikaži gumb SPREMI i napomenu samo ako ima najmanje 4 znaka i prolazi osnovnu validaciju znakova/duljine
+                     if (value.length >= 4 && value.length <= 21 && value === cleanedValue) { // Provjeri i da nema nedozvoljenih znakova
+                         usernameSave.style.display = 'block';
+                         document.getElementById('username-warning').style.display = 'block';
+                     } else {
+                         usernameSave.style.display = 'none';
+                          // Sakrij napomenu ako uvjeti nisu ispunjeni, osim ako je prazno
+                         if (value.length === 0) {
+                              document.getElementById('username-warning').style.display = 'none';
+                         }
+                     }
+                 });
+            } else {
+                 console.error("Elementi za validaciju korisničkog imena nisu pronađeni.");
+            }
+
+
+            // Prikaži polje za lozinku nakon što korisnik klikne SPREMI za korisničko ime
+            if (usernameSave && usernameInput && usernameSection && passwordSection && document.querySelector('#username-section .input-requirements') && document.getElementById('username-warning')) {
+                 usernameSave.addEventListener('click', function() {
+                     const value = usernameInput.value.trim().toLowerCase();
+
+                     // Ponovna validacija korisničkog imena prije prijelaza na lozinku
+                     const cleanedValue = value.replace(/[^a-zA-Z0-9]/g, '');
+                     if (cleanedValue.length < 4 || cleanedValue.length > 21 || value !== cleanedValue) {
+                         showError('Molimo ispravite korisničko ime prema zahtjevima (4-21 znak, samo slova i brojevi).');
+                         usernameInput.value = cleanedValue;
+                         const requirementsDiv = document.querySelector('#username-section .input-requirements');
+                         const usernameWarning = document.getElementById('username-warning');
+                          if(requirementsDiv) requirementsDiv.style.display = 'flex';
+                          if(usernameWarning) usernameWarning.style.display = 'block';
+                         usernameSave.style.display = 'block';
+                         usernameInput.disabled = false;
+                         return;
+                     }
+
+
+                     // Provjera postoji li već korisničko ime
+                     if (existingUsernames.includes(value)) {
+                         showError('Korisničko ime već postoji u sustavu. Molimo odaberite drugo korisničko ime.');
+                         usernameInput.disabled = false;
+                         return;
+                     }
+
+                     // Ako je validacija prošla
+                     const requirementsDiv = document.querySelector('#username-section .input-requirements');
+                     const usernameWarning = document.getElementById('username-warning');
+                     if(requirementsDiv) requirementsDiv.style.display = 'none';
+                     if(usernameWarning) usernameWarning.style.display = 'none';
+                     usernameSave.style.display = 'none';
+                     usernameInput.disabled = true;
+
+
+                     // Sakrij sekciju korisničkog imena s animacijom
+                     usernameSection.classList.remove('active');
+                      setTimeout(() => {
+                          usernameSection.style.display = 'none';
+                          passwordSection.style.display = 'block';
+                          setTimeout(() => {
+                              passwordSection.classList.add('active');
+                              if (passwordInput) {
+                                  passwordInput.focus();
+                              }
+                          }, 10);
+                     }, passwordSection.style.transitionDuration ? parseFloat(getComputedStyle(usernameSection).transitionDuration) * 1000 : 800);
+
+                 });
+            } else {
+                 console.error("Elementi za spremanje korisničkog imena ili prikaz lozinke nisu pronađeni.");
+            }
+
+
+            // Prikaži gumb SPREMI kada korisnik počne upisivati lozinku
+            if (passwordInput && passwordSave) {
+                 passwordInput.addEventListener('input', function() {
+                     const value = this.value;
+
+                     // Provjera da li prvi znak razmak i uklanjanje ako je
+                     if (value.length > 0 && value.startsWith(' ')) {
+                         this.value = value.trimStart(); // Ukloni vodeće razmake
+                         // Opcionalno prikaži grešku, ali uklanjanje je primarno
+                         // showError('Lozinka ne smije počinjati razmakom.');
+                         // Vrijednost inputa je sada očišćena, nastavi s provjerom duljine
+                         value = this.value;
+                     }
+
+                     // Prikaži gumb SPREMI samo ako lozinka ima najmanje 7 znakova (nakon uklanjanja vodećih razmaka)
+                     // i najviše 21 znak
+                     if (value.length >= 7 && value.length <= 21) {
+                         passwordSave.style.display = 'block';
+                     } else {
+                         passwordSave.style.display = 'none';
+                     }
+                 });
+            } else {
+                 console.error("Elementi za validaciju lozinke nisu pronađeni.");
+            }
+
+
+                        // Preusmjeri na office_kyc.html nakon što korisnik klikne SPREMI za lozinku
+             if (passwordSave && passwordInput && usernameInput) {
+                 passwordSave.addEventListener('click', function() {
+                     const value = passwordInput.value; // Uzmi vrijednost kakva jest
+                     console.log(`Kliknut SPREMI za lozinku: "${value}"`);
+
+                     // Prvo očisti prethodnu grešku
+                     if(errorPopup) {
+                         errorPopup.style.display = 'none';
+                         popupOverlay.style.display = 'none';
+                     }
+                     if(passwordInput) passwordInput.classList.remove('border-red-500');
+
+
+                     // Pozovi ažuriranu funkciju za validaciju
+                     const isValid = isPasswordValid(value);
+
+                     if (isValid) {
+                         // Lozinka je OK - nastavi
+                         console.log("Lozinka je validna, preusmjeravam...");
+                         console.log("Korisničko ime:", usernameInput.value.trim());
+                         console.log("Lozinka (sent):", value);
+                         window.location.href = 'office_kyc.html';
+                     } else {
+                         // Lozinka NIJE OK - Prikaži specifičnu grešku
+                         let specificErrorMessage = 'Lozinka ne zadovoljava sve zahtjeve.'; // Default poruka
+
+                         // Utvrdi točan razlog greške za prikaz korisniku
+                         if (/\s/.test(value)) { // <<<=== PROVJERA ZA RAZMAKE PRVO!
+                             specificErrorMessage = 'Lozinka ne smije sadržavati razmake.';
+                         } else if (value.length < 7) {
+                             specificErrorMessage = 'Lozinka mora imati najmanje 7 znakova.';
+                         } else if (value.length > 21) {
+                             specificErrorMessage = 'Lozinka mora imati najviše 21 znak.';
+                         } else if (!hasLowerCase(value)) {
+                             specificErrorMessage = 'Lozinka mora sadržavati barem jedno malo slovo (a-z).';
+                         } else if (!hasUpperCase(value)) {
+                             specificErrorMessage = 'Lozinka mora sadržavati barem jedno veliko slovo (A-Z).';
+                         } else if (!hasNumber(value)) {
+                             specificErrorMessage = 'Lozinka mora sadržavati barem jedan broj (0-9).';
+                         } else if (!hasSpecialChar(value)) {
+                             specificErrorMessage = 'Lozinka mora sadržavati barem jedan poseban znak (! " # $ % & / _ + ~ = ?).';
+                         }
+
+                         console.error("GREŠKA kod spremanja lozinke:", specificErrorMessage);
+                         showError(specificErrorMessage); // Pokaži grešku
+                         if(passwordInput) passwordInput.classList.add('border-red-500'); // Označi polje
+                     }
+                 });
+             } else {
+                 console.error("Gumb za spremanje lozinke ili input polje nisu pronađeni.");
+             }
+             
+            // Omogući pritisak Enter tipke za nastavak
+            if (usernameInput && usernameSave) {
+                 usernameInput.addEventListener('keypress', function(e) {
+                     if (e.key === 'Enter' && this.value.trim().length >= 4 && usernameSave.style.display !== 'none') {
+                         e.preventDefault();
+                         usernameSave.click();
+                     }
+                 });
+            }
+             if (passwordInput && passwordSave) {
+                 passwordInput.addEventListener('keypress', function(e) {
+                      // Provjeri je li Enter i je li gumb za spremanje vidljiv (što implicira min duljinu)
+                      // Također provjeri da input ne počinje razmakom
+                     if (e.key === 'Enter' && passwordSave.style.display !== 'none' && !this.value.startsWith(' ')) {
+                         e.preventDefault();
+                         passwordSave.click();
+                     } else if (e.key === 'Enter' && this.value.startsWith(' ')) {
+                          e.preventDefault();
+                          showError('Lozinka ne smije počinjati razmakom.');
+                          this.value = this.value.trimStart();
+                     }
+                 });
+            }
+
+
+            // Funkcionalnost za prikaz/skrivanje lozinke
+            if (togglePassword && passwordInput) {
+                 togglePassword.addEventListener('click', function() {
+                     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                     passwordInput.setAttribute('type', type);
+
+                     // Promijeni ikonu oka
+                     const icon = this.querySelector('i');
+                     if (icon) {
+                         if (type === 'password') {
+                             icon.classList.remove('fa-eye-slash');
+                             icon.classList.add('fa-eye');
+                         } else {
+                             icon.classList.remove('fa-eye');
+                             icon.classList.add('fa-eye-slash');
+                         }
+                     }
+                 });
+            } else {
+                 console.error("Elementi za prikaz/skrivanje lozinke nisu pronađeni.");
+            }
+
+            // Inicijalna provjera da se prva sekcija animira pri učitavanju
+            if (usernameSection) {
+                 usernameSection.classList.add('active');
+            }
+
+
+        }); // Kraj DOMContentLoaded
+    </script>
+    
+    <!-- DODANA SKRIPTA ZA ANIMACIJU POZADINE -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('network-canvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        const options = {
+            particleColor: "rgba(128, 255, 0, 0.85)",
+            lineColor: "rgba(170, 0, 255, 0.8)",
+            particleAmount: 120,
+            defaultRadius: 1.3,
+            linkRadius: 150,
+            particleSpeed: 0.25,
+            lineWidth: 0.4,
+            mouseInteractionRadius: 150,
+            mouseEffectStrength: 2,
+        };
+
+        const resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+             mouse.x = null;
+             mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.z = Math.random() * 2 - 1;
+                this.radius = options.defaultRadius * (1 + this.z * 0.5);
+                this.vx = (Math.random() - 0.5) * options.particleSpeed;
+                this.vy = (Math.random() - 0.5) * options.particleSpeed;
+            }
+
+            draw() {
+                let finalRadius = this.radius;
+                let opacity = 1;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < options.mouseInteractionRadius) {
+                        const effect = (1 - dist / options.mouseInteractionRadius);
+                        finalRadius += effect * options.mouseEffectStrength;
+                        opacity += effect * 0.5;
+                    }
+                }
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, finalRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(128, 255, 0, ${opacity * 0.85})`;
+                ctx.fill();
+            }
+
+            update() {
+                this.x += this.vx * (1 + this.z * 0.5);
+                this.y += this.vy * (1 + this.z * 0.5);
+                if (this.x > canvas.width + 5) this.x = -5;
+                else if (this.x < -5) this.x = canvas.width + 5;
+                if (this.y > canvas.height + 5) this.y = -5;
+                else if (this.y < -5) this.y = canvas.height + 5;
+            }
+        }
+
+        const initParticles = () => {
+            particles = [];
+            for (let i = 0; i < options.particleAmount; i++) {
+                particles.push(new Particle());
+            }
+        };
+
+        const drawLines = () => {
+            let pulse = Math.sin(Date.now() * 0.001) * 0.2 + 0.8;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+                    const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+                    if (dist < options.linkRadius) {
+                        let opacity = 1 - (dist / options.linkRadius);
+                        opacity *= pulse;
+                        if (mouse.x !== null) {
+                           const distToMouse1 = Math.sqrt(Math.pow(p1.x - mouse.x, 2) + Math.pow(p1.y - mouse.y, 2));
+                           const distToMouse2 = Math.sqrt(Math.pow(p2.x - mouse.x, 2) + Math.pow(p2.y - mouse.y, 2));
+                           if(distToMouse1 < options.mouseInteractionRadius || distToMouse2 < options.mouseInteractionRadius) {
+                               opacity = Math.min(1, opacity + 0.5);
+                           }
+                        }
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(170, 0, 255, ${opacity * 0.5})`;
+                        ctx.lineWidth = options.lineWidth;
+                        ctx.stroke();
+                    }
+                }
+            }
+        };
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => p.update());
+            drawLines();
+            particles.forEach(p => p.draw());
+            requestAnimationFrame(animate);
+        };
+
+        initParticles();
+        animate();
+    });
+    </script>
+</body>
+</html>
