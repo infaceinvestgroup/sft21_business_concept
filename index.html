@@ -2516,6 +2516,53 @@ const setTheme = (isLight) => {
         });
     });
 </script>
+<script>
+     const mobileTrigger = document.querySelector('.nav-menu .mobile-dropdown-toggle');
+    const mobileMenu = document.querySelector('.nav-menu .sft21-nav-item.dropdown .dropdown-menu');
 
+    // KOD KOJI OMOGUĆAVA OTVARANJE DROPDOUNA NA MOBILNOM
+    if (mobileTrigger && mobileMenu && mobileTrigger.parentElement.classList.contains('dropdown')) {
+         mobileTrigger.addEventListener('click', (e) => {
+             e.preventDefault();
+             e.stopPropagation(); // Spriječi da se klik propagira dalje
+
+             const dropdownItem = mobileTrigger.closest('.sft21-nav-item.dropdown');
+             if (dropdownItem && mobileMenu) {
+                 // Zatvori sve druge otvorene dropdownove u mobilnom meniju
+                 document.querySelectorAll('.nav-menu .sft21-nav-item.dropdown.open:not(.mobile-language-selector)').forEach(openDropdown => {
+                     if (openDropdown !== dropdownItem) {
+                         openDropdown.classList.remove('open');
+                         const otherIcon = openDropdown.querySelector('.mobile-dropdown-toggle i');
+                         if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                         const otherMenu = openDropdown.querySelector('.dropdown-menu');
+                         if (otherMenu) otherMenu.style.display = 'none';
+                     }
+                 });
+
+                 const isOpen = dropdownItem.classList.contains('open');
+                 dropdownItem.classList.toggle('open');
+                 mobileMenu.style.display = isOpen ? 'none' : 'block';
+
+                 const icon = mobileTrigger.querySelector('i.fas');
+                 if (icon) {
+                     icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+                 }
+
+                 // Dodatno zatvaranje dropdown-a ako se klikne izvan njega
+                 // Ovo mora biti postavljeno tako da se ne zatvara kada se klikne na sam dropdown ili njegove stavke
+                 document.addEventListener('click', function closeOtherDropdowns(event) {
+                     if (!dropdownItem.contains(event.target) && !mobileTrigger.contains(event.target)) {
+                         dropdownItem.classList.remove('open');
+                         mobileMenu.style.display = 'none';
+                         if (icon) icon.style.transform = 'rotate(0deg)';
+                         document.removeEventListener('click', closeOtherDropdowns); // Ukloni listener nakon što se zatvori
+                     }
+                 }, { once: true }); // Ovaj listener bi trebao biti samo jednom aktivan na svaki klik izvan
+             }
+         });
+    }
+        // --- KRAJ KODA ZA MOBILE DROPDOWN IZBORNIK ---
+    });
+</script>
 </body>
 </html>
