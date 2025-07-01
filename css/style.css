@@ -12,6 +12,7 @@
     --fluorescent-orange: #d9ff00; /* A bright, fluorescent orange */
     --success-green: #4ade80; /* DODANO: Zelena boja za kvačicu */
     --fluorescent-green: #80ff00; /* A bright, fluorescent green */
+    --fluorescent-purple: #ff00ff; /* Nova varijabla za fluorescentno ljubičastu */
 }
 
 body {
@@ -326,7 +327,7 @@ nav.fixed {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(rgba(171, 71, 188, 0.3) 2px, transparent 2px);
+    background-image: radial-gradient(rgba(171, 71, 188, 0.3) 4px, transparent 4px);
     background-size: 40px 40px;
     animation: moveBackground 60s linear infinite;
 }
@@ -819,32 +820,6 @@ body.overflow-hidden {
     margin-bottom: 0; 
 }
 
-.ip-wide-card.glass-card {
-    border: 1px solid var(--fluorescent-green); 
-    border-radius: 15px;
-    overflow: hidden; 
-}
-
-#ip7-amount-input-container {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-    text-align: center; 
-}
-
-.ip-wide-card .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem; 
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap; 
-}
-
-.ip-wide-card .btn-group .btn-primary {
-    padding: 10px 20px;
-}
-
 .ip-wide-card .amount-input-container {
     display: none; 
     margin-top: 1.5rem;
@@ -1318,3 +1293,287 @@ canvas#network-canvas {
         .hero-video-container { width: 100%; max-width: 600px; margin: auto; }
 
         .dropdown-menu.active { display: block; }
+
+:root {
+    --accent-color: #ff00ff; /* FLUORESCENTNO LJUBIČASTA */
+}
+
+body.light-mode {
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+/* === Navigacija === */
+body.light-mode nav.fixed {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom-color: #ff00ff; /* Ljubičasta */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+body.light-mode .logo-nav,
+body.light-mode .text-logo-orange {
+    color: var(--primary-color);
+}
+body.light-mode .logo-nav .small-text {
+    color: var(--primary-color);
+}
+body.light-mode .nav-link {
+    color: var(--primary-color);
+}
+body.light-mode .nav-link:hover,
+body.light-mode .nav-link.active {
+    color: #ff00ff; /* Ljubičasto */
+}
+body.light-mode .nav-link::after {
+    background-color: #ff00ff; /* Ljubičasto */
+}
+body.light-mode #theme-toggle,
+body.light-mode #theme-toggle-mobile,
+body.light-mode #desktop-lang-trigger i,
+body.light-mode #mobile-lang-trigger i {
+    color: var(--primary-color);
+}
+/* === Gumbi === */
+body.light-mode .btn-primary {
+background-color: var(--primary-color);
+    color: white;
+}
+body.light-mode .btn-primary:hover {
+    background-color: #e600e6;
+}
+body.light-mode .btn-outline {
+    color: var(--primary-color); 
+    border-color: var(--primary-color); 
+}
+body.light-mode .btn-outline:hover {
+    background-color: #ff00ff;
+    color: white;
+}
+
+/* === Kartice i Okviri === */
+body.light-mode .glass-card,
+body.light-mode .ip-card,
+body.light-mode .info-box,
+body.light-mode .accordion-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+body.light-mode .glass-card,
+body.light-mode .form-input,
+body.light-mode .ip-card {
+    border-color: #ff00ff; /* Ljubičasto */
+}
+
+/* === Tekstovi i Naslovi === */
+body.light-mode h1, body.light-mode h2, body.light-mode h3, body.light-mode h4 { color: var(--primary-color); }
+body.light-mode .text-gray-300 { color: #475569 !important; }
+body.light-mode .glass-card p, body.light-mode .glass-card li { color: #475569; }
+
+/* === Ikone i specifični elementi === */
+body.light-mode .fa-check-circle, 
+body.light-mode .fas.fa-check {
+    color: #ff00ff; /* Ljubičasto */
+}
+body.light-mode .icon-box i {
+    color: #ff00ff; /* Ljubičasto */
+}
+body.light-mode .pricing-table .lock-icon i {
+    color: #ff00ff; /* Ljubičasto */
+}
+body.light-mode .info-box-icon {
+    color: #ff00ff; /* Ljubičasto */
+}
+body.light-mode .faze-card .rounded-full {
+    border-color: #ff00ff !important; /* Ljubičasto */
+}
+body.light-mode .faze-card .rounded-full span {
+    color: #ff00ff !important; /* Ljubičasto */
+}
+
+/* === Headeri na karticama === */
+body.light-mode .ip-card-header,
+body.light-mode .ip-wide-card-header {
+    background: linear-gradient(to right, #ff00ff, #c000c0); /* Ljubičasto */
+}
+body.light-mode .ip-card-header h4,
+body.light-mode .ip-wide-card-header-title {
+    color: white !important;
+}
+body.light-mode .pricing-table th {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+/* === Linije ispod naslova === */
+body.light-mode #o-nama .w-24.h-1 {
+   background-color: var(--primary-color);
+}
+
+body.light-mode .logo-nav .text-logo-orange {
+    color: var(--primary-color);
+}
+
+body.light-mode .logo-nav .text-white {
+    color: var(--primary-color);
+}
+
+/* === Promjena boje ikona u "O nama" sekciji === */
+body.light-mode #o-nama .glass-card .fas {
+    color: var(--fluorescent-purple);
+}
+
+/* === Izmjena ikona u sekciji "Kako funkcionira" === */
+body.light-mode #kako-funkcionira .glass-card .rounded-full {
+    background-color: var(--primary-color);
+}
+
+body.light-mode #kako-funkcionira .glass-card .fas {
+    color: var(--fluorescent-purple);
+}
+
+/* === Izmjena ikona u sekciji "Prednosti" === */
+body.light-mode #prednosti .rounded-full {
+    background-color: var(--primary-color);
+}
+
+body.light-mode #prednosti .fas {
+    color: var(--fluorescent-purple);
+}
+
+/* === Ispravak boje za preostale zelene naslove === */
+body.light-mode #faq h2,
+body.light-mode #faq-startni-paketi h2,
+body.light-mode #fransizni-model h3,
+body.light-mode #vazna-napomena h3,
+body.light-mode #investicija h2,
+body.light-mode #jedinstvena-prilika h2,
+body.light-mode #kontakt h2,
+body.light-mode #vasa-odluka h2,
+body.light-mode #vizualni-model h2, 
+body.light-mode #startni-paketi h2 {  
+    color: var(--primary-color);
+}
+
+body.light-mode .accordion-header {
+    border-color: var(--fluorescent-purple);
+}
+
+body.light-mode .accordion-header span {
+    color: var(--primary-color);
+}
+
+body.light-mode #poslovni-koncept .icon-box {
+    background-color: var(--light-color);
+}
+
+body.light-mode #poslovni-koncept .icon-box h4 {
+    color: var(--primary-color);
+}
+
+body.light-mode #poslovni-koncept .icon-box .fas {
+    color: var(--fluorescent-purple);
+}
+
+body.light-mode #fransizni-model p.text-purple-300,
+body.light-mode #fransizni-model .grid span {
+    color: var(--primary-color);
+}
+
+body.light-mode .info-box .fas {
+    color: var(--fluorescent-purple);
+}
+body.light-mode .info-box-content h5 {
+    color: var(--primary-color);
+}
+
+body.light-mode .info-box-content p {
+    color: #475569;
+}
+
+body.light-mode #zasto-investirati .border-purple-500 {
+    border-color: var(--primary-color);
+}
+
+body.light-mode #zasto-investirati .border-purple-500 p {
+    color: var(--primary-color);
+}
+
+body.light-mode #objasnjenje-zarade-investicije strong,
+body.light-mode #objasnjenje-zarade-investicije .text-white {
+    color: var(--primary-color);
+}
+
+body.light-mode .ip-card-body,
+body.light-mode .ip-card-body span.label,
+body.light-mode .ip-card-body span.duration {
+    color: #475569;
+}
+
+body.light-mode .ip-card-body span.value {
+    color: var(--primary-color);
+}
+
+body.light-mode #odluka-na-vama strong.text-white {
+    color: var(--primary-color);
+}
+
+body.light-mode #kontakt .glass-card .bg-gray-800 {
+    background-color: var(--light-color);
+}
+
+body.light-mode #kontakt .glass-card .flex-shrink-0 > .fas {
+    color: var(--fluorescent-purple);
+}
+
+body.light-mode #kontakt .glass-card .social-icons a i {
+    color: var(--primary-color) !important;
+}
+
+body.light-mode #semfiai .glass-card .fas {
+    color: var(--fluorescent-purple);
+}
+
+.bg-gradient-to-r.from-purple-900 h2 {
+    color: var(--fluorescent-green);
+}
+
+.bg-gradient-to-r.from-purple-900 .btn-primary {
+    background-color: var(--fluorescent-green);
+    color: var(--dark-color);
+}
+
+body.light-mode footer h3,
+body.light-mode footer h4 {
+    color: white;
+}
+
+body.light-mode footer .fab {
+    color: var(--fluorescent-purple);
+}
+
+body.light-mode #ecosystem-details .fas {
+    color: var(--fluorescent-purple);
+}
+
+body.light-mode #ecosystem-details .font-semibold.text-white {
+    color: var(--primary-color);
+}
+
+body.light-mode #ecosystem-details ul li > div {
+    color: #475569;
+}
+
+body.light-mode #paket-info .text-4xl .fas {
+    color: var(--fluorescent-purple);
+}
+
+body.light-mode canvas#network-canvas {
+    background-color: transparent;
+}
+
+body.light-mode button#theme-toggle i,
+body.light-mode button#theme-toggle-mobile i,
+body.light-mode button#theme-toggle:hover i,
+body.light-mode button#theme-toggle-mobile:hover i {
+    color: var(--fluorescent-purple);
+}
