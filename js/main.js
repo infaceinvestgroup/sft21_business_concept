@@ -228,7 +228,7 @@ function initializeAppLogic() {
         if (chooseInvestorTypePopup) chooseInvestorTypePopup.style.display = 'none';
         if (investmentDetailsPopup) investmentDetailsPopup.style.display = 'none';
         if (popupOverlay) popupOverlay.style.display = 'none';
-        if (body) body.classList.remove('overflow-hidden');
+        if (body) body.classList.remove('nav-menu-open');
         if (ip7AmountInputContainer) ip7AmountInputContainer.style.display = 'none';
         if (ip7AmountInput) ip7AmountInput.value = '';
         if(starterPackageEmailInput) starterPackageEmailInput.value = '';
@@ -309,7 +309,7 @@ function initializeAppLogic() {
         hamburger.addEventListener('click', () => {
             const isActive = hamburger.classList.toggle('active');
             navMenu.classList.toggle('active', isActive);
-            body.classList.toggle('overflow-hidden', isActive);
+            body.classList.toggle('nav-menu-open', isActive); 
             closeAllLanguageDropdowns();
             document.querySelectorAll('.nav-menu .sft21-nav-item.dropdown.open:not(.mobile-language-selector)').forEach(openDropdown => {
                 openDropdown.classList.remove('open');
@@ -324,8 +324,7 @@ function initializeAppLogic() {
                 if (hamburger.classList.contains('active')) {
                     hamburger.classList.remove('active');
                     navMenu.classList.remove('active');
-                    body.classList.remove('overflow-hidden');
-                }
+                    body?.classList.remove('nav-menu-open');                }
             });
         });
     }
