@@ -1577,3 +1577,81 @@ body.light-mode button#theme-toggle:hover i,
 body.light-mode button#theme-toggle-mobile:hover i {
     color: var(--fluorescent-purple);
 }
+
+body.light-mode .hamburger .bar {
+    background-color: #6a1b9a; /* Ovo je ljubičasta boja (Primary color) */
+}
+
+/* --- Dodaj ovo na kraj postojeće datoteke css/style.css --- */
+
+/* Mobilni dropdown meni - stilovi za otvaranje */
+.nav-menu .sft21-nav-item.dropdown .dropdown-menu {
+    display: none; /* Sakriveno po defaultu */
+    position: static; /* Mora biti static da se prikaže unutar mobilnog izbornika */
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    width: 100%; /* Da zauzme cijelu širinu u mobilnom izborniku */
+    background-color: #1f2937; /* Tamna pozadina */
+    border: none; /* Makni defaultne granice ako ne trebaju */
+    border-radius: 0; /* U mobilnom izborniku možda ne treba zaobljene rubove */
+    box-shadow: none;
+    z-index: 10;
+    transition: none; /* Makni tranziciju pri otvaranju/zatvaranju */
+}
+
+/* Kad je dropdown otvoren na mobilnom */
+.nav-menu .sft21-nav-item.dropdown.open .dropdown-menu {
+    display: block; /* Pokaži ga */
+}
+
+/* Stilovi za same stavke unutar mobilnog podmenija */
+.nav-menu .dropdown-menu a.dropdown-item {
+    padding: 0.75rem 1.5rem; /* Malo više paddinga */
+    text-align: left; /* Poravnaj tekst lijevo */
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    display: block; /* Da svaka stavka bude svoj red */
+}
+
+.nav-menu .dropdown-menu a.dropdown-item:hover {
+    background-color: var(--primary-color); /* Ljubičasta na hover */
+    color: white;
+}
+
+/* Stilovi za sam okidač (link s ikoncom) u mobilnom izborniku */
+.nav-menu .mobile-dropdown-toggle {
+    display: flex; /* Osiguraj da se sve poravna */
+    justify-content: space-between; /* Da ikona bude desno */
+    align-items: center; /* Poravnaj okomito */
+    width: 100%; /* Da zauzme cijelu širinu */
+    padding: 0.75rem 1.5rem;
+    color: white;
+    text-align: left; /* Poravnaj tekst lijevo */
+}
+
+.nav-menu .mobile-dropdown-toggle:hover {
+    background-color: rgba(255, 95, 0, 0.1); /* Blagi narančasti hover */
+}
+
+.nav-menu .mobile-dropdown-toggle i.fas {
+    margin-left: 0.5rem; /* Malo razmaka između teksta i ikone */
+    transition: transform 0.3s ease;
+}
+/* Dodaj rotaciju za ikonu kada je dropdown otvoren */
+.nav-menu .sft21-nav-item.dropdown.open .mobile-dropdown-toggle i.fas {
+    transform: rotate(180deg);
+}
+
+/* Ispravak za zatvaranje jezika */
+.nav-menu .mobile-language-selector .language-dropdown-mobile {
+    display: none; /* Sakrij ga po defaultu */
+}
+.nav-menu .mobile-language-selector.open .language-dropdown-mobile {
+    display: block; /* Pokaži ga kad je selector otvoren */
+}
+
+/* Dodatni popravak za zatvaranje izbornika kada se klikne na stavku */
+.nav-menu a:not([id*="lang-trigger"]):not(.mobile-dropdown-toggle) {
+    /* Ovdje će biti dodan event listener u JS-u */
+}
+
