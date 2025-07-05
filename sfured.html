@@ -1265,69 +1265,54 @@
                 console.warn("Hamburger or vertical navigation not found.");
             }
         
-            // --- Vertical Nav Link Click Handling (Ažurirano za sfured.html) ---
+                       // --- Vertical Nav Link Click Handling (Ažurirano za sfured.html) ---
             if (navLinksVertical.length > 0) {
                 navLinksVertical.forEach(link => {
                     link.addEventListener('click', (e) => {
                         const href = link.getAttribute('href');
                         const targetPanel = link.getAttribute('data-panel-target');
 
-                        // Provjeri je li link za vanjsku .html stranicu
-                        if (href && href !== '#' && href.includes('.html') && (!window.location.pathname.endsWith(href) && href !== window.location.pathname)) {
-                            if (hamburger && verticalNav && hamburger.classList.contains('active')) {
-                                hamburger.classList.remove('active');
-                                verticalNav.classList.remove('active');
-                                if (document.body.classList.contains('overflow-hidden-mobile')) {
-                                    document.body.classList.remove('overflow-hidden-mobile');
-                                }
-                            }
-                            return; // NE RADI e.preventDefault() - dopusti prijelaz na drugu stranicu
-                        }
-                        
-                        // Ako nije vanjski link, onda je za promjenu panela na TRENUTNOJ stranici
-                        e.preventDefault(); // Spriječi defaultnu navigaciju (npr. skok na #)
-
-                        navLinksVertical.forEach(otherLink => otherLink.classList.remove('active'));
-                        link.classList.add('active');
-
-                        console.log(`Clicked nav link for panel: ${targetPanel} on sfured.html`);
-
-                        // Definiraj mapping target panela na elemente koji postoje SAMO na sfured.html
-                        const panelMap = {
-                            'kontrolna-ploca': dashboardGrid,
-                            'moj-racun': mojRacunContent,
-                            'novcanik': novcanikContent,
-                            'sfteam': sftimContent
-                            // Nema mapiranja za sfkod, sfnet, sfshop jer su oni vanjske stranice
-                        };
-
-                        // Sakrij sve content blokove koji su dio sfured.html
-                        Object.values(panelMap).forEach(panelElement => {
-                            if (panelElement) { // Provjeri da li element postoji prije sakrivanja
-                                panelElement.style.display = 'none';
-                            }
-                        });
-                        
-                        // Prikaži odgovarajući blok sadržaja ako je definiran u panelMap
-                        const panelToShow = panelMap[targetPanel];
-                        if (panelToShow) {
-                            if (targetPanel === 'kontrolna-ploca') {
-                                panelToShow.style.display = 'grid';
-                            } else {
-                                panelToShow.style.display = 'block';
-                            }
-                        } else if (targetPanel && !href.includes('.html')) {
-                            // Ako je specificiran targetPanel ali nije u mapi i nije .html link, vjerojatno greška ili link za nepostojeći panel
-                            console.warn(`Panel target "${targetPanel}" specified, but not handled or corresponding element not found on sfured.html.`);
-                        }
-
-                        // Ako je mobilni meni otvoren, zatvori ga
+                        // Prvo, uvijek zatvori mobilni meni ako je otvoren
                         if (hamburger && verticalNav && hamburger.classList.contains('active')) {
                             hamburger.classList.remove('active');
                             verticalNav.classList.remove('active');
                             if (document.body.classList.contains('overflow-hidden-mobile')) {
                                 document.body.classList.remove('overflow-hidden-mobile');
                             }
+                        }
+
+                        // Provjeri da li link vodi na drugu .html stranicu.
+                        // Ako vodi, NE sprječavaj defaultno ponašanje (ne pozivaj e.preventDefault()).
+                        if (href && href !== '#' && href.includes('.html')) {
+                            // Link vodi na drugu stranicu, ne radimo ništa više, puštamo preglednik da odradi svoje.
+                            return;
+                        }
+                        
+                        // Ako link NE VODI na drugu stranicu, onda je za promjenu panela.
+                        // Tek sada sprječavamo defaultno ponašanje.
+                        e.preventDefault(); 
+                        
+                        navLinksVertical.forEach(otherLink => otherLink.classList.remove('active'));
+                        link.classList.add('active');
+
+                        console.log(`Clicked nav link for panel: ${targetPanel} on sfured.html`);
+
+                        const panelMap = {
+                            'kontrolna-ploca': dashboardGrid,
+                            'moj-racun': mojRacunContent,
+                            'novcanik': novcanikContent,
+                            'sfteam': sftimContent
+                        };
+
+                        Object.values(panelMap).forEach(panelElement => {
+                            if (panelElement) panelElement.style.display = 'none';
+                        });
+                        
+                        const panelToShow = panelMap[targetPanel];
+                        if (panelToShow) {
+                            panelToShow.style.display = (targetPanel === 'kontrolna-ploca') ? 'grid' : 'block';
+                        } else if (targetPanel) {
+                            console.warn(`Panel target "${targetPanel}" not handled on sfured.html.`);
                         }
                     });
                 });
