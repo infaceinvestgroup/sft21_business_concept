@@ -111,6 +111,93 @@
             accent-color: var(--fluorescent-green); /* Mijenja boju kvačice */
         }
 
+                /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 0;
+                 padding-left: 0;
+            }
+            .sfured-header {
+                padding: 0 1rem;
+            }
+            .sfured-header .logo-sfured .logo-nav {
+                font-size: 1rem;
+            }
+             .sfured-header .logo-sfured .logo-nav .small-text {
+                 font-size: 0.5rem;
+             }
+             .sfured-header .logo-sfured img {
+                 width: 40px;
+                 margin-right: 0.25rem;
+             }
+             .sfured-header .status-timer {
+                 display: none;
+             }
+            .sfured-header .user-info .user-details {
+                display: none;
+            }
+            .sfured-header .user-info .avatar-placeholder {
+                margin-right: 0.5rem;
+            }
+            .sfured-header .user-info .logout-icon {
+                margin-right: 1rem;
+            }
+
+             .sfured-nav-vertical {
+                 width: 100%;
+                 height: auto;
+                 max-height: calc(100vh - 64px);
+                 top: 64px;
+                 left: 0;
+                 bottom: auto;
+                 border-right: none;
+                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                 transform: translateY(-100%);
+                 transition: transform 0.3s ease-in-out;
+                 padding: 1rem;
+                 overflow-y: auto;
+            }
+             .sfured-nav-vertical.active {
+                 transform: translateY(0);
+            }
+             .sfured-main-content {
+                 margin-left: 0;
+                 padding: 1.5rem 1rem;
+                 padding-top: calc(64px + 1.5rem);
+                 min-height: auto;
+                 margin-top: 0;
+             }
+             .dashboard-grid {
+                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                 gap: 1rem;
+             }
+
+            .hamburger {
+                 display: block;
+                 cursor: pointer;
+                 margin-right: 0rem;
+                 z-index: 60;
+             }
+             .hamburger .bar {
+                 display: block;
+                 width: 25px;
+                 height: 3px;
+                 margin: 5px auto;
+                 -webkit-transition: all 0.3s ease-in-out;
+                 transition: all 0.3s ease-in-out;
+                 background-color: #d1d5db;
+             }
+             .hamburger.active .bar:nth-child(2) {
+                 opacity: 0;
+             }
+             .hamburger.active .bar:nth-child(1) {
+                 transform: translateY(8px) rotate(45deg);
+             }
+             .hamburger.active .bar:nth-child(3) {
+                 transform: translateY(-8px) rotate(-45deg);
+             }
+        }
+
     </style>
 </head>
 <body>
@@ -426,5 +513,30 @@
             initializeTable();
         });
     </script>
+ <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const verticalNav = document.querySelector('.sfured-nav-vertical');
+
+            if (hamburger && verticalNav) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    verticalNav.classList.toggle('active');
+                });
+            }
+
+            // Zatvori meni ako se klikne na link
+            const navLinks = verticalNav.querySelectorAll('.nav-link-vertical');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (hamburger.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        verticalNav.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+    
 </body>
 </html>
