@@ -229,7 +229,7 @@ function initializeAppLogic() {
         if (investmentDetailsPopup) investmentDetailsPopup.style.display = 'none';
         if (popupOverlay) popupOverlay.style.display = 'none';
         if (body) body.classList.remove('nav-menu-open');
-        if (ip7AmountInputContainer) ip7AmountInputContainer.style.display = 'none';
+         if (ip7AmountInputContainer) ip7AmountInputContainer.style.display = 'none';
         if (ip7AmountInput) ip7AmountInput.value = '';
         if(starterPackageEmailInput) starterPackageEmailInput.value = '';
         resetInvestmentDetailsForm();
