@@ -1665,3 +1665,24 @@ body.overflow-hidden.nav-menu-open { /* Dodaj ovu klasu na body preko JS-a */
     /* Ovdje će biti dodan event listener u JS-u */
 }
 
+/* Ovo pravilo je za podebljani tekst unutar odgovora koji ima klase font-bold i text-white */
+body.light-mode .accordion-content p.font-bold.text-white {
+    color: #800080 !important; /* Tamno ljubičasta */
+}
+
+/* Ovo pravilo je za podebljani tekst unutar odgovora koji ima samo klasu uppercase */
+body.light-mode .accordion-content p.uppercase {
+    color: #800080 !important; /* Tamno ljubičasta */
+}
+
+/* Ovo je i dalje ostavljeno za ostale podebljane dijelove teksta koji nemaju te specifične klase */
+body.light-mode .accordion-content strong,
+body.light-mode .accordion-content b {
+    color: #800080; /* Tamno ljubičasta */
+}
+
+/* Ovo pravilo je za naslov pitanja, ako zatreba */
+body.light-mode .accordion-header span.font-semibold {
+    color: #800080; /* Tamno ljubičasta */
+}
+
