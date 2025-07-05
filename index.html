@@ -16,6 +16,28 @@
     <canvas id="network-canvas"></canvas>
     <div class="custom-cursor"></div>
     <div id="popup-overlay" class="popup-overlay">
+                <div id="welcome-popup" class="popup-content" style="display: none;">
+            <button class="popup-close" aria-label="Zatvori popup">×</button>
+            <h4>Poštovani korisnici…</h4>
+            <p>S obzirom na činjenicu da nastavljamo poslovanje nakon prekida koji je trajao tri godine, svjesni da će se u toj situaciji pratiti svaki naš korak i sve što činimo te kako bi održali transparentnost uz iznošenje istine, pravih i relevantnih informacija, želimo da napomenemo slijedeće;</p>
+            <ul style="list-style-type: disc; text-align: left; padding-left: 20px; margin-bottom: 1rem;">
+                <li>ova web stranica se servira preko HTTPS (statički HTML/CSS/JS), nema backend-a niti baze podataka.</li>
+                <li>Stranica je linearna, bez sticky navigacije ili interaktivnih elemenata, nema metatagova za pretraživače, nije optimizirana, nema ALT oznaka, meta opisa, struktuiranih naslova, nedostaje joj napredna optimizacija mobilnosti i performansi...</li>
+            </ul>
+            <p>Ovo je statička DEMO stranica, čija je svrha u ovoj fazi razvoja, prvenstveno informirati članove iz starog sistema o pravilima novog sistema poslovanja i trenutnoj fazi razvoja.</p>
+            <p>Na ovoj stranici, imate mogućnost pogledati i proučiti “SFT21 Business Concept” prezentaciju novog, odnosno nadograđenog sistema poslovanja, kao i mnoge druge informacije vezano za startne i investicijske paketa te nastavak poslovanja.</p>
+            <p>S obzirom da nam je primarni cilj u ovoj fazi razvoja prikupiti sredstva potrebna za izradu odnosno nadopunu stranica backofficea odnosno kontrolne ploče u ovoj fazi razvoja nije moguće uplatiti startne pakete već je moguće uplatiti ulaganje u investicijske pakete.</p>
+            <p>Osim toga na stranici Odluka o nastavku poslovanja imate mogućnost vidjeti i proučiti opcije prema kojim ćete se izjasniti da li odustajete ili nastavljate poslovanje uz ulaganje u Investicijski paket ili nastavljate bez ulaganja u Investicijski paket. Odluka o nastavku poslovanja koju donesete na ovim stranicama informativne je prirode dok ćete pravo odluku imati mogućnost donijeti neposredno prije početka poslovanja sukladno novom poslovnom modelu.</p>
+            <p>Važno je napomenuti, da vašom trenutnom odlukom na ovim stranicama, ukoliko se odlučite imate mogućnost odabrati jedan ili više Investicijskih paketa ali nemate mogućnost uplatiti iste.</p>
+            <p>Vaša odluka o nastavku poslovanja i ulaganju u Investicijske pakete na ovim stranicama, trebala bi nam biti pokazatelj sa kojim brojem korisnika iz starog sistema možemo računati da nastavljaju dalje sa nama kao i sa iznosom sredstava na koji bi mogli računati na osnovu iskazanog interesa za investicijske pakete.</p>
+            <p>Ova stranica treba poslužiti kako starim članovima da se izjasne o nastavku i ulaganju u investicijske pakete tako i novim potencijalnim investitorima ili novim članovima da iskažu svoj interes ukoliko žele ulagati u investicijske pakete i/ili započeti poslovanje.</p>
+            <p>Ovo je stranica, koja treba poslužiti za gore navedeno i kao takva je pokazatelj u kojem smjeru idemo i kako bi u konačnici moglo sve izgledati.</p>
+            <p>Da li ćemo nastaviti sa dizajnom iz staroga sistema pa se prilagođavati istome, što nam je trenutno najjeftinija varijanta s obzirom na situaciju u kojom se nalazimo ili ćemo nastaviti sa novim predloženim dizajnom ili možda sa još boljim i naprednijim dizajnom i tehnologijama, pitanje je naših financijskih mogućnosti u datom trenutku.</p>
+            <p>Međutim, složiti ćete se s nama, bez obzira na dizajn i “kozmetičke” promjene, najvažnije je da osiguramo sredstva neophodna za završetak i nadogradnju potrebnih softvera i aplikacija, kako bi nastavili poslovanje.</p>
+            <div class="text-center mt-6">
+              <button id="welcome-popup-continue" class="btn-primary">NASTAVI</button>
+            </div>
+        </div>
         <div id="validation-popup" class="popup-content" style="display: none;">
         </div>
         <div id="contact-form-popup" class="popup-content" style="display: none;">
@@ -707,7 +729,7 @@
                     </div>
                      <div class="accordion-item bg-gray-800 bg-opacity-40 rounded-lg overflow-hidden shadow-md fade-in" style="animation-delay: 0.2s;">
                         <div class="accordion-header flex justify-between items-center px-6 py-4 cursor-pointer hover:bg-gray-700 transition-colors duration-200"><span class="font-semibold text-lg text-white">Što je limit maksimalne zarade a što maksimalni mogući limit?</span><i class="fas fa-chevron-down text-purple-400"></i></div>
-                        <div class="accordion-content"><div><p class="font-bold text-white">Limit maksimalne zarade (LMZ)</p><p>LMZ je najveći iznos koji možete zaraditi sa aktivnim računom unutar jednog pretplatničkog perioda, koji traje 28 dana. Vaša zarada u pretplatničkom periodu može biti manja ali nikako veća od limita maksimalne zarade.</p><p class="uppercase">LMZ SE ODREĐUJE NA OSNOVI UPLAĆENOG INVESTICIJSKOG PAKETA (IP), NA OSNOVI UPLAĆENOG STARTNOG PAKETA (SP) ILI IZGRADNJOM KARIJERNOG STATUSA.</p><p>Limit maksimalne zarade dobiven uplatom investicijskog paketa (IP) može biti od minimalnih 200 SFC do maksimalnih 2.100 SFC. Uplatom IP dobivate SFbodove, koji su duplo veći u odnosu na uloženi iznos investicije. Na svaki uloženi euro investicije dobivate 2 SFboda.</p><p>Npr. uplatom IP1 u vrijednosti 100 € dobivate 200 SFbodova, što vam postavlja LMZ na 200 SFC. Uplatom npr. IP4 vrijednosti 1.000 €, dobivate 2.000 SFbodova što vam postavlja LMZ na 2.000 SFC. Uplatom IP5 vrijednosti 1.500 € dobivate 3.000 SFbodova, uplatom IP6 vrijednosti 2.100 € dobivate 4.200 SFbodova međutim LMZ vam se postavlja na 2.100 SFC, što je maksimalni mogući limit zarade koji se može dobiti bez obzira na visinu uplaćene investicije.</p><p>S obzirom da investitori nemaju nikakvih radnih obaveza prema kompaniji i kao takvi zarađuju pasivan prihod koji je određen prema visini iznosa investicije, njima se postavlja limit maksimalne zarade u slučaju da se odluče i na aktivnu suradnju u svojstvu franšizera.</p><p>Limit maksimalne zarade dobiven kupovinom startnog paketa može biti od minimalnih 50 SFC (SP1) do maksimalnih 1.900 SFC, kada je uplaćeni SP nadograđivan naknadnim nadoplatama pretplatničkih perioda, odnosno 2.100 SFC u slučaju kada je uplaćen sedmi startni paket (SP7).</p><p>Limit maksimalne zarade dobiven na osnovu karijernog statusa može biti od minimalnih 2.200 SFC, do maksimalnih 100.000 SFC, što se određuje prema broju direktnih i indirektnih članova</p><p>U limit maksimalne zarade računa se zarada dobivena po prijateljskom bonusu (PB), sponzorskom bonusu (SB) i rabat bonusu (RB) dok zarada dobivena po direktnom bonusu (DB) ne ulazi u limit maksimalne zarade.</p><p>Ukoliko po isteku PP ne uplatite NAREDNI pretplatnički period (50 SFC), odnosno PRESKOČITE DVA pretplatnička perioda (56 dana) zaredom u prvih 13 pretplatničkih perioda, ili PRESKOČITE TRI pretplatnička perioda (84 dana) zaredom u posljednjih 8 pretplatničkih perioda (100 SFC), ZADRŽAVATE POSTIGNUTI LIMIT MAKSIMALNE ZARADE.</p><p>U slučaju kada vaš račun sakupi ukupno 280 neaktivnih dana prije nego što uplatite posljednji (21.) pretplatniččki period, također zadržavate postignuti limit maksimalne zarade.</p><p>U tim slučajevima veći limit maksimalne zarade naknadno možete povećati isključivo nadoplatom do posljednjeg 21. pretplatničkog perioda ili radeći na izgradnji karijernog statusa registracijom novih članova franšizera.</p><p class="font-bold text-white mt-4">Maksimalni mogući limit</p><p>To je najveći mogući limit zarade koji možete ostvariti na osnovi odabranog startnog paketa.</p><p>Npr. uplatom SP1 vrijednosti 50 €, LMZ unutar jednog pretplatničkog perioda vam je postavljen na 50 SFC. Taj limit možete povećavati nadoplatama novih pretplatničkih perioda s time da ga možete povećati do maksimalnih 1.050 SFC.</p><p>Uplatom npr. SP6 vrijednosti 1.050 €, LMZ unutar jednog pretplatničkog perioda vam je postavljen na 1.700 SFC. Taj limit možete povećavati nadoplatama novih pretplatničkih perioda s time da ga možete povećati do maksimalnih 1.900 SFC.</p><p>Uplatom SP7 vrijednosti 1.450 €, LMZ unutar jednog pretplatničkog perioda vam je postavljen na 2.100 SFC što je ujedno i maksimalni mogući limit, koji možete ostvariti na osnovi startnog paketa.</p></div></div>
+                        <div class="accordion-content"><div><p class="font-bold text-white">Limit maksimalne zarade (LMZ)</p><p><p>LMZ je najveći iznos koji možete zaraditi sa aktivnim računom unutar jednog pretplatničkog perioda, koji traje 28 dana. Vaša zarada u pretplatničkom periodu može biti manja ali nikako veća od limita maksimalne zarade.</p><p class="uppercase">LMZ SE ODREĐUJE NA OSNOVI UPLAĆENOG INVESTICIJSKOG PAKETA (IP), NA OSNOVI UPLAĆENOG STARTNOG PAKETA (SP) ILI IZGRADNJOM KARIJERNOG STATUSA.</p><p>Limit maksimalne zarade dobiven uplatom investicijskog paketa (IP) može biti od minimalnih 200 SFC do maksimalnih 2.100 SFC. Uplatom IP dobivate SFbodove, koji su duplo veći u odnosu na uloženi iznos investicije. Na svaki uloženi euro investicije dobivate 2 SFboda.</p><p>Npr. uplatom IP1 u vrijednosti 100 € dobivate 200 SFbodova, što vam postavlja LMZ na 200 SFC. Uplatom npr. IP4 vrijednosti 1.000 €, dobivate 2.000 SFbodova što vam postavlja LMZ na 2.000 SFC. Uplatom IP5 vrijednosti 1.500 € dobivate 3.000 SFbodova, uplatom IP6 vrijednosti 2.100 € dobivate 4.200 SFbodova međutim LMZ vam se postavlja na 2.100 SFC, što je maksimalni mogući limit zarade koji se može dobiti bez obzira na visinu uplaćene investicije.</p><p>S obzirom da investitori nemaju nikakvih radnih obaveza prema kompaniji i kao takvi zarađuju pasivan prihod koji je određen prema visini iznosa investicije, njima se postavlja limit maksimalne zarade u slučaju da se odluče i na aktivnu suradnju u svojstvu franšizera.</p><p>Limit maksimalne zarade dobiven kupovinom startnog paketa može biti od minimalnih 50 SFC (SP1) do maksimalnih 1.900 SFC, kada je uplaćeni SP nadograđivan naknadnim nadoplatama pretplatničkih perioda, odnosno 2.100 SFC u slučaju kada je uplaćen sedmi startni paket (SP7).</p><p>Limit maksimalne zarade dobiven na osnovu karijernog statusa može biti od minimalnih 2.200 SFC, do maksimalnih 100.000 SFC, što se određuje prema broju direktnih i indirektnih članova</p><p>U limit maksimalne zarade računa se zarada dobivena po prijateljskom bonusu (PB), sponzorskom bonusu (SB) i rabat bonusu (RB) dok zarada dobivena po direktnom bonusu (DB) ne ulazi u limit maksimalne zarade.</p><p>Ukoliko po isteku PP ne uplatite NAREDNI pretplatnički period (50 SFC), odnosno PRESKOČITE DVA pretplatnička perioda (56 dana) zaredom u prvih 13 pretplatničkih perioda, ili PRESKOČITE TRI pretplatnička perioda (84 dana) zaredom u posljednjih 8 pretplatničkih perioda (100 SFC), ZADRŽAVATE POSTIGNUTI LIMIT MAKSIMALNE ZARADE.</p><p>U slučaju kada vaš račun sakupi ukupno 280 neaktivnih dana prije nego što uplatite posljednji (21.) pretplatniččki period, također zadržavate postignuti limit maksimalne zarade.</p><p>U tim slučajevima veći limit maksimalne zarade naknadno možete povećati isključivo nadoplatom do posljednjeg 21. pretplatničkog perioda ili radeći na izgradnji karijernog statusa registracijom novih članova franšizera.</p><p class="font-bold text-white mt-4">Maksimalni mogući limit</p><p>To je najveći mogući limit zarade koji možete ostvariti na osnovi odabranog startnog paketa.</p><p>Npr. uplatom SP1 vrijednosti 50 €, LMZ unutar jednog pretplatničkog perioda vam je postavljen na 50 SFC. Taj limit možete povećavati nadoplatama novih pretplatničkih perioda s time da ga možete povećati do maksimalnih 1.050 SFC.</p><p>Uplatom npr. SP6 vrijednosti 1.050 €, LMZ unutar jednog pretplatničkog perioda vam je postavljen na 1.700 SFC. Taj limit možete povećavati nadoplatama novih pretplatničkih perioda s time da ga možete povećati do maksimalnih 1.900 SFC.</p><p>Uplatom SP7 vrijednosti 1.450 €, LMZ unutar jednog pretplatničkog perioda vam je postavljen na 2.100 SFC što je ujedno i maksimalni mogući limit, koji možete ostvariti na osnovi startnog paketa.</p></div></div>
                     </div>
                      <div class="accordion-item bg-gray-800 bg-opacity-40 rounded-lg overflow-hidden shadow-md fade-in" style="animation-delay: 0.3s;">
                          <div class="accordion-header flex justify-between items-center px-6 py-4 cursor-pointer hover:bg-gray-700 transition-colors duration-200"><span class="font-semibold text-lg text-white">Odakle dolazi zarada?</span><i class="fas fa-chevron-down text-purple-400"></i></div>
@@ -1416,7 +1438,7 @@ const btnNoviInvestitorChoice = document.getElementById('btn-novi-investitor-cho
 const investmentDetailsForm = document.getElementById('investment-details-form');
 const investorNameDetailsInput = document.getElementById('investor-name-details');
 const investorEmailDetailsInput = document.getElementById('investor-email-details');
-const investmentPackageDetailsCheckboxes = document.querySelectorAll('#investment-package-selection input[name="ip_package_details"]');
+const investmentPackageDetailsCheckboxes = document.querySelectorAll('#investment-details-form input[name="ip_package_details"]');
 const ip7CheckboxDetails = document.getElementById('ip7-checkbox-details');
 const ip7CustomAmountDetailsInput = document.getElementById('ip7-custom-amount-details');
 const totalInvestmentAmountDetailsSpan = document.getElementById('total-investment-amount-details');
@@ -1828,32 +1850,57 @@ if (starterPackageEmailForm && starterPackageEmailInput && validationPopup) {
                     updateTotalInvestmentDetails(); 
                 };
 
-            const updateTotalInvestmentDetails = () => {
-                let currentTotal = 0;
+      const updateTotalInvestmentDetails = () => {
+    let initialTotal = 0;
+    // Prvo izračunaj zbroj samo standardnih paketa (IP1-IP6)
+    investmentPackageDetailsCheckboxes.forEach(cb => {
+        if (cb.checked) {
+            initialTotal += parseFloat(cb.value);
+        }
+    });
 
-                investmentPackageDetailsCheckboxes.forEach(cb => {
-                    if (cb.checked) {
-                        currentTotal += parseFloat(cb.value);
-                    }
-                });
+    // NOVI DIO: Automatska aktivacija IP7
+    // Ako je zbroj standardnih paketa 5000€ ili više...
+    if (initialTotal >= 5000) {
+        // ...odznačiti sve standardne pakete
+        investmentPackageDetailsCheckboxes.forEach(cb => {
+            cb.checked = false;
+        });
 
-                if (ip7CheckboxDetails && ip7CustomAmountDetailsInput) {
-                    ip7CustomAmountDetailsInput.disabled = !ip7CheckboxDetails.checked;
+        // ...označiti IP7 kućicu, omogućiti unos i upisati zbroj
+        if (ip7CheckboxDetails) ip7CheckboxDetails.checked = true;
+        if (ip7CustomAmountDetailsInput) {
+            ip7CustomAmountDetailsInput.disabled = false;
+            ip7CustomAmountDetailsInput.value = initialTotal;
+        }
+    }
 
-                    if (ip7CheckboxDetails.checked) {
-                        const ip7Value = parseFloat(ip7CustomAmountDetailsInput.value);
-                        if (!isNaN(ip7Value)) {
-                            currentTotal += ip7Value;
-                        }
-                    } else {
-                        ip7CustomAmountDetailsInput.value = '';
-                    }
-                }
+    // Konačni izračun ukupnog iznosa nakon potencijalnih izmjena
+    let finalTotal = 0;
+    investmentPackageDetailsCheckboxes.forEach(cb => {
+        if (cb.checked) {
+            finalTotal += parseFloat(cb.value);
+        }
+    });
 
-                if (totalInvestmentAmountDetailsSpan) {
-                    totalInvestmentAmountDetailsSpan.textContent = currentTotal.toString();
-                }
-            };
+    if (ip7CheckboxDetails && ip7CustomAmountDetailsInput) {
+        ip7CustomAmountDetailsInput.disabled = !ip7CheckboxDetails.checked;
+        if (ip7CheckboxDetails.checked) {
+            const ip7Value = parseFloat(ip7CustomAmountDetailsInput.value);
+            if (!isNaN(ip7Value)) {
+                finalTotal += ip7Value;
+            }
+        } else {
+            // Ako korisnik ručno odznači IP7, obriši vrijednost
+            ip7CustomAmountDetailsInput.value = '';
+        }
+    }
+
+    // Prikaz konačnog iznosa
+    if (totalInvestmentAmountDetailsSpan) {
+        totalInvestmentAmountDetailsSpan.textContent = finalTotal.toString();
+    }
+};
                 
                 const allPackageCheckboxes = [...investmentPackageDetailsCheckboxes];
                 if (ip7CheckboxDetails) {
@@ -2565,4 +2612,65 @@ const setTheme = (isLight) => {
     });
 </script>
 </body>
+
+</script>
+
+<!-- NOVI SCRIPT BLOK ZA WELCOME POPUP -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Selektori za elemente
+        const welcomePopup = document.getElementById('welcome-popup');
+        const popupOverlay = document.getElementById('popup-overlay');
+        const continueBtn = document.getElementById('welcome-popup-continue');
+        const closeBtn = welcomePopup.querySelector('.popup-close');
+        const body = document.body;
+
+        // Funkcija za zatvaranje
+        const closeWelcomePopup = () => {
+            if (welcomePopup) welcomePopup.style.display = 'none';
+            if (popupOverlay) popupOverlay.style.display = 'none';
+            if (body) body.classList.remove('overflow-hidden');
+        };
+
+        // Funkcija za otvaranje
+        const showWelcomePopup = () => {
+            if (welcomePopup && popupOverlay && body) {
+                popupOverlay.style.display = 'flex';
+                welcomePopup.style.display = 'block';
+                body.classList.add('overflow-hidden');
+            }
+        };
+
+        // Glavna logika
+        // Provjeri sessionStorage da li je popup već prikazan
+        if (!sessionStorage.getItem('sft21_welcome_shown')) {
+            showWelcomePopup();
+            // Postavi oznaku da je prikazan
+            sessionStorage.setItem('sft21_welcome_shown', 'true');
+        }
+
+        // Dodaj listenere za zatvaranje
+        if (continueBtn) {
+            continueBtn.addEventListener('click', closeWelcomePopup);
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeWelcomePopup);
+        }
+        // Zatvaranje klikom na pozadinu
+        if (popupOverlay) {
+            popupOverlay.addEventListener('click', (e) => {
+                if (e.target === popupOverlay) {
+                    // Pozovi globalnu funkciju za zatvaranje svih popupa
+                    // da bi se resetirale i druge forme ako su bile otvorene
+                    if (typeof window.closeAllPopups === 'function') {
+                        window.closeAllPopups();
+                    } else {
+                        // Fallback ako globalna funkcija ne postoji
+                        closeWelcomePopup();
+                    }
+                }
+            });
+        }
+    });
+</script>
 </html>
